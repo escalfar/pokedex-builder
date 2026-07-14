@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Environment
+.venv/
+
+# PyCharm
+.idea/
+
+# Generated data
+cache/*
+!cache/.gitkeep
+
+output/*
+!output/.gitkeep
+
+# Operating system
+.DS_Store
+Thumbs.db
