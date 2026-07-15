@@ -22,3 +22,6 @@ output/*
 # Operating system
 .DS_Store
 Thumbs.db
+
+# Logs
+logs/
