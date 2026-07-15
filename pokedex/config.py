@@ -4,6 +4,8 @@ from pathlib import Path
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from pokedex.cache import JsonCache
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -40,6 +42,12 @@ class Settings(BaseSettings):
             self.logs_dir,
         ):
             directory.mkdir(parents=True, exist_ok=True)
+
+    def build_cache(self) -> "JsonCache":
+        return JsonCache(
+            directory=self.cache_dir,
+            ttl_hours=self.cache_ttl_hours,
+        )
 
 
 @lru_cache

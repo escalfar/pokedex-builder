@@ -42,3 +42,17 @@ def test_create_directories(tmp_path: Path) -> None:
     assert settings.cache_dir.is_dir()
     assert settings.output_dir.is_dir()
     assert settings.logs_dir.is_dir()
+
+
+def test_settings_build_cache(tmp_path: Path) -> None:
+    settings = Settings(
+        project_root=tmp_path,
+        data_dir=tmp_path / "data",
+        cache_dir=tmp_path / "cache",
+        output_dir=tmp_path / "output",
+        logs_dir=tmp_path / "logs",
+    )
+
+    cache = settings.build_cache()
+
+    assert cache.directory == tmp_path / "cache"
