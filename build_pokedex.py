@@ -12,6 +12,7 @@ from pokedex.species import build_species
 from pokedex.varieties import build_variety_candidates
 from pokedex.form_rules import filter_variety_candidates
 from pokedex.form_overrides import apply_form_overrides
+from pokedex.forms import build_pokemon_forms
 
 
 def build_argument_parser() -> argparse.ArgumentParser:
@@ -138,12 +139,10 @@ def run(
     )
 
     excluded_count = len(variety_candidates) - len(filtered_candidates)
-    # excluded_count = len(variety_candidates) - len(normalized_candidates)
 
     logger.info(
         "Included variety candidates: %s",
         len(filtered_candidates),
-        # len(normalized_candidates),
     )
 
     logger.info(
@@ -165,6 +164,25 @@ def run(
 
     logger.info("Application infrastructure initialized successfully")
 
+    pokemon_forms = build_pokemon_forms(
+        normalized_candidates,
+    )
+
+    logger.info(
+        "Built and validated %s preliminary Pokémon forms",
+        len(pokemon_forms),
+    )
+
+    form_counts: dict[int, int] = {}
+
+    for form in pokemon_forms:
+        form_counts[form.national_dex] = form_counts.get(form.national_dex, 0) + 1
+
+    species_with_multiple_forms = sum(count > 1 for count in form_counts.values())
+    logger.info(
+        "Species with multiple included forms: %s",
+        species_with_multiple_forms,
+    )
     return 0
 
 
