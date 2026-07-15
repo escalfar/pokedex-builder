@@ -1,12 +1,11 @@
+from __future__ import annotations
+
 import json
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
-
-# from typing import Any
+from typing import TypeAlias, cast
 
 from pokedex.exceptions import CacheError
-
-from typing import TypeAlias, cast
 
 JsonPrimitive: TypeAlias = str | int | float | bool | None
 JsonValue: TypeAlias = JsonPrimitive | list["JsonValue"] | dict[str, "JsonValue"]
@@ -38,8 +37,7 @@ class JsonCache:
 
     def path_for(self, key: str) -> Path:
         """Return the JSON file path for a cache key."""
-        normalized_key = self._normalize_key(key)
-        return self._directory / f"{normalized_key}.json"
+        return self._directory / f"{self._normalize_key(key)}.json"
 
     def exists(self, key: str) -> bool:
         """Return whether a cached JSON file exists."""
@@ -48,11 +46,7 @@ class JsonCache:
     def is_expired(self, key: str) -> bool:
         """Return whether a cached file has exceeded its TTL."""
         path = self.path_for(key)
-
-        if not path.is_file():
-            return True
-
-        if self._ttl == timedelta(0):
+        if not path.is_file() or self._ttl == timedelta(0):
             return True
 
         try:
@@ -66,7 +60,6 @@ class JsonCache:
         """Return whether a cache entry exists and has not expired."""
         return self.exists(key) and not self.is_expired(key)
 
-    # def save(self, key: str, data: Any) -> Path:
     def save(self, key: str, data: JsonValue) -> Path:
         """Serialize data as UTF-8 JSON and return the written path."""
         self.ensure_directory()
@@ -75,13 +68,7 @@ class JsonCache:
 
         try:
             with temporary_path.open("w", encoding="utf-8", newline="\n") as file:
-                json.dump(
-                    data,
-                    file,
-                    ensure_ascii=False,
-                    indent=2,
-                    sort_keys=True,
-                )
+                json.dump(data, file, ensure_ascii=False, indent=2, sort_keys=True)
                 file.write("\n")
 
             temporary_path.replace(path)
@@ -91,7 +78,6 @@ class JsonCache:
 
         return path
 
-    # def load(self, key: str) -> Any:
     def load(self, key: str) -> JsonValue:
         """Load and deserialize a cached JSON file."""
         path = self.path_for(key)
@@ -136,7 +122,6 @@ class JsonCache:
             raise CacheError(
                 f"Unable to clear cache directory: {self._directory}"
             ) from error
-
         return removed
 
     @staticmethod
@@ -145,14 +130,12 @@ class JsonCache:
 
         if not normalized:
             raise ValueError("Cache key cannot be empty.")
-
         if not all(
             character.isalnum() or character in {"_", "-"} for character in normalized
         ):
             raise ValueError(
                 "Cache key may contain only letters, numbers, hyphens, and underscores."
             )
-
         return normalized
 
     @staticmethod

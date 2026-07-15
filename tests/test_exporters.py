@@ -2,7 +2,7 @@ import csv
 import json
 from pathlib import Path
 
-from pokedex.constants import OUTPUT_COLUMNS
+from pokedex.constants import OUTPUT_COLUMNS, Gender
 from pokedex.exporter_csv import export_csv
 from pokedex.exporter_json import export_json
 from pokedex.models import GameAvailability, PokemonEntry
@@ -19,6 +19,7 @@ def build_entry() -> PokemonEntry:
         availability=GameAvailability(),
         legendary_mythical=False,
         obtainable_shiny=True,
+        gender=Gender.NONE,
     )
 
 

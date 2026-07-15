@@ -1,0 +1,47 @@
+version: "1.0"
+
+# This catalog is deliberately marked incomplete until every supported game is
+# populated and cross-checked. Empty rules produce FALSE rather than guessing.
+complete: false
+
+games:
+  xy:
+    national_dex: []
+    home_ids: []
+    excluded_home_ids: []
+  oras:
+    national_dex: []
+    home_ids: []
+    excluded_home_ids: []
+  sm:
+    national_dex: []
+    home_ids: []
+    excluded_home_ids: []
+  usum:
+    national_dex: []
+    home_ids: []
+    excluded_home_ids: []
+  lgpe:
+    national_dex: []
+    home_ids: []
+    excluded_home_ids: []
+  swsh:
+    national_dex: []
+    home_ids: []
+    excluded_home_ids: []
+  pla:
+    national_dex: []
+    home_ids: []
+    excluded_home_ids: []
+  bdsp:
+    national_dex: []
+    home_ids: []
+    excluded_home_ids: []
+  sv:
+    national_dex: []
+    home_ids: []
+    excluded_home_ids: []
+  za:
+    national_dex: []
+    home_ids: []
+    excluded_home_ids: []

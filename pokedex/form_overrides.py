@@ -7,7 +7,8 @@ from typing import Any
 import yaml
 
 from pokedex.exceptions import ConfigurationError, ValidationError
-from pokedex.varieties import VarietyCandidate
+from pokedex.models import PokemonVariant
+from pokedex.variants import sort_pokemon_variants
 
 
 @dataclass(frozen=True, slots=True)
@@ -46,14 +47,14 @@ class FormOverride:
 
 @dataclass(frozen=True, slots=True)
 class FormOverrides:
-    """Collection of regional and exact form corrections."""
+    """Collection of regional and exact variant corrections."""
 
     regional_forms: dict[str, RegionalFormOverride]
     forms: dict[str, FormOverride]
 
     @classmethod
     def from_yaml(cls, path: Path) -> FormOverrides:
-        """Load form overrides from a YAML file."""
+        """Load variant overrides from YAML."""
         if not path.is_file():
             raise ConfigurationError(f"Form overrides file does not exist: {path}")
 
@@ -75,84 +76,78 @@ class FormOverrides:
 
 
 def apply_form_overrides(
-    candidates: tuple[VarietyCandidate, ...],
+    variants: tuple[PokemonVariant, ...],
     overrides: FormOverrides,
-) -> tuple[VarietyCandidate, ...]:
-    """Apply exact and regional corrections to variety candidates."""
-    normalized = tuple(
-        normalize_candidate(candidate, overrides) for candidate in candidates
-    )
+) -> tuple[PokemonVariant, ...]:
+    """Apply exact and regional corrections to variants."""
+    normalized = tuple(normalize_variant(variant, overrides) for variant in variants)
 
-    validate_normalized_candidates(normalized)
+    ordered = sort_pokemon_variants(normalized)
 
-    return normalized
+    validate_normalized_variants(ordered)
+
+    return ordered
 
 
-def normalize_candidate(
-    candidate: VarietyCandidate,
+def normalize_variant(
+    variant: PokemonVariant,
     overrides: FormOverrides,
-) -> VarietyCandidate:
-    """Return a candidate with corrected naming and generation."""
-    if candidate.is_default:
-        return candidate
+) -> PokemonVariant:
+    """Return a variant with corrected naming and generation."""
+    if variant.is_default:
+        return variant
 
-    exact_override = overrides.forms.get(candidate.variety_api_name.casefold())
+    exact_override = overrides.forms.get(variant.variety_api_name.casefold())
 
     if exact_override is not None:
         return _apply_exact_override(
-            candidate,
+            variant,
             exact_override,
         )
 
     regional_override = _find_regional_override(
-        candidate,
+        variant,
         overrides,
     )
 
     if regional_override is not None:
         return _apply_regional_override(
-            candidate,
+            variant,
             regional_override,
         )
 
-    return candidate
+    return variant
 
 
 def _apply_exact_override(
-    candidate: VarietyCandidate,
+    variant: PokemonVariant,
     override: FormOverride,
-) -> VarietyCandidate:
-    form_name = override.form_name or candidate.form_name
-    display_name = override.display_name or candidate.display_name
-    generation = override.generation or candidate.generation
-
+) -> PokemonVariant:
     return replace(
-        candidate,
-        form_name=form_name,
-        display_name=display_name,
-        generation=generation,
+        variant,
+        form_name=(override.form_name or variant.form_name),
+        display_name=(override.display_name or variant.display_name),
+        generation=(override.generation or variant.generation),
     )
 
 
 def _apply_regional_override(
-    candidate: VarietyCandidate,
+    variant: PokemonVariant,
     override: RegionalFormOverride,
-) -> VarietyCandidate:
-    display_name = f"{override.form_name} {candidate.pokemon}"
-
+) -> PokemonVariant:
     return replace(
-        candidate,
+        variant,
         form_name=override.form_name,
-        display_name=display_name,
+        display_name=(f"{override.form_name} {variant.pokemon}"),
         generation=override.generation,
     )
 
 
 def _find_regional_override(
-    candidate: VarietyCandidate,
+    variant: PokemonVariant,
     overrides: FormOverrides,
 ) -> RegionalFormOverride | None:
-    slug_parts = candidate.form_slug.casefold().split("-")
+    slug_parts = variant.form_slug.casefold().split("-")
 
     for regional_slug, override in overrides.regional_forms.items():
         if regional_slug in slug_parts:
@@ -161,15 +156,19 @@ def _find_regional_override(
     return None
 
 
-def validate_normalized_candidates(
-    candidates: tuple[VarietyCandidate, ...],
+def validate_normalized_variants(
+    variants: tuple[PokemonVariant, ...],
 ) -> None:
-    """Validate uniqueness after applying naming corrections."""
+    """Validate uniqueness after applying corrections."""
     names: dict[str, list[str]] = {}
 
-    for candidate in candidates:
-        normalized_name = candidate.display_name.casefold()
-        names.setdefault(normalized_name, []).append(candidate.home_id)
+    for variant in variants:
+        normalized_name = variant.display_name.casefold()
+
+        names.setdefault(
+            normalized_name,
+            [],
+        ).append(variant.home_id)
 
     duplicated_names = {
         name: home_ids for name, home_ids in names.items() if len(home_ids) > 1
@@ -180,7 +179,10 @@ def validate_normalized_candidates(
             f"{name}: {', '.join(home_ids)}"
             for name, home_ids in sorted(duplicated_names.items())
         )
-        raise ValidationError(f"Duplicate normalized Pokémon names found: {details}")
+
+        raise ValidationError(
+            "Duplicate normalized Pokémon variant names found: " f"{details}"
+        )
 
 
 def _parse_regional_forms(
@@ -241,10 +243,7 @@ def _parse_form_overrides(
                 f"Override '{raw_api_name}' has invalid form_name."
             )
 
-        if display_name is not None and not isinstance(
-            display_name,
-            str,
-        ):
+        if display_name is not None and not isinstance(display_name, str):
             raise ConfigurationError(
                 f"Override '{raw_api_name}' has invalid display_name."
             )

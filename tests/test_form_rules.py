@@ -3,12 +3,8 @@ from pathlib import Path
 import pytest
 
 from pokedex.exceptions import ConfigurationError, ValidationError
-from pokedex.form_rules import (
-    FormRules,
-    evaluate_candidate,
-    filter_variety_candidates,
-)
-from pokedex.varieties import VarietyCandidate
+from pokedex.form_rules import FormRules, evaluate_variant, filter_pokemon_variants
+from pokedex.models import PokemonVariant
 
 
 def build_candidate(
@@ -18,8 +14,8 @@ def build_candidate(
     variety_api_name: str = "charizard",
     form_slug: str = "normal",
     is_default: bool = True,
-) -> VarietyCandidate:
-    return VarietyCandidate(
+) -> PokemonVariant:
+    return PokemonVariant(
         national_dex=national_dex,
         pokemon="Charizard",
         species_api_name=species_api_name,
@@ -34,7 +30,6 @@ def build_candidate(
             f"{variety_api_name}"
         ),
         is_default=is_default,
-        home_id=(f"{national_dex:05d}_" f"{form_slug.replace('-', '_').upper()}"),
     )
 
 
@@ -92,7 +87,7 @@ def test_default_candidate_is_included() -> None:
     )
     candidate = build_candidate()
 
-    result = evaluate_candidate(candidate, rules)
+    result = evaluate_variant(candidate, rules)
 
     assert result.excluded is False
 
@@ -112,7 +107,7 @@ def test_excludes_exact_slug() -> None:
         is_default=False,
     )
 
-    result = evaluate_candidate(candidate, rules)
+    result = evaluate_variant(candidate, rules)
 
     assert result.excluded is True
     assert result.reason is not None
@@ -135,7 +130,7 @@ def test_excludes_species_configured_as_single_row() -> None:
         is_default=False,
     )
 
-    result = evaluate_candidate(candidate, rules)
+    result = evaluate_variant(candidate, rules)
 
     assert result.excluded is True
 
@@ -157,7 +152,7 @@ def test_filter_preserves_default_candidate() -> None:
         is_default=False,
     )
 
-    filtered = filter_variety_candidates(
+    filtered = filter_pokemon_variants(
         (normal, mega),
         rules,
     )
@@ -182,9 +177,9 @@ def test_filter_rejects_when_species_disappears() -> None:
 
     with pytest.raises(
         ValidationError,
-        match="All variety candidates were excluded",
+        match="All Pokémon variants were excluded",
     ):
-        filter_variety_candidates(
+        filter_pokemon_variants(
             (candidate,),
             rules,
         )

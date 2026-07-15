@@ -25,3 +25,6 @@ Thumbs.db
 
 # Logs
 logs/
+
+# zips basura
+zips_gpt/

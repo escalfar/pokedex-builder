@@ -1,44 +1,55 @@
-from dataclasses import dataclass, field
-from typing import Any
+from __future__ import annotations
 
-from pokedex.constants import GAME_COLUMNS, GameColumn
+from dataclasses import dataclass, field
+from typing import TypeAlias
+
+from pokedex.constants import GAME_COLUMNS, Gender, GameColumn
+
+JsonScalar: TypeAlias = str | int | float | bool | None
+JsonValue: TypeAlias = JsonScalar | list["JsonValue"] | dict[str, "JsonValue"]
 
 
 @dataclass(frozen=True, slots=True)
 class GameAvailability:
-    """Availability of a Pokémon form in the supported games."""
+    """Availability of a Pokémon variant in the supported games."""
 
     values: dict[GameColumn, bool] = field(
         default_factory=lambda: {game: False for game in GAME_COLUMNS}
     )
 
     def __post_init__(self) -> None:
-        missing_games = set(GAME_COLUMNS) - set(self.values)
-        unexpected_games = set(self.values) - set(GAME_COLUMNS)
+        expected_games = set(GAME_COLUMNS)
+        actual_games = set(self.values)
+
+        missing_games = expected_games - actual_games
+        unexpected_games = actual_games - expected_games
 
         if missing_games:
             missing = ", ".join(sorted(game.value for game in missing_games))
             raise ValueError(f"Missing availability values for: {missing}")
 
         if unexpected_games:
-            unexpected = ", ".join(str(game) for game in unexpected_games)
+            unexpected = ", ".join(sorted(str(game) for game in unexpected_games))
             raise ValueError(f"Unexpected availability keys: {unexpected}")
 
         if any(not isinstance(value, bool) for value in self.values.values()):
             raise TypeError("All game availability values must be boolean.")
 
-    def is_available_in(self, game: GameColumn) -> bool:
-        """Return whether the Pokémon is available in the selected game."""
+    def is_available_in(
+        self,
+        game: GameColumn,
+    ) -> bool:
+        """Return whether the variant is available in a game."""
         return self.values[game]
 
     def to_dict(self) -> dict[str, bool]:
-        """Return availability using the final output column names."""
+        """Return availability using final output column names."""
         return {game.value: self.values[game] for game in GAME_COLUMNS}
 
 
 @dataclass(frozen=True, slots=True)
 class PokemonSpecies:
-    """Base information about a National Pokédex species."""
+    """Base information about one National Pokédex species."""
 
     national_dex: int
     name: str
@@ -47,14 +58,26 @@ class PokemonSpecies:
     is_mythical: bool = False
 
     def __post_init__(self) -> None:
-        if self.national_dex <= 0:
-            raise ValueError("National Pokédex number must be greater than zero.")
-
-        if not self.name.strip():
-            raise ValueError("Species name cannot be empty.")
-
-        if self.generation <= 0:
-            raise ValueError("Generation must be greater than zero.")
+        _validate_positive_integer(
+            self.national_dex,
+            "National Pokédex number",
+        )
+        _validate_non_empty_text(
+            self.name,
+            "Species name",
+        )
+        _validate_positive_integer(
+            self.generation,
+            "Generation",
+        )
+        _validate_boolean(
+            self.is_legendary,
+            "is_legendary",
+        )
+        _validate_boolean(
+            self.is_mythical,
+            "is_mythical",
+        )
 
     @property
     def is_legendary_or_mythical(self) -> bool:
@@ -63,36 +86,95 @@ class PokemonSpecies:
 
 
 @dataclass(frozen=True, slots=True)
-class PokemonForm:
-    """A storable Pokémon form or variant."""
+class PokemonVariant:
+    """One Pokémon form and gender combination stored by the project."""
 
     national_dex: int
     pokemon: str
-    form: str
-    name: str
+    species_api_name: str
+    variety_api_name: str
+    form_slug: str
+    form_name: str
+    display_name: str
     generation: int
-    home_id: str
+    resource_url: str
+    is_default: bool
+    gender: Gender = Gender.NONE
 
     def __post_init__(self) -> None:
-        if self.national_dex <= 0:
-            raise ValueError("National Pokédex number must be greater than zero.")
+        _validate_positive_integer(
+            self.national_dex,
+            "National Pokédex number",
+        )
+        _validate_non_empty_text(
+            self.pokemon,
+            "Pokemon",
+        )
+        _validate_non_empty_text(
+            self.species_api_name,
+            "Species API name",
+        )
+        _validate_non_empty_text(
+            self.variety_api_name,
+            "Variety API name",
+        )
+        _validate_non_empty_text(
+            self.form_slug,
+            "Form slug",
+        )
+        _validate_non_empty_text(
+            self.form_name,
+            "Form name",
+        )
+        _validate_non_empty_text(
+            self.display_name,
+            "Display name",
+        )
+        _validate_positive_integer(
+            self.generation,
+            "Generation",
+        )
+        _validate_non_empty_text(
+            self.resource_url,
+            "Resource URL",
+        )
+        _validate_boolean(
+            self.is_default,
+            "is_default",
+        )
 
-        for field_name, value in (
-            ("pokemon", self.pokemon),
-            ("form", self.form),
-            ("name", self.name),
-            ("home_id", self.home_id),
-        ):
-            if not value.strip():
-                raise ValueError(f"{field_name} cannot be empty.")
+        if not isinstance(self.gender, Gender):
+            raise TypeError("gender must be a Gender value.")
 
-        if self.generation <= 0:
-            raise ValueError("Generation must be greater than zero.")
+    @property
+    def home_id(self) -> str:
+        """Return the deterministic identifier for this variant."""
+        normalized_form = self.form_slug.strip().casefold().replace("-", "_").upper()
+
+        return (
+            f"{self.national_dex:05d}_"
+            f"{normalized_form}_"
+            f"{self.gender.value.upper()}"
+        )
+
+    @property
+    def logical_key(self) -> tuple[int, str, Gender]:
+        """Return the dimensions that uniquely identify the variant."""
+        return (
+            self.national_dex,
+            self.form_slug.casefold(),
+            self.gender,
+        )
+
+    @property
+    def is_normal_form(self) -> bool:
+        """Return whether the variant belongs to the normal form."""
+        return self.form_slug.casefold() == "normal"
 
 
 @dataclass(frozen=True, slots=True)
 class PokemonEntry:
-    """Final row included in the generated Pokédex."""
+    """Final row exported to CSV, JSON, and Excel."""
 
     national_dex: int
     pokemon: str
@@ -100,29 +182,57 @@ class PokemonEntry:
     name: str
     generation: int
     home_id: str
+    gender: Gender
     availability: GameAvailability
     legendary_mythical: bool
     obtainable_shiny: bool
 
     def __post_init__(self) -> None:
-        if self.national_dex <= 0:
-            raise ValueError("National Pokédex number must be greater than zero.")
+        _validate_positive_integer(
+            self.national_dex,
+            "National Pokédex number",
+        )
+        _validate_non_empty_text(
+            self.pokemon,
+            "Pokemon",
+        )
+        _validate_non_empty_text(
+            self.form,
+            "Form",
+        )
+        _validate_non_empty_text(
+            self.name,
+            "Name",
+        )
+        _validate_positive_integer(
+            self.generation,
+            "Generation",
+        )
+        _validate_non_empty_text(
+            self.home_id,
+            "HOME ID",
+        )
+        _validate_boolean(
+            self.legendary_mythical,
+            "legendary_mythical",
+        )
+        _validate_boolean(
+            self.obtainable_shiny,
+            "obtainable_shiny",
+        )
 
-        if self.generation <= 0:
-            raise ValueError("Generation must be greater than zero.")
+        if not isinstance(self.gender, Gender):
+            raise TypeError("gender must be a Gender value.")
 
-        for field_name, value in (
-            ("pokemon", self.pokemon),
-            ("form", self.form),
-            ("name", self.name),
-            ("home_id", self.home_id),
+        if not isinstance(
+            self.availability,
+            GameAvailability,
         ):
-            if not value.strip():
-                raise ValueError(f"{field_name} cannot be empty.")
+            raise TypeError("availability must be a GameAvailability instance.")
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> dict[str, JsonValue]:
         """Convert the entry to the final export structure."""
-        row: dict[str, Any] = {
+        row: dict[str, JsonValue] = {
             "Nat Dex": self.national_dex,
             "Pokemon": self.pokemon,
             "Forma": self.form,
@@ -136,3 +246,33 @@ class PokemonEntry:
         row["Obtenible"] = self.obtainable_shiny
 
         return row
+
+
+def _validate_positive_integer(
+    value: int,
+    field_name: str,
+) -> None:
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise TypeError(f"{field_name} must be an integer.")
+
+    if value <= 0:
+        raise ValueError(f"{field_name} must be greater than zero.")
+
+
+def _validate_non_empty_text(
+    value: str,
+    field_name: str,
+) -> None:
+    if not isinstance(value, str):
+        raise TypeError(f"{field_name} must be a string.")
+
+    if not value.strip():
+        raise ValueError(f"{field_name} cannot be empty.")
+
+
+def _validate_boolean(
+    value: bool,
+    field_name: str,
+) -> None:
+    if not isinstance(value, bool):
+        raise TypeError(f"{field_name} must be boolean.")

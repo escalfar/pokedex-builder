@@ -7,7 +7,7 @@ class ConfigurationError(PokedexError):
 
 
 class DownloadError(PokedexError):
-    """Raised when data cannot be downloaded."""
+    """Raised when data cannot be downloaded or parsed."""
 
 
 class CacheError(PokedexError):

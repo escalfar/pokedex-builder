@@ -6,6 +6,28 @@ import pytest
 
 import build_pokedex
 from pokedex.config import Settings
+from pokedex.pokeapi import PokeApiClient, SpeciesDetails, SpeciesVariety
+
+
+def mock_species_details() -> tuple[SpeciesDetails, ...]:
+    return (
+        SpeciesDetails(
+            national_dex=1,
+            api_name="bulbasaur",
+            english_name="Bulbasaur",
+            generation=1,
+            is_legendary=False,
+            is_mythical=False,
+            resource_url="https://pokeapi.co/api/v2/pokemon-species/1/",
+            varieties=(
+                SpeciesVariety(
+                    api_name="bulbasaur",
+                    resource_url="https://pokeapi.co/api/v2/pokemon/1/",
+                    is_default=True,
+                ),
+            ),
+        ),
+    )
 
 
 @pytest.fixture
@@ -54,13 +76,27 @@ def test_initialize_application_creates_directories(
     assert logger.name == "pokedex_builder"
 
 
-def test_run_returns_success(settings: Settings) -> None:
+def test_run_returns_success(
+    settings: Settings, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(
+        PokeApiClient,
+        "get_species_details",
+        lambda self, refresh_cache=False: mock_species_details(),
+    )
     result = build_pokedex.run(settings)
 
     assert result == 0
 
 
-def test_run_writes_log_file(settings: Settings) -> None:
+def test_run_writes_log_file(
+    settings: Settings, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(
+        PokeApiClient,
+        "get_species_details",
+        lambda self, refresh_cache=False: mock_species_details(),
+    )
     result = build_pokedex.run(
         settings,
         refresh_cache=True,

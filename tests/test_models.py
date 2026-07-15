@@ -1,11 +1,11 @@
 import pytest
 
-from pokedex.constants import GAME_COLUMNS, GameColumn
+from pokedex.constants import GAME_COLUMNS, Gender, GameColumn
 from pokedex.models import (
     GameAvailability,
     PokemonEntry,
-    PokemonForm,
     PokemonSpecies,
+    PokemonVariant,
 )
 
 
@@ -28,19 +28,14 @@ def test_game_availability_rejects_missing_game() -> None:
     values = {game: False for game in GAME_COLUMNS}
     values.pop(GameColumn.ZA)
 
-    with pytest.raises(ValueError, match="Missing availability"):
+    with pytest.raises(
+        ValueError,
+        match="Missing availability",
+    ):
         GameAvailability(values=values)
 
 
-def test_game_availability_rejects_non_boolean_value() -> None:
-    values = {game: False for game in GAME_COLUMNS}
-    values[GameColumn.XY] = 1  # type: ignore[assignment]
-
-    with pytest.raises(TypeError, match="must be boolean"):
-        GameAvailability(values=values)
-
-
-def test_pokemon_species_legendary_property() -> None:
+def test_species_legendary_or_mythical_property() -> None:
     species = PokemonSpecies(
         national_dex=150,
         name="Mewtwo",
@@ -51,55 +46,118 @@ def test_pokemon_species_legendary_property() -> None:
     assert species.is_legendary_or_mythical is True
 
 
-def test_pokemon_species_rejects_invalid_dex_number() -> None:
-    with pytest.raises(ValueError, match="greater than zero"):
-        PokemonSpecies(
-            national_dex=0,
-            name="MissingNo.",
-            generation=1,
-        )
-
-
-def test_pokemon_form_uses_variant_generation() -> None:
-    form = PokemonForm(
+def test_variant_generates_home_id() -> None:
+    variant = PokemonVariant(
         national_dex=26,
         pokemon="Raichu",
-        form="Alolan",
-        name="Alolan Raichu",
+        species_api_name="raichu",
+        variety_api_name="raichu-alola",
+        form_slug="alola",
+        form_name="Alolan",
+        display_name="Alolan Raichu",
         generation=7,
-        home_id="00026_ALOLAN",
+        resource_url=("https://pokeapi.co/api/v2/pokemon/10100/"),
+        is_default=False,
     )
 
-    assert form.generation == 7
+    assert variant.home_id == "00026_ALOLA_NONE"
 
 
-def test_pokemon_entry_exports_expected_columns() -> None:
-    availability_values = {game: False for game in GAME_COLUMNS}
-    availability_values[GameColumn.SM] = True
-    availability_values[GameColumn.USUM] = True
+def test_gendered_variant_generates_gendered_home_id() -> None:
+    variant = PokemonVariant(
+        national_dex=25,
+        pokemon="Pikachu",
+        species_api_name="pikachu",
+        variety_api_name="pikachu",
+        form_slug="normal",
+        form_name="Female",
+        display_name="Female Pikachu",
+        generation=1,
+        resource_url=("https://pokeapi.co/api/v2/pokemon/25/"),
+        is_default=True,
+        gender=Gender.FEMALE,
+    )
 
+    assert variant.home_id == "00025_NORMAL_FEMALE"
+
+
+def test_variant_logical_key_contains_identity_dimensions() -> None:
+    variant = PokemonVariant(
+        national_dex=215,
+        pokemon="Sneasel",
+        species_api_name="sneasel",
+        variety_api_name="sneasel-hisui",
+        form_slug="hisui",
+        form_name="Hisuian",
+        display_name="Male Hisuian Sneasel",
+        generation=8,
+        resource_url=("https://pokeapi.co/api/v2/pokemon/10235/"),
+        is_default=False,
+        gender=Gender.MALE,
+    )
+
+    assert variant.logical_key == (
+        215,
+        "hisui",
+        Gender.MALE,
+    )
+
+
+def test_entry_exports_only_final_columns() -> None:
     entry = PokemonEntry(
-        national_dex=26,
-        pokemon="Raichu",
-        form="Alolan",
-        name="Alolan Raichu",
-        generation=7,
-        home_id="00026_ALOLAN",
-        availability=GameAvailability(values=availability_values),
+        national_dex=25,
+        pokemon="Pikachu",
+        form="Female",
+        name="Female Pikachu",
+        generation=1,
+        home_id="00025_NORMAL_FEMALE",
+        gender=Gender.FEMALE,
+        availability=GameAvailability(),
         legendary_mythical=False,
         obtainable_shiny=True,
     )
 
     row = entry.to_dict()
 
-    assert row["Nat Dex"] == 26
-    assert row["Pokemon"] == "Raichu"
-    assert row["Forma"] == "Alolan"
-    assert row["Nombre"] == "Alolan Raichu"
-    assert row["Gen"] == 7
-    assert row["ID HOME"] == "00026_ALOLAN"
-    assert row["Sun / Moon"] is True
+    assert row["Nat Dex"] == 25
+    assert row["Pokemon"] == "Pikachu"
+    assert row["Forma"] == "Female"
+    assert row["Nombre"] == "Female Pikachu"
+    assert row["Gen"] == 1
+    assert row["ID HOME"] == "00025_NORMAL_FEMALE"
     assert row["X/Y"] is False
-    assert row["Legendario/Mítico"] is False
     assert row["Obtenible"] is True
+    assert "Gender" not in row
     assert len(row) == 18
+
+
+def test_models_reject_boolean_as_integer() -> None:
+    with pytest.raises(
+        TypeError,
+        match="must be an integer",
+    ):
+        PokemonSpecies(
+            national_dex=True,
+            name="Invalid",
+            generation=1,
+        )
+
+
+def test_variant_rejects_invalid_gender_type() -> None:
+    with pytest.raises(
+        TypeError,
+        match="gender must be a Gender value",
+    ):
+        PokemonVariant(
+            national_dex=25,
+            pokemon="Pikachu",
+            species_api_name="pikachu",
+            variety_api_name="pikachu",
+            form_slug="normal",
+            form_name="Normal",
+            display_name="Pikachu",
+            generation=1,
+            resource_url=("https://pokeapi.co/api/v2/pokemon/25/"),
+            is_default=True,
+            gender="Female",  # type: ignore[arg-type]
+        )

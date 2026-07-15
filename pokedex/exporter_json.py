@@ -3,9 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from pokedex.cache import JsonValue
 from pokedex.exceptions import PokedexError
-from pokedex.models import PokemonEntry
+from pokedex.models import JsonValue, PokemonEntry
 
 
 def export_json(
@@ -17,14 +16,12 @@ def export_json(
         raise ValueError("Cannot export an empty Pokémon entry collection.")
 
     payload: list[JsonValue] = [entry.to_dict() for entry in entries]
-
+    temporary_path = output_path.with_suffix(f"{output_path.suffix}.tmp")
     try:
         output_path.parent.mkdir(
             parents=True,
             exist_ok=True,
         )
-
-        temporary_path = output_path.with_suffix(f"{output_path.suffix}.tmp")
 
         with temporary_path.open(
             "w",
@@ -41,16 +38,10 @@ def export_json(
 
         temporary_path.replace(output_path)
     except (OSError, TypeError, ValueError) as error:
-        _remove_temporary_file(temporary_path)
+        try:
+            temporary_path.unlink(missing_ok=True)
+        except OSError:
+            pass
         raise PokedexError(f"Unable to export JSON file: {output_path}") from error
 
     return output_path
-
-
-def _remove_temporary_file(
-    path: Path,
-) -> None:
-    try:
-        path.unlink(missing_ok=True)
-    except OSError:
-        pass

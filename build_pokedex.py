@@ -9,11 +9,12 @@ from pokedex.exceptions import PokedexError
 from pokedex.logger import configure_logger
 from pokedex.pokeapi import PokeApiClient
 from pokedex.species import build_species
-from pokedex.varieties import build_variety_candidates
-from pokedex.form_rules import filter_variety_candidates
+from pokedex.variants import build_pokemon_variants
+from pokedex.form_rules import filter_pokemon_variants
 from pokedex.form_overrides import apply_form_overrides
-from pokedex.forms import build_pokemon_forms
 from pokedex.entries import build_pokemon_entries
+from pokedex.game_availability import apply_game_availability
+from pokedex.gender_differences import expand_gender_differences
 from pokedex.exporter_csv import export_csv
 from pokedex.exporter_json import export_json
 
@@ -115,78 +116,85 @@ def run(
         mythical_count,
     )
 
-    variety_candidates = build_variety_candidates(
+    pokemon_variants = build_pokemon_variants(
         species_details,
         species,
     )
 
     logger.info(
-        "Built and validated %s variety candidates",
-        len(variety_candidates),
+        "Built and validated %s Pokémon variants",
+        len(pokemon_variants),
     )
 
-    non_default_count = sum(
-        not candidate.is_default for candidate in variety_candidates
-    )
+    non_default_count = sum(not candidate.is_default for candidate in pokemon_variants)
 
     logger.info(
-        "Non-default variety candidates: %s",
+        "Non-default Pokémon variants: %s",
         non_default_count,
     )
 
     form_rules = settings.load_form_rules()
 
-    filtered_candidates = filter_variety_candidates(
-        variety_candidates,
+    filtered_variants = filter_pokemon_variants(
+        pokemon_variants,
         form_rules,
     )
 
-    excluded_count = len(variety_candidates) - len(filtered_candidates)
+    excluded_count = len(pokemon_variants) - len(filtered_variants)
 
     logger.info(
-        "Included variety candidates: %s",
-        len(filtered_candidates),
+        "Included Pokémon variants: %s",
+        len(filtered_variants),
     )
 
     logger.info(
-        "Excluded variety candidates: %s",
+        "Excluded Pokémon variants: %s",
         excluded_count,
     )
 
     form_overrides = settings.load_form_overrides()
 
-    normalized_candidates = apply_form_overrides(
-        filtered_candidates,
+    normalized_variants = apply_form_overrides(
+        filtered_variants,
         form_overrides,
     )
 
     logger.info(
-        "Normalized %s included form candidates",
-        len(normalized_candidates),
+        "Normalized %s included Pokémon variants",
+        len(normalized_variants),
     )
 
-    pokemon_forms = build_pokemon_forms(
-        normalized_candidates,
+    gender_rules = settings.load_gender_difference_rules()
+    gender_expanded_variants = expand_gender_differences(
+        normalized_variants,
+        gender_rules,
     )
 
     logger.info(
-        "Built and validated %s preliminary Pokémon forms",
-        len(pokemon_forms),
+        "Expanded variants to %s rows after gender differences",
+        len(gender_expanded_variants),
     )
 
-    form_counts: dict[int, int] = {}
+    variant_counts: dict[int, int] = {}
 
-    for form in pokemon_forms:
-        form_counts[form.national_dex] = form_counts.get(form.national_dex, 0) + 1
+    for variant in gender_expanded_variants:
+        variant_counts[variant.national_dex] = (
+            variant_counts.get(
+                variant.national_dex,
+                0,
+            )
+            + 1
+        )
 
-    species_with_multiple_forms = sum(count > 1 for count in form_counts.values())
+    species_with_multiple_variants = sum(count > 1 for count in variant_counts.values())
+
     logger.info(
-        "Species with multiple included forms: %s",
-        species_with_multiple_forms,
+        "Species with multiple included variants: %s",
+        species_with_multiple_variants,
     )
 
     pokemon_entries = build_pokemon_entries(
-        pokemon_forms,
+        gender_expanded_variants,
         species,
     )
 
@@ -194,6 +202,19 @@ def run(
         "Built %s preliminary export entries",
         len(pokemon_entries),
     )
+
+    availability_rules = settings.load_game_availability_rules()
+    pokemon_entries = apply_game_availability(
+        pokemon_entries,
+        availability_rules,
+    )
+
+    if not availability_rules.complete:
+        # The catalog starts conservative: unknown values remain FALSE
+        # instead of being inferred from incomplete public data.
+        logger.warning(
+            "Game availability catalog is incomplete; " "unlisted variants remain FALSE"
+        )
 
     if validate_only:
         logger.info("Validation completed; output generation skipped")

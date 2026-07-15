@@ -46,9 +46,7 @@ def export_csv(
 def _prepare_csv_row(
     entry: PokemonEntry,
 ) -> dict[str, object]:
-    row = entry.to_dict()
-
-    return {key: _convert_csv_value(value) for key, value in row.items()}
+    return {key: _convert_csv_value(value) for key, value in entry.to_dict().items()}
 
 
 def _convert_csv_value(value: object) -> object:

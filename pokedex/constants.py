@@ -1,6 +1,14 @@
 from enum import StrEnum
 
 
+class Gender(StrEnum):
+    """Gender dimension used for visually distinct Pokémon variants."""
+
+    NONE = "None"
+    MALE = "Male"
+    FEMALE = "Female"
+
+
 class GameColumn(StrEnum):
     """Supported game availability columns."""
 
@@ -55,3 +63,9 @@ GAME_COLUMNS: tuple[GameColumn, ...] = tuple(GameColumn)
 OUTPUT_COLUMNS: tuple[OutputColumn, ...] = tuple(OutputColumn)
 
 DEFAULT_FORM_NAME = "Normal"
+
+GENDER_SORT_ORDER = {
+    Gender.NONE: 0,
+    Gender.FEMALE: 1,
+    Gender.MALE: 2,
+}

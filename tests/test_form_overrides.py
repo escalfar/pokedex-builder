@@ -8,9 +8,9 @@ from pokedex.form_overrides import (
     FormOverrides,
     RegionalFormOverride,
     apply_form_overrides,
-    normalize_candidate,
+    normalize_variant,
 )
-from pokedex.varieties import VarietyCandidate
+from pokedex.models import PokemonVariant
 
 
 def build_candidate(
@@ -21,9 +21,8 @@ def build_candidate(
     display_name: str = "Alola Raichu",
     generation: int = 1,
     is_default: bool = False,
-    home_id: str = "00026_ALOLA",
-) -> VarietyCandidate:
-    return VarietyCandidate(
+) -> PokemonVariant:
+    return PokemonVariant(
         national_dex=26,
         pokemon="Raichu",
         species_api_name="raichu",
@@ -34,7 +33,6 @@ def build_candidate(
         generation=generation,
         resource_url=("https://pokeapi.co/api/v2/" f"pokemon/{variety_api_name}/"),
         is_default=is_default,
-        home_id=home_id,
     )
 
 
@@ -49,7 +47,7 @@ def test_regional_override_updates_name_and_generation() -> None:
         forms={},
     )
 
-    result = normalize_candidate(
+    result = normalize_variant(
         build_candidate(),
         overrides,
     )
@@ -76,7 +74,7 @@ def test_exact_override_has_priority() -> None:
         },
     )
 
-    result = normalize_candidate(
+    result = normalize_variant(
         build_candidate(),
         overrides,
     )
@@ -94,7 +92,6 @@ def test_default_candidate_is_not_modified() -> None:
         display_name="Raichu",
         generation=1,
         is_default=True,
-        home_id="00026_NORMAL",
     )
 
     overrides = FormOverrides(
@@ -111,7 +108,7 @@ def test_default_candidate_is_not_modified() -> None:
         },
     )
 
-    result = normalize_candidate(
+    result = normalize_variant(
         candidate,
         overrides,
     )
@@ -122,12 +119,10 @@ def test_default_candidate_is_not_modified() -> None:
 def test_apply_form_overrides_rejects_duplicate_names() -> None:
     first = build_candidate(
         variety_api_name="raichu-alola",
-        home_id="00026_ALOLA",
     )
     second = build_candidate(
         variety_api_name="raichu-special",
         form_slug="special",
-        home_id="00026_SPECIAL",
     )
 
     overrides = FormOverrides(
@@ -144,7 +139,7 @@ def test_apply_form_overrides_rejects_duplicate_names() -> None:
 
     with pytest.raises(
         ValidationError,
-        match="Duplicate normalized Pokémon names",
+        match="Duplicate normalized Pokémon variant names",
     ):
         apply_form_overrides(
             (first, second),

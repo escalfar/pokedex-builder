@@ -56,3 +56,29 @@ def test_settings_build_cache(tmp_path: Path) -> None:
     cache = settings.build_cache()
 
     assert cache.directory == tmp_path / "cache"
+
+
+def test_settings_load_game_availability_rules(tmp_path: Path) -> None:
+    rules_path = tmp_path / "game_availability.yaml"
+    rules_path.write_text(
+        """
+complete: false
+games:
+  xy: {national_dex: [], home_ids: [], excluded_home_ids: []}
+  oras: {national_dex: [], home_ids: [], excluded_home_ids: []}
+  sm: {national_dex: [], home_ids: [], excluded_home_ids: []}
+  usum: {national_dex: [], home_ids: [], excluded_home_ids: []}
+  lgpe: {national_dex: [], home_ids: [], excluded_home_ids: []}
+  swsh: {national_dex: [], home_ids: [], excluded_home_ids: []}
+  pla: {national_dex: [], home_ids: [], excluded_home_ids: []}
+  bdsp: {national_dex: [], home_ids: [], excluded_home_ids: []}
+  sv: {national_dex: [], home_ids: [], excluded_home_ids: []}
+  za: {national_dex: [], home_ids: [], excluded_home_ids: []}
+""".strip(),
+        encoding="utf-8",
+    )
+    settings = Settings(game_availability_path=rules_path)
+
+    rules = settings.load_game_availability_rules()
+
+    assert rules.complete is False

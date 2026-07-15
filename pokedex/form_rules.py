@@ -7,12 +7,12 @@ from typing import Any
 import yaml
 
 from pokedex.exceptions import ConfigurationError, ValidationError
-from pokedex.varieties import VarietyCandidate
+from pokedex.models import PokemonVariant
 
 
 @dataclass(frozen=True, slots=True)
 class FormRules:
-    """Validated inclusion and exclusion rules for Pokémon forms."""
+    """Validated inclusion and exclusion rules for Pokémon variants."""
 
     exact_slugs: frozenset[str]
     slug_prefixes: tuple[str, ...]
@@ -23,7 +23,7 @@ class FormRules:
 
     @classmethod
     def from_yaml(cls, path: Path) -> FormRules:
-        """Load and validate form rules from a YAML file."""
+        """Load and validate form rules from YAML."""
         if not path.is_file():
             raise ConfigurationError(f"Form rules file does not exist: {path}")
 
@@ -71,22 +71,22 @@ class FormRules:
 
 @dataclass(frozen=True, slots=True)
 class ExclusionResult:
-    """Result of evaluating a variety candidate against form rules."""
+    """Result of evaluating a variant against form rules."""
 
     excluded: bool
     reason: str | None = None
 
 
-def evaluate_candidate(
-    candidate: VarietyCandidate,
+def evaluate_variant(
+    variant: PokemonVariant,
     rules: FormRules,
 ) -> ExclusionResult:
-    """Determine whether a candidate must be excluded."""
-    api_name = candidate.variety_api_name.casefold()
-    species_name = candidate.species_api_name.casefold()
-    form_slug = candidate.form_slug.casefold()
+    """Determine whether a Pokémon variant must be excluded."""
+    api_name = variant.variety_api_name.casefold()
+    species_name = variant.species_api_name.casefold()
+    form_slug = variant.form_slug.casefold()
 
-    if candidate.is_default:
+    if variant.is_default:
         return ExclusionResult(excluded=False)
 
     if species_name in rules.species_single_row:
@@ -128,22 +128,20 @@ def evaluate_candidate(
     return ExclusionResult(excluded=False)
 
 
-def filter_variety_candidates(
-    candidates: tuple[VarietyCandidate, ...],
+def filter_pokemon_variants(
+    variants: tuple[PokemonVariant, ...],
     rules: FormRules,
-) -> tuple[VarietyCandidate, ...]:
-    """Remove excluded candidates while preserving deterministic order."""
+) -> tuple[PokemonVariant, ...]:
+    """Remove excluded variants while preserving their order."""
     included = tuple(
-        candidate
-        for candidate in candidates
-        if not evaluate_candidate(candidate, rules).excluded
+        variant for variant in variants if not evaluate_variant(variant, rules).excluded
     )
 
     if not included:
-        raise ValidationError("All variety candidates were excluded by the form rules.")
+        raise ValidationError("All Pokémon variants were excluded by the form rules.")
 
     _validate_each_species_is_represented(
-        original=candidates,
+        original=variants,
         filtered=included,
     )
 
@@ -152,18 +150,19 @@ def filter_variety_candidates(
 
 def _validate_each_species_is_represented(
     *,
-    original: tuple[VarietyCandidate, ...],
-    filtered: tuple[VarietyCandidate, ...],
+    original: tuple[PokemonVariant, ...],
+    filtered: tuple[PokemonVariant, ...],
 ) -> None:
-    original_species = {candidate.national_dex for candidate in original}
-    filtered_species = {candidate.national_dex for candidate in filtered}
+    original_species = {variant.national_dex for variant in original}
+    filtered_species = {variant.national_dex for variant in filtered}
 
     missing_species = sorted(original_species - filtered_species)
 
     if missing_species:
         values = ", ".join(str(value) for value in missing_species)
+
         raise ValidationError(
-            "Form rules removed every candidate for National Dex: " f"{values}"
+            "Form rules removed every variant for National Dex: " f"{values}"
         )
 
 
