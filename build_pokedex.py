@@ -9,6 +9,7 @@ from pokedex.exceptions import PokedexError
 from pokedex.logger import configure_logger
 from pokedex.pokeapi import PokeApiClient
 from pokedex.species import build_species
+from pokedex.varieties import build_variety_candidates
 
 
 def build_argument_parser() -> argparse.ArgumentParser:
@@ -77,6 +78,25 @@ def run(
         )
 
     species = build_species(species_details)
+
+    variety_candidates = build_variety_candidates(
+        species_details,
+        species,
+    )
+
+    logger.info(
+        "Built and validated %s variety candidates",
+        len(variety_candidates),
+    )
+
+    non_default_count = sum(
+        not candidate.is_default for candidate in variety_candidates
+    )
+
+    logger.info(
+        "Non-default variety candidates: %s",
+        non_default_count,
+    )
 
     logger.info(
         "Loaded and validated %s Pokémon species",
