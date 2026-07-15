@@ -174,6 +174,40 @@ def test_source_gender_varieties_are_normalized() -> None:
     ]
 
 
+def test_default_source_variety_can_represent_male_gender() -> None:
+    # PokéAPI names the male default varieties simply ``frillish``,
+    # ``jellicent`` and ``pyroar`` instead of using a ``-male`` suffix.
+    male = build_variant(
+        national_dex=592,
+        pokemon="Frillish",
+        variety_api_name="frillish",
+        display_name="Frillish",
+    )
+    female = build_variant(
+        national_dex=592,
+        pokemon="Frillish",
+        variety_api_name="frillish-female",
+        form_slug="female",
+        form_name="Female",
+        display_name="Female Frillish",
+        is_default=False,
+    )
+    rules = build_rules(
+        forms_by_dex={592: frozenset({"normal"})},
+        source_gender_varieties={
+            "frillish": SourceGenderVariety(Gender.MALE, "normal"),
+            "frillish-female": SourceGenderVariety(Gender.FEMALE, "normal"),
+        },
+    )
+
+    variants = expand_gender_differences((male, female), rules)
+
+    assert [variant.home_id for variant in variants] == [
+        "00592_NORMAL_FEMALE",
+        "00592_NORMAL_MALE",
+    ]
+
+
 def test_missing_configured_form_is_rejected() -> None:
     normal = build_variant(
         national_dex=215,

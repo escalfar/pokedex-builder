@@ -43,6 +43,9 @@ class Settings(BaseSettings):
     csv_output_path: Path = PROJECT_ROOT / "output" / "Pokedex.csv"
     json_output_path: Path = PROJECT_ROOT / "output" / "Pokedex.json"
     excel_output_path: Path = PROJECT_ROOT / "output" / "Pokedex.xlsx"
+    catalog_coverage_output_path: Path = (
+        PROJECT_ROOT / "output" / "Catalog_Coverage.json"
+    )
 
     pokeapi_base_url: str = "https://pokeapi.co/api/v2"
     request_timeout_seconds: float = Field(default=30.0, gt=0)

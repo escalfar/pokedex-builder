@@ -116,11 +116,12 @@ source_gender_varieties:
   unfezant-female: {gender: female, form_slug: normal}
   unfezant-male: {gender: male, form_slug: normal}
   frillish-female: {gender: female, form_slug: normal}
-  frillish-male: {gender: male, form_slug: normal}
+  # PokéAPI uses the base/default variety name for these male forms.
+  frillish: {gender: male, form_slug: normal}
   jellicent-female: {gender: female, form_slug: normal}
-  jellicent-male: {gender: male, form_slug: normal}
+  jellicent: {gender: male, form_slug: normal}
   pyroar-female: {gender: female, form_slug: normal}
-  pyroar-male: {gender: male, form_slug: normal}
+  pyroar: {gender: male, form_slug: normal}
   meowstic-female: {gender: female, form_slug: normal}
   meowstic-male: {gender: male, form_slug: normal}
   indeedee-female: {gender: female, form_slug: normal}

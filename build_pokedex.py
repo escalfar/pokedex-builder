@@ -5,6 +5,10 @@ import logging
 from collections.abc import Sequence
 
 from pokedex.config import Settings, get_settings
+from pokedex.catalog_coverage import (
+    build_catalog_coverage_report,
+    export_catalog_coverage_json,
+)
 from pokedex.exceptions import PokedexError
 from pokedex.logger import configure_logger
 from pokedex.pokeapi import PokeApiClient
@@ -231,6 +235,28 @@ def run(
             "unlisted variants remain FALSE"
         )
 
+    coverage_report = build_catalog_coverage_report(
+        pokemon_entries,
+        availability_rules,
+        shiny_rules,
+    )
+
+    for game, counts in coverage_report.games.items():
+        logger.info(
+            "Catalog coverage for %s: %.2f%% (%s/%s verified)",
+            game.value,
+            counts.percent,
+            counts.verified,
+            counts.total,
+        )
+
+    logger.info(
+        "Catalog coverage for shiny availability: %.2f%% (%s/%s verified)",
+        coverage_report.shiny.percent,
+        coverage_report.shiny.verified,
+        coverage_report.shiny.total,
+    )
+
     if validate_only:
         logger.info("Validation completed; output generation skipped")
     else:
@@ -242,6 +268,11 @@ def run(
         json_path = export_json(
             pokemon_entries,
             settings.json_output_path,
+        )
+
+        coverage_path = export_catalog_coverage_json(
+            coverage_report,
+            settings.catalog_coverage_output_path,
         )
 
         excel_path = export_excel(
@@ -257,6 +288,11 @@ def run(
         logger.info(
             "JSON exported to: %s",
             json_path,
+        )
+
+        logger.info(
+            "Catalog coverage exported to: %s",
+            coverage_path,
         )
 
         logger.info(
