@@ -7,6 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from pokedex.cache import JsonCache
 from pokedex.http import HttpClient
 from pokedex.pokeapi import PokeApiClient
+from pokedex.form_rules import FormRules
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
@@ -27,6 +28,7 @@ class Settings(BaseSettings):
     cache_dir: Path = PROJECT_ROOT / "cache"
     output_dir: Path = PROJECT_ROOT / "output"
     logs_dir: Path = PROJECT_ROOT / "logs"
+    form_rules_path: Path = PROJECT_ROOT / "data" / "form_rules.yaml"
 
     pokeapi_base_url: str = "https://pokeapi.co/api/v2"
     request_timeout_seconds: float = Field(default=30.0, gt=0)
@@ -64,6 +66,9 @@ class Settings(BaseSettings):
             http_client=self.build_http_client(),
             cache=self.build_cache(),
         )
+
+    def load_form_rules(self) -> "FormRules":
+        return FormRules.from_yaml(self.form_rules_path)
 
 
 @lru_cache

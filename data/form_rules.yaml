@@ -1,0 +1,78 @@
+version: "1.0"
+
+exclude:
+  exact_slugs:
+    - ash
+    - battle-bond
+    - blade
+    - busted
+    - complete
+    - crowned
+    - dusk-mane
+    - eternamax
+    - gulping
+    - hangry
+    - hero
+    - ice-rider
+    - low-key-gmax
+    - mega
+    - mega-x
+    - mega-y
+    - noice
+    - original-color
+    - partner
+    - primal
+    - school
+    - shadow-rider
+    - solo
+    - starter
+    - sunshine
+    - ten-percent
+    - ultra
+    - zen
+    - zen-galar
+    - gorging
+
+  slug_prefixes:
+    - gmax
+    - mega
+    - pikachu-cap
+    - pikachu-cosplay
+    - pikachu-rock-star
+    - pikachu-belle
+    - pikachu-pop-star
+    - pikachu-phd
+    - pikachu-libre
+
+  slug_suffixes:
+    - gmax
+    - mega
+    - mega-x
+    - mega-y
+    - cap
+
+  api_name_contains:
+    - "-gmax"
+    - "-mega"
+    - "-totem"
+    - "-cap"
+    - "-cosplay"
+    - "-starter"
+
+  species_single_row:
+    - arceus
+    - dialga
+    - genesect
+    - giratina
+    - minior
+    - ogerpon
+    - palkia
+    - silvally
+    - terapagos
+
+  excluded_api_names:
+    - greninja-battle-bond
+    - greninja-ash
+    - pikachu-partner
+    - eevee-partner
+    - floette-eternal

@@ -10,6 +10,7 @@ from pokedex.logger import configure_logger
 from pokedex.pokeapi import PokeApiClient
 from pokedex.species import build_species
 from pokedex.varieties import build_variety_candidates
+from pokedex.form_rules import filter_variety_candidates
 
 
 def build_argument_parser() -> argparse.ArgumentParser:
@@ -79,25 +80,6 @@ def run(
 
     species = build_species(species_details)
 
-    variety_candidates = build_variety_candidates(
-        species_details,
-        species,
-    )
-
-    logger.info(
-        "Built and validated %s variety candidates",
-        len(variety_candidates),
-    )
-
-    non_default_count = sum(
-        not candidate.is_default for candidate in variety_candidates
-    )
-
-    logger.info(
-        "Non-default variety candidates: %s",
-        non_default_count,
-    )
-
     logger.info(
         "Loaded and validated %s Pokémon species",
         len(species),
@@ -121,6 +103,44 @@ def run(
     logger.info(
         "Mythical species: %s",
         mythical_count,
+    )
+
+    variety_candidates = build_variety_candidates(
+        species_details,
+        species,
+    )
+
+    logger.info(
+        "Built and validated %s variety candidates",
+        len(variety_candidates),
+    )
+
+    non_default_count = sum(
+        not candidate.is_default for candidate in variety_candidates
+    )
+
+    logger.info(
+        "Non-default variety candidates: %s",
+        non_default_count,
+    )
+
+    form_rules = settings.load_form_rules()
+
+    filtered_candidates = filter_variety_candidates(
+        variety_candidates,
+        form_rules,
+    )
+
+    excluded_count = len(variety_candidates) - len(filtered_candidates)
+
+    logger.info(
+        "Included variety candidates: %s",
+        len(filtered_candidates),
+    )
+
+    logger.info(
+        "Excluded variety candidates: %s",
+        excluded_count,
     )
 
     if validate_only:
