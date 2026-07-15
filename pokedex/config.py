@@ -5,6 +5,7 @@ from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from pokedex.cache import JsonCache
+from pokedex.http import HttpClient
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
@@ -47,6 +48,14 @@ class Settings(BaseSettings):
         return JsonCache(
             directory=self.cache_dir,
             ttl_hours=self.cache_ttl_hours,
+        )
+
+    def build_http_client(self) -> "HttpClient":
+        return HttpClient(
+            base_url=self.pokeapi_base_url,
+            timeout_seconds=self.request_timeout_seconds,
+            retries=self.request_retries,
+            user_agent=self.user_agent,
         )
 
 
