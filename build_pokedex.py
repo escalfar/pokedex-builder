@@ -7,6 +7,7 @@ from collections.abc import Sequence
 from pokedex.config import Settings, get_settings
 from pokedex.exceptions import PokedexError
 from pokedex.logger import configure_logger
+from pokedex.pokeapi import PokeApiClient
 
 
 def build_argument_parser() -> argparse.ArgumentParser:
@@ -63,6 +64,21 @@ def run(
     logger.info("Output directory: %s", settings.output_dir)
     logger.info("Refresh cache: %s", refresh_cache)
     logger.info("Validation only: %s", validate_only)
+
+    with settings.build_http_client() as http_client:
+        pokeapi_client = PokeApiClient(
+            http_client=http_client,
+            cache=settings.build_cache(),
+        )
+
+        species = pokeapi_client.get_species_resources(
+            refresh_cache=refresh_cache,
+        )
+
+    logger.info(
+        "Loaded %s Pokémon species resources",
+        len(species),
+    )
 
     if validate_only:
         logger.info("Validation mode initialized")
