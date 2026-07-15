@@ -45,6 +45,22 @@ class ResourcePage:
 
 
 @dataclass(frozen=True, slots=True)
+class SpeciesVariety:
+    """A Pokémon variety associated with a species."""
+
+    api_name: str
+    resource_url: str
+    is_default: bool
+
+    def __post_init__(self) -> None:
+        if not self.api_name.strip():
+            raise ValueError("Variety API name cannot be empty.")
+
+        if not self.resource_url.strip():
+            raise ValueError("Variety resource URL cannot be empty.")
+
+
+@dataclass(frozen=True, slots=True)
 class SpeciesDetails:
     """Normalized Pokémon species data from PokéAPI."""
 
@@ -55,6 +71,7 @@ class SpeciesDetails:
     is_legendary: bool
     is_mythical: bool
     resource_url: str
+    varieties: tuple[SpeciesVariety, ...]
 
     def __post_init__(self) -> None:
         if self.national_dex <= 0:
@@ -70,6 +87,16 @@ class SpeciesDetails:
         ):
             if not value.strip():
                 raise ValueError(f"{field_name} cannot be empty.")
+
+        if not self.varieties:
+            raise ValueError("Species details must contain at least one variety.")
+
+        default_count = sum(variety.is_default for variety in self.varieties)
+
+        if default_count != 1:
+            raise ValueError(
+                "Species details must contain exactly one default variety."
+            )
 
 
 class PokeApiClient:
@@ -135,6 +162,14 @@ class PokeApiClient:
                 "is_legendary": item.is_legendary,
                 "is_mythical": item.is_mythical,
                 "resource_url": item.resource_url,
+                "varieties": [
+                    {
+                        "api_name": variety.api_name,
+                        "resource_url": variety.resource_url,
+                        "is_default": variety.is_default,
+                    }
+                    for variety in item.varieties
+                ],
             }
             for item in details
         ]
@@ -241,6 +276,7 @@ class PokeApiClient:
             is_legendary = item.get("is_legendary")
             is_mythical = item.get("is_mythical")
             resource_url = item.get("resource_url")
+            varieties_payload = item.get("varieties")
 
             if not isinstance(national_dex, int):
                 raise DownloadError(
@@ -278,6 +314,10 @@ class PokeApiClient:
                     "Cached species details contain an invalid resource URL."
                 )
 
+            varieties = self._parse_cached_varieties(
+                varieties_payload,
+            )
+
             details.append(
                 SpeciesDetails(
                     national_dex=national_dex,
@@ -287,6 +327,7 @@ class PokeApiClient:
                     is_legendary=is_legendary,
                     is_mythical=is_mythical,
                     resource_url=resource_url,
+                    varieties=varieties,
                 )
             )
 
@@ -363,6 +404,7 @@ class PokeApiClient:
         pokedex_numbers = payload.get("pokedex_numbers")
         is_legendary = payload.get("is_legendary")
         is_mythical = payload.get("is_mythical")
+        varieties_data = payload.get("varieties")
 
         if not isinstance(api_name, str):
             raise DownloadError("PokéAPI species details are missing a valid name.")
@@ -375,6 +417,9 @@ class PokeApiClient:
         )
         national_dex = PokeApiClient._parse_national_dex(
             pokedex_numbers,
+        )
+        varieties = PokeApiClient._parse_varieties(
+            varieties_data,
         )
 
         if not isinstance(is_legendary, bool):
@@ -395,6 +440,7 @@ class PokeApiClient:
             is_legendary=is_legendary,
             is_mythical=is_mythical,
             resource_url=resource_url,
+            varieties=varieties,
         )
 
     @staticmethod
@@ -491,3 +537,111 @@ class PokeApiClient:
         raise DownloadError(
             "PokéAPI species details do not contain a National Pokédex number."
         )
+
+    @staticmethod
+    def _parse_cached_varieties(
+        payload: JsonValue | None,
+    ) -> tuple[SpeciesVariety, ...]:
+        if not isinstance(payload, list):
+            raise DownloadError("Cached species varieties must contain a JSON list.")
+
+        varieties: list[SpeciesVariety] = []
+
+        for item in payload:
+            if not isinstance(item, dict):
+                raise DownloadError(
+                    "Cached species varieties must contain JSON objects."
+                )
+
+            api_name = item.get("api_name")
+            resource_url = item.get("resource_url")
+            is_default = item.get("is_default")
+
+            if not isinstance(api_name, str):
+                raise DownloadError(
+                    "Cached species variety contains an invalid API name."
+                )
+
+            if not isinstance(resource_url, str):
+                raise DownloadError(
+                    "Cached species variety contains an invalid resource URL."
+                )
+
+            if not isinstance(is_default, bool):
+                raise DownloadError(
+                    "Cached species variety contains an invalid default value."
+                )
+
+            varieties.append(
+                SpeciesVariety(
+                    api_name=api_name,
+                    resource_url=resource_url,
+                    is_default=is_default,
+                )
+            )
+
+        if not varieties:
+            raise DownloadError("Cached species details contain no varieties.")
+
+        return tuple(varieties)
+
+    @staticmethod
+    def _parse_varieties(
+        payload: JsonValue | None,
+    ) -> tuple[SpeciesVariety, ...]:
+        if not isinstance(payload, list):
+            raise DownloadError("PokéAPI species varieties must contain a JSON list.")
+
+        varieties: list[SpeciesVariety] = []
+
+        for item in payload:
+            if not isinstance(item, dict):
+                raise DownloadError(
+                    "PokéAPI species varieties must contain JSON objects."
+                )
+
+            is_default = item.get("is_default")
+            pokemon = item.get("pokemon")
+
+            if not isinstance(is_default, bool):
+                raise DownloadError(
+                    "PokéAPI species variety contains an invalid default value."
+                )
+
+            if not isinstance(pokemon, dict):
+                raise DownloadError(
+                    "PokéAPI species variety is missing its Pokémon resource."
+                )
+
+            api_name = pokemon.get("name")
+            resource_url = pokemon.get("url")
+
+            if not isinstance(api_name, str):
+                raise DownloadError(
+                    "PokéAPI species variety contains an invalid Pokémon name."
+                )
+
+            if not isinstance(resource_url, str):
+                raise DownloadError(
+                    "PokéAPI species variety contains an invalid Pokémon URL."
+                )
+
+            varieties.append(
+                SpeciesVariety(
+                    api_name=api_name,
+                    resource_url=resource_url,
+                    is_default=is_default,
+                )
+            )
+
+        if not varieties:
+            raise DownloadError("PokéAPI species details contain no varieties.")
+
+        default_count = sum(variety.is_default for variety in varieties)
+
+        if default_count != 1:
+            raise DownloadError(
+                "PokéAPI species details must contain exactly " "one default variety."
+            )
+
+        return tuple(varieties)

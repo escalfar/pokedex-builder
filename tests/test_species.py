@@ -2,7 +2,7 @@ import pytest
 
 from pokedex.exceptions import ValidationError
 from pokedex.models import PokemonSpecies
-from pokedex.pokeapi import SpeciesDetails
+from pokedex.pokeapi import SpeciesDetails, SpeciesVariety
 from pokedex.species import build_species, validate_species
 
 
@@ -22,6 +22,13 @@ def build_details(
         is_legendary=is_legendary,
         is_mythical=is_mythical,
         resource_url=("https://pokeapi.co/api/v2/" f"pokemon-species/{national_dex}/"),
+        varieties=(
+            SpeciesVariety(
+                api_name=english_name.casefold(),
+                resource_url=("https://pokeapi.co/api/v2/" f"pokemon/{national_dex}/"),
+                is_default=True,
+            ),
+        ),
     )
 
 

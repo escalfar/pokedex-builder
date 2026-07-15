@@ -56,6 +56,15 @@ def build_species_payload() -> dict[str, object]:
         ],
         "is_legendary": False,
         "is_mythical": False,
+        "varieties": [
+            {
+                "is_default": True,
+                "pokemon": {
+                    "name": "bulbasaur",
+                    "url": "https://pokeapi.co/api/v2/pokemon/1/",
+                },
+            }
+        ],
     }
 
 
@@ -114,6 +123,13 @@ def test_get_species_details_uses_cache(
                 "is_legendary": True,
                 "is_mythical": False,
                 "resource_url": ("https://pokeapi.co/api/v2/" "pokemon-species/150/"),
+                "varieties": [
+                    {
+                        "api_name": "mewtwo",
+                        "resource_url": ("https://pokeapi.co/api/v2/pokemon/150/"),
+                        "is_default": True,
+                    }
+                ],
             }
         ],
     )
