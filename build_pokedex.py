@@ -14,6 +14,7 @@ from pokedex.form_rules import filter_pokemon_variants
 from pokedex.form_overrides import apply_form_overrides
 from pokedex.entries import build_pokemon_entries
 from pokedex.game_availability import apply_game_availability
+from pokedex.shiny_availability import apply_shiny_availability
 from pokedex.gender_differences import expand_gender_differences
 from pokedex.exporter_csv import export_csv
 from pokedex.exporter_json import export_json
@@ -214,6 +215,19 @@ def run(
         # instead of being inferred from incomplete public data.
         logger.warning(
             "Game availability catalog is incomplete; " "unlisted variants remain FALSE"
+        )
+
+    shiny_rules = settings.load_shiny_availability_rules()
+    pokemon_entries = apply_shiny_availability(
+        pokemon_entries,
+        shiny_rules,
+    )
+
+    if not shiny_rules.complete:
+        # Unknown shiny status stays FALSE until the variant is verified.
+        logger.warning(
+            "Shiny availability catalog is incomplete; "
+            "unlisted variants remain FALSE"
         )
 
     if validate_only:

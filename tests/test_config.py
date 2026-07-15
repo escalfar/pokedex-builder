@@ -82,3 +82,21 @@ games:
     rules = settings.load_game_availability_rules()
 
     assert rules.complete is False
+
+
+def test_settings_load_shiny_availability_rules(tmp_path: Path) -> None:
+    rules_path = tmp_path / "shiny_availability.yaml"
+    rules_path.write_text(
+        """
+complete: false
+national_dex: []
+home_ids: []
+excluded_home_ids: []
+""".strip(),
+        encoding="utf-8",
+    )
+    settings = Settings(shiny_availability_path=rules_path)
+
+    rules = settings.load_shiny_availability_rules()
+
+    assert rules.complete is False

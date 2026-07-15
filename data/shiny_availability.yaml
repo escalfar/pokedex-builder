@@ -1,0 +1,12 @@
+version: "1.0"
+
+# The catalog remains conservative until every retained HOME variant has been
+# checked against ordinary in-game encounters, breeding, gifts, and shiny locks.
+# Unlisted entries stay FALSE rather than being guessed.
+complete: false
+
+# Use National Dex numbers only when every retained variant follows the same
+# shiny-obtainability rule. Use ID HOME for form-specific exceptions.
+national_dex: []
+home_ids: []
+excluded_home_ids: []

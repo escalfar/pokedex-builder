@@ -12,6 +12,7 @@ from pokedex.game_availability import GameAvailabilityRules
 from pokedex.gender_differences import GenderDifferenceRules
 from pokedex.http import HttpClient
 from pokedex.pokeapi import PokeApiClient
+from pokedex.shiny_availability import ShinyAvailabilityRules
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
@@ -29,14 +30,15 @@ class Settings(BaseSettings):
 
     project_root: Path = PROJECT_ROOT
     data_dir: Path = PROJECT_ROOT / "data"
-    cache_dir: Path = PROJECT_ROOT / "cache"
     output_dir: Path = PROJECT_ROOT / "output"
+    cache_dir: Path = PROJECT_ROOT / "cache"
     logs_dir: Path = PROJECT_ROOT / "logs"
 
     form_rules_path: Path = PROJECT_ROOT / "data" / "form_rules.yaml"
     form_overrides_path: Path = PROJECT_ROOT / "data" / "form_overrides.yaml"
     gender_differences_path: Path = PROJECT_ROOT / "data" / "gender_differences.yaml"
     game_availability_path: Path = PROJECT_ROOT / "data" / "game_availability.yaml"
+    shiny_availability_path: Path = PROJECT_ROOT / "data" / "shiny_availability.yaml"
 
     csv_output_path: Path = PROJECT_ROOT / "output" / "Pokedex.csv"
     json_output_path: Path = PROJECT_ROOT / "output" / "Pokedex.json"
@@ -97,6 +99,10 @@ class Settings(BaseSettings):
     def load_game_availability_rules(self) -> GameAvailabilityRules:
         """Load the curated availability catalog for supported games."""
         return GameAvailabilityRules.from_yaml(self.game_availability_path)
+
+    def load_shiny_availability_rules(self) -> ShinyAvailabilityRules:
+        """Load the curated non-event shiny availability catalog."""
+        return ShinyAvailabilityRules.from_yaml(self.shiny_availability_path)
 
 
 @lru_cache
