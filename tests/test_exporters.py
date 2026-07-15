@@ -86,3 +86,64 @@ def test_json_uses_unescaped_unicode(
 
     assert "Legendario/Mítico" in content
     assert "\\u00ed" not in content
+
+
+def test_export_excel_creates_four_expected_sheets(tmp_path: Path) -> None:
+    from openpyxl import load_workbook
+
+    from pokedex.exporter_excel import export_excel
+
+    output_path = tmp_path / "Pokedex.xlsx"
+    result = export_excel((build_entry(),), output_path)
+
+    assert result == output_path
+    workbook = load_workbook(output_path, data_only=True)
+
+    try:
+        assert workbook.sheetnames == [
+            "Pokédex",
+            "Resumen",
+            "Validación",
+            "Metadatos",
+        ]
+        sheet = workbook["Pokédex"]
+        assert sheet.freeze_panes == "A2"
+        assert sheet["A1"].value == "Nat Dex"
+        assert sheet["D2"].value == "Alolan Raichu"
+        assert sheet["R2"].value is True
+    finally:
+        workbook.close()
+
+
+def test_export_excel_summary_and_metadata(tmp_path: Path) -> None:
+    from datetime import UTC, datetime
+
+    from openpyxl import load_workbook
+
+    from pokedex.exporter_excel import export_excel
+
+    output_path = tmp_path / "Pokedex.xlsx"
+    generated_at = datetime(2026, 7, 15, 12, 0, tzinfo=UTC)
+
+    export_excel(
+        (build_entry(),),
+        output_path,
+        generator_version="1.2.3",
+        specification_version="1.0",
+        generated_at=generated_at,
+    )
+
+    workbook = load_workbook(output_path, data_only=True)
+
+    try:
+        summary = workbook["Resumen"]
+        metadata = workbook["Metadatos"]
+        validation = workbook["Validación"]
+
+        assert summary["B4"].value == 1
+        assert summary["B5"].value == 1
+        assert metadata["B4"].value == "1.2.3"
+        assert metadata["B6"].value == generated_at.isoformat()
+        assert validation["B4"].value == "OK"
+    finally:
+        workbook.close()

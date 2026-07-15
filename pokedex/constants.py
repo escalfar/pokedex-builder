@@ -5,8 +5,15 @@ class Gender(StrEnum):
     """Gender dimension used for visually distinct Pokémon variants."""
 
     NONE = "None"
-    MALE = "Male"
     FEMALE = "Female"
+    MALE = "Male"
+
+
+GENDER_SORT_ORDER: dict[Gender, int] = {
+    Gender.NONE: 0,
+    Gender.FEMALE: 1,
+    Gender.MALE: 2,
+}
 
 
 class GameColumn(StrEnum):
@@ -50,7 +57,7 @@ class OutputColumn(StrEnum):
 
 
 class ExcelSheet(StrEnum):
-    """Names of the worksheets in the generated Excel file."""
+    """Worksheet names used by the Excel exporter."""
 
     POKEDEX = "Pokédex"
     SUMMARY = "Resumen"
@@ -63,9 +70,3 @@ GAME_COLUMNS: tuple[GameColumn, ...] = tuple(GameColumn)
 OUTPUT_COLUMNS: tuple[OutputColumn, ...] = tuple(OutputColumn)
 
 DEFAULT_FORM_NAME = "Normal"
-
-GENDER_SORT_ORDER = {
-    Gender.NONE: 0,
-    Gender.FEMALE: 1,
-    Gender.MALE: 2,
-}

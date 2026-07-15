@@ -18,6 +18,7 @@ from pokedex.shiny_availability import apply_shiny_availability
 from pokedex.gender_differences import expand_gender_differences
 from pokedex.exporter_csv import export_csv
 from pokedex.exporter_json import export_json
+from pokedex.exporter_excel import export_excel
 
 
 def build_argument_parser() -> argparse.ArgumentParser:
@@ -243,6 +244,11 @@ def run(
             settings.json_output_path,
         )
 
+        excel_path = export_excel(
+            pokemon_entries,
+            settings.excel_output_path,
+        )
+
         logger.info(
             "CSV exported to: %s",
             csv_path,
@@ -251,6 +257,11 @@ def run(
         logger.info(
             "JSON exported to: %s",
             json_path,
+        )
+
+        logger.info(
+            "Excel exported to: %s",
+            excel_path,
         )
 
     logger.info("Application infrastructure initialized successfully")
