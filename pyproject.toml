@@ -56,6 +56,7 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["pokedex"]
+include = ["build_pokedex.py"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -63,4 +64,7 @@ addopts = [
     "--strict-markers",
     "--strict-config",
 ]
+
+[project.scripts]
+pokedex-builder = "build_pokedex:main"
 
