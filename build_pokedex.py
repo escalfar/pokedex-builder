@@ -71,12 +71,12 @@ def run(
             cache=settings.build_cache(),
         )
 
-        species = pokeapi_client.get_species_resources(
+        species = pokeapi_client.get_species_details(
             refresh_cache=refresh_cache,
         )
 
     logger.info(
-        "Loaded %s Pokémon species resources",
+        "Loaded %s normalized Pokémon species",
         len(species),
     )
 
