@@ -13,6 +13,9 @@ from pokedex.varieties import build_variety_candidates
 from pokedex.form_rules import filter_variety_candidates
 from pokedex.form_overrides import apply_form_overrides
 from pokedex.forms import build_pokemon_forms
+from pokedex.entries import build_pokemon_entries
+from pokedex.exporter_csv import export_csv
+from pokedex.exporter_json import export_json
 
 
 def build_argument_parser() -> argparse.ArgumentParser:
@@ -162,8 +165,6 @@ def run(
         len(normalized_candidates),
     )
 
-    logger.info("Application infrastructure initialized successfully")
-
     pokemon_forms = build_pokemon_forms(
         normalized_candidates,
     )
@@ -183,6 +184,42 @@ def run(
         "Species with multiple included forms: %s",
         species_with_multiple_forms,
     )
+
+    pokemon_entries = build_pokemon_entries(
+        pokemon_forms,
+        species,
+    )
+
+    logger.info(
+        "Built %s preliminary export entries",
+        len(pokemon_entries),
+    )
+
+    if validate_only:
+        logger.info("Validation completed; output generation skipped")
+    else:
+        csv_path = export_csv(
+            pokemon_entries,
+            settings.csv_output_path,
+        )
+
+        json_path = export_json(
+            pokemon_entries,
+            settings.json_output_path,
+        )
+
+        logger.info(
+            "CSV exported to: %s",
+            csv_path,
+        )
+
+        logger.info(
+            "JSON exported to: %s",
+            json_path,
+        )
+
+    logger.info("Application infrastructure initialized successfully")
+
     return 0
 
 

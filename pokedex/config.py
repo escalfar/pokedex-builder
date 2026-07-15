@@ -29,8 +29,13 @@ class Settings(BaseSettings):
     cache_dir: Path = PROJECT_ROOT / "cache"
     output_dir: Path = PROJECT_ROOT / "output"
     logs_dir: Path = PROJECT_ROOT / "logs"
+
     form_rules_path: Path = PROJECT_ROOT / "data" / "form_rules.yaml"
     form_overrides_path: Path = PROJECT_ROOT / "data" / "form_overrides.yaml"
+
+    csv_output_path: Path = PROJECT_ROOT / "output" / "Pokedex.csv"
+    json_output_path: Path = PROJECT_ROOT / "output" / "Pokedex.json"
+    excel_output_path: Path = PROJECT_ROOT / "output" / "Pokedex.xlsx"
 
     pokeapi_base_url: str = "https://pokeapi.co/api/v2"
     request_timeout_seconds: float = Field(default=30.0, gt=0)
