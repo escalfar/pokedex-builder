@@ -48,6 +48,7 @@ def test_argument_parser_defaults() -> None:
 
     assert arguments.refresh_cache is False
     assert arguments.validate is False
+    assert arguments.only is None
 
 
 def test_argument_parser_accepts_flags() -> None:
@@ -57,11 +58,16 @@ def test_argument_parser_accepts_flags() -> None:
         [
             "--refresh-cache",
             "--validate",
+            "--only",
+            "excel",
+            "--only",
+            "json",
         ]
     )
 
     assert arguments.refresh_cache is True
     assert arguments.validate is True
+    assert arguments.only == ["excel", "json"]
 
 
 def test_initialize_application_creates_directories(
@@ -101,6 +107,7 @@ def test_run_writes_log_file(
         settings,
         refresh_cache=True,
         validate_only=True,
+        only=["excel"],
     )
 
     log_file = settings.logs_dir / "pokedex.log"
@@ -133,6 +140,8 @@ def test_main_passes_arguments_to_run(
         [
             "--refresh-cache",
             "--validate",
+            "--only",
+            "excel",
         ]
     )
 
@@ -141,6 +150,7 @@ def test_main_passes_arguments_to_run(
         settings,
         refresh_cache=True,
         validate_only=True,
+        only=["excel"],
     )
 
 

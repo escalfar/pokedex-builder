@@ -24,6 +24,8 @@ from pokedex.exporter_csv import export_csv
 from pokedex.exporter_json import export_json
 from pokedex.exporter_excel import export_excel
 
+EXPORT_FORMATS: tuple[str, ...] = ("csv", "json", "excel", "coverage")
+
 
 def build_argument_parser() -> argparse.ArgumentParser:
     """Create the command-line argument parser."""
@@ -41,6 +43,16 @@ def build_argument_parser() -> argparse.ArgumentParser:
         "--validate",
         action="store_true",
         help="Run validations without generating output files.",
+    )
+    parser.add_argument(
+        "--only",
+        action="append",
+        choices=EXPORT_FORMATS,
+        metavar="FORMAT",
+        help=(
+            "Generate only the selected format. Repeat the option to select "
+            "multiple formats: csv, json, excel, or coverage."
+        ),
     )
     parser.add_argument(
         "--version",
@@ -65,6 +77,7 @@ def run(
     *,
     refresh_cache: bool = False,
     validate_only: bool = False,
+    only: Sequence[str] | None = None,
 ) -> int:
     """Run the application.
 
@@ -79,6 +92,10 @@ def run(
     logger.info("Output directory: %s", settings.output_dir)
     logger.info("Refresh cache: %s", refresh_cache)
     logger.info("Validation only: %s", validate_only)
+
+    # An omitted --only option means that every supported artifact is generated.
+    selected_formats = frozenset(only or EXPORT_FORMATS)
+    logger.info("Selected output formats: %s", ", ".join(sorted(selected_formats)))
 
     if validate_only:
         logger.info("Validation mode initialized")
@@ -260,45 +277,35 @@ def run(
     if validate_only:
         logger.info("Validation completed; output generation skipped")
     else:
-        csv_path = export_csv(
-            pokemon_entries,
-            settings.csv_output_path,
-        )
+        # Exporters are independent, so selective generation does not alter
+        # the validation and enrichment stages that precede this block.
+        if "csv" in selected_formats:
+            csv_path = export_csv(
+                pokemon_entries,
+                settings.csv_output_path,
+            )
+            logger.info("CSV exported to: %s", csv_path)
 
-        json_path = export_json(
-            pokemon_entries,
-            settings.json_output_path,
-        )
+        if "json" in selected_formats:
+            json_path = export_json(
+                pokemon_entries,
+                settings.json_output_path,
+            )
+            logger.info("JSON exported to: %s", json_path)
 
-        coverage_path = export_catalog_coverage_json(
-            coverage_report,
-            settings.catalog_coverage_output_path,
-        )
+        if "coverage" in selected_formats:
+            coverage_path = export_catalog_coverage_json(
+                coverage_report,
+                settings.catalog_coverage_output_path,
+            )
+            logger.info("Catalog coverage exported to: %s", coverage_path)
 
-        excel_path = export_excel(
-            pokemon_entries,
-            settings.excel_output_path,
-        )
-
-        logger.info(
-            "CSV exported to: %s",
-            csv_path,
-        )
-
-        logger.info(
-            "JSON exported to: %s",
-            json_path,
-        )
-
-        logger.info(
-            "Catalog coverage exported to: %s",
-            coverage_path,
-        )
-
-        logger.info(
-            "Excel exported to: %s",
-            excel_path,
-        )
+        if "excel" in selected_formats:
+            excel_path = export_excel(
+                pokemon_entries,
+                settings.excel_output_path,
+            )
+            logger.info("Excel exported to: %s", excel_path)
 
     logger.info("Application infrastructure initialized successfully")
 
@@ -316,6 +323,7 @@ def main(arguments: Sequence[str] | None = None) -> int:
             settings,
             refresh_cache=parsed_arguments.refresh_cache,
             validate_only=parsed_arguments.validate,
+            only=parsed_arguments.only,
         )
     except PokedexError as error:
         logging.getLogger("pokedex_builder").exception(
