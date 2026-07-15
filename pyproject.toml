@@ -3,7 +3,7 @@ name = "pokedex-builder"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.13"
 dependencies = [
     "beautifulsoup4>=4.15.0",
     "lxml>=6.1.1",
@@ -16,7 +16,34 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "black>=26.5.1",
     "mypy>=2.3.0",
+    "pre-commit>=4.6.0",
     "pytest>=9.1.1",
-    "pytest-cov>=7.1.0"
+    "pytest-cov>=7.1.0",
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.idea
+  | \.mypy_cache
+  | \.pytest_cache
+  | \.venv
+  | cache
+  | output
+)/
+'''
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unused_configs = true
+exclude = [
+    "^cache/",
+    "^output/",
 ]
