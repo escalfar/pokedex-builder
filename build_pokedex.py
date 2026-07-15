@@ -8,6 +8,7 @@ from pokedex.config import Settings, get_settings
 from pokedex.exceptions import PokedexError
 from pokedex.logger import configure_logger
 from pokedex.pokeapi import PokeApiClient
+from pokedex.species import build_species
 
 
 def build_argument_parser() -> argparse.ArgumentParser:
@@ -71,13 +72,35 @@ def run(
             cache=settings.build_cache(),
         )
 
-        species = pokeapi_client.get_species_details(
+        species_details = pokeapi_client.get_species_details(
             refresh_cache=refresh_cache,
         )
 
+    species = build_species(species_details)
+
     logger.info(
-        "Loaded %s normalized Pokémon species",
+        "Loaded and validated %s Pokémon species",
         len(species),
+    )
+
+    logger.info(
+        "National Pokédex range: %s–%s",
+        species[0].national_dex,
+        species[-1].national_dex,
+    )
+
+    legendary_count = sum(item.is_legendary for item in species)
+
+    mythical_count = sum(item.is_mythical for item in species)
+
+    logger.info(
+        "Legendary species: %s",
+        legendary_count,
+    )
+
+    logger.info(
+        "Mythical species: %s",
+        mythical_count,
     )
 
     if validate_only:
