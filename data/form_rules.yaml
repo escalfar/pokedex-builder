@@ -10,6 +10,7 @@ exclude:
     - crowned
     - dusk-mane
     - eternamax
+    - galar-zen
     - gulping
     - hangry
     - hero
@@ -30,7 +31,6 @@ exclude:
     - ten-percent
     - ultra
     - zen
-    - zen-galar
     - gorging
 
   slug_prefixes:
@@ -71,6 +71,7 @@ exclude:
     - terapagos
 
   excluded_api_names:
+    - darmanitan-galar-zen
     - greninja-battle-bond
     - greninja-ash
     - pikachu-partner

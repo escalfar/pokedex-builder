@@ -8,6 +8,7 @@ from pokedex.cache import JsonCache
 from pokedex.http import HttpClient
 from pokedex.pokeapi import PokeApiClient
 from pokedex.form_rules import FormRules
+from pokedex.form_overrides import FormOverrides
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
@@ -29,6 +30,7 @@ class Settings(BaseSettings):
     output_dir: Path = PROJECT_ROOT / "output"
     logs_dir: Path = PROJECT_ROOT / "logs"
     form_rules_path: Path = PROJECT_ROOT / "data" / "form_rules.yaml"
+    form_overrides_path: Path = PROJECT_ROOT / "data" / "form_overrides.yaml"
 
     pokeapi_base_url: str = "https://pokeapi.co/api/v2"
     request_timeout_seconds: float = Field(default=30.0, gt=0)
@@ -69,6 +71,9 @@ class Settings(BaseSettings):
 
     def load_form_rules(self) -> "FormRules":
         return FormRules.from_yaml(self.form_rules_path)
+
+    def load_form_overrides(self) -> "FormOverrides":
+        return FormOverrides.from_yaml(self.form_overrides_path)
 
 
 @lru_cache

@@ -11,6 +11,7 @@ from pokedex.pokeapi import PokeApiClient
 from pokedex.species import build_species
 from pokedex.varieties import build_variety_candidates
 from pokedex.form_rules import filter_variety_candidates
+from pokedex.form_overrides import apply_form_overrides
 
 
 def build_argument_parser() -> argparse.ArgumentParser:
@@ -67,6 +68,11 @@ def run(
     logger.info("Output directory: %s", settings.output_dir)
     logger.info("Refresh cache: %s", refresh_cache)
     logger.info("Validation only: %s", validate_only)
+
+    if validate_only:
+        logger.info("Validation mode initialized")
+    else:
+        logger.info("Generation mode initialized")
 
     with settings.build_http_client() as http_client:
         pokeapi_client = PokeApiClient(
@@ -132,10 +138,12 @@ def run(
     )
 
     excluded_count = len(variety_candidates) - len(filtered_candidates)
+    # excluded_count = len(variety_candidates) - len(normalized_candidates)
 
     logger.info(
         "Included variety candidates: %s",
         len(filtered_candidates),
+        # len(normalized_candidates),
     )
 
     logger.info(
@@ -143,10 +151,17 @@ def run(
         excluded_count,
     )
 
-    if validate_only:
-        logger.info("Validation mode initialized")
-    else:
-        logger.info("Generation mode initialized")
+    form_overrides = settings.load_form_overrides()
+
+    normalized_candidates = apply_form_overrides(
+        filtered_candidates,
+        form_overrides,
+    )
+
+    logger.info(
+        "Normalized %s included form candidates",
+        len(normalized_candidates),
+    )
 
     logger.info("Application infrastructure initialized successfully")
 
