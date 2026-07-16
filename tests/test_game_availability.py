@@ -819,3 +819,49 @@ def test_bdsp_handles_permanent_gifts_and_event_only_mythicals() -> None:
     assert manaphy.availability.is_available_in(GameColumn.BDSP) is False
     assert darkrai.availability.is_available_in(GameColumn.BDSP) is False
     assert shaymin.availability.is_available_in(GameColumn.BDSP) is False
+
+
+def test_sv_complete_catalog_covers_three_regional_pokedexes() -> None:
+    """SV covers Paldea, Kitakami, and Blueberry except event-only species."""
+    rule = load_project_game_rules().games[GameColumn.SV]
+
+    assert rule.complete is True
+    assert rule.includes_national_dex(906) is True
+    assert rule.includes_national_dex(1017) is True
+    assert rule.includes_national_dex(1024) is True
+    assert rule.includes_national_dex(1009) is False
+    assert rule.includes_national_dex(1010) is False
+    assert rule.includes_national_dex(1025) is False
+
+
+def test_sv_keeps_supported_regional_and_special_forms() -> None:
+    rules = load_project_game_rules()
+    entries = apply_game_availability(
+        (
+            build_entry(national_dex=128, home_id="00128_PALDEA_COMBAT_BREED_NONE"),
+            build_entry(national_dex=194, home_id="00194_PALDEA_NONE"),
+            build_entry(national_dex=901, home_id="00901_BLOODMOON_NONE"),
+            build_entry(national_dex=999, home_id="00999_ROAMING_NONE"),
+        ),
+        rules,
+    )
+
+    assert all(entry.availability.is_available_in(GameColumn.SV) for entry in entries)
+
+
+def test_sv_excludes_event_only_species_and_temporary_ride_modes() -> None:
+    rules = load_project_game_rules()
+    entries = apply_game_availability(
+        (
+            build_entry(national_dex=1009, home_id="01009_NORMAL_NONE"),
+            build_entry(national_dex=1010, home_id="01010_NORMAL_NONE"),
+            build_entry(national_dex=1025, home_id="01025_NORMAL_NONE"),
+            build_entry(national_dex=1007, home_id="01007_GLIDING_BUILD_NONE"),
+            build_entry(national_dex=1008, home_id="01008_DRIVE_MODE_NONE"),
+        ),
+        rules,
+    )
+
+    assert all(
+        not entry.availability.is_available_in(GameColumn.SV) for entry in entries
+    )
