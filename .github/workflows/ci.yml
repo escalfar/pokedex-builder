@@ -1,0 +1,54 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# The workflow only needs read access to the repository contents.
+permissions:
+  contents: read
+
+# Cancel an older run when a newer commit is pushed to the same branch or PR.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Python 3.12 quality checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8
+        with:
+          # Reuse downloaded packages between workflow runs.
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Synchronize locked dependencies
+        run: uv sync --locked --all-groups
+
+      - name: Check formatting with Black
+        run: uv run black --check .
+
+      - name: Check static types with Mypy
+        run: uv run mypy pokedex tests build_pokedex.py
+
+      - name: Run test suite
+        run: uv run pytest -v
