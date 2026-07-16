@@ -354,3 +354,37 @@ def test_sm_regional_tranche_classifies_events_but_leaves_island_scan_unknown() 
     assert sm.verified_false == 2
     assert sm.unknown == 1
     assert sm.percent == 75.0
+
+
+def test_usum_regional_tranche_classifies_events_but_leaves_island_scan_unknown() -> (
+    None
+):
+    """The regional core is known; external encounter systems get a later pass."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "game_availability.yaml"
+    )
+    game_rules = GameAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=803, name="Poipole", home_id="00803_NORMAL_NONE"),
+        build_entry(national_dex=801, name="Magearna", home_id="00801_NORMAL_NONE"),
+        build_entry(national_dex=802, name="Marshadow", home_id="00802_NORMAL_NONE"),
+        build_entry(national_dex=807, name="Zeraora", home_id="00807_NORMAL_NONE"),
+        build_entry(national_dex=1, name="Bulbasaur", home_id="00001_NORMAL_NONE"),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        game_rules,
+        ShinyAvailabilityRules(
+            complete=False,
+            national_dex=frozenset(),
+            home_ids=frozenset(),
+            excluded_home_ids=frozenset(),
+        ),
+    )
+
+    usum = report.games[GameColumn.USUM]
+    assert usum.verified_true == 1
+    assert usum.verified_false == 3
+    assert usum.unknown == 1
+    assert usum.percent == 80.0

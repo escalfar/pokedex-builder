@@ -392,10 +392,157 @@ games:
 
   usum:
     complete: false
-    national_dex: []
-    national_dex_ranges: []
+    # Source: PokéAPI updated Alola Pokédex (403 entries) for Ultra Sun/Moon.
+    # Magearna, Marshadow, and Zeraora are event-only, leaving 400 regional
+    # species obtainable without event distributions. Island Scan and Ultra
+    # Warp Ride encounters outside the regional Pokédex remain pending.
+    national_dex:
+      - 108
+      - 113
+      - 115
+      - 190
+      - 212
+      - 233
+      - 235
+      - 299
+      - 324
+      - 357
+      - 359
+      - 474
+      - 476
+      - 478
+      - 587
+      - 718
+    national_dex_ranges:
+      - [10, 12]
+      - [19, 28]
+      - [35, 42]
+      - [46, 47]
+      - [50, 68]
+      - [72, 76]
+      - [79, 82]
+      - [86, 94]
+      - [96, 97]
+      - [102, 105]
+      - [118, 143]
+      - [147, 149]
+      - [163, 174]
+      - [177, 181]
+      - [185, 186]
+      - [196, 200]
+      - [204, 206]
+      - [209, 210]
+      - [214, 215]
+      - [222, 229]
+      - [238, 242]
+      - [246, 248]
+      - [278, 279]
+      - [283, 284]
+      - [296, 297]
+      - [302, 303]
+      - [309, 310]
+      - [318, 321]
+      - [327, 330]
+      - [339, 354]
+      - [361, 362]
+      - [366, 376]
+      - [408, 411]
+      - [422, 430]
+      - [438, 440]
+      - [443, 448]
+      - [456, 458]
+      - [461, 463]
+      - [466, 467]
+      - [470, 471]
+      - [506, 508]
+      - [524, 526]
+      - [546, 553]
+      - [559, 560]
+      - [564, 573]
+      - [582, 584]
+      - [592, 594]
+      - [605, 606]
+      - [619, 625]
+      - [627, 630]
+      - [636, 637]
+      - [661, 663]
+      - [667, 671]
+      - [674, 676]
+      - [686, 687]
+      - [690, 693]
+      - [696, 709]
+      - [714, 715]
+      - [722, 800]
+      - [803, 806]
     home_ids: []
-    excluded_home_ids: []
+    excluded_home_ids:
+      - "00801_NORMAL_NONE"  # Magearna: external QR-code gift
+      - "00802_NORMAL_NONE"  # Marshadow: event distribution
+      - "00807_NORMAL_NONE"  # Zeraora: event distribution
+
+      # Ultra Sun/Moon produces the Alolan form for these lines during normal
+      # play. The original forms require transfer or breeding from transferred
+      # parents and are therefore not classified as caught in this batch.
+      - "00019_NORMAL_FEMALE"
+      - "00019_NORMAL_MALE"
+      - "00020_NORMAL_FEMALE"
+      - "00020_NORMAL_MALE"
+      - "00026_NORMAL_FEMALE"
+      - "00026_NORMAL_MALE"
+      - "00027_NORMAL_NONE"
+      - "00028_NORMAL_NONE"
+      - "00037_NORMAL_NONE"
+      - "00038_NORMAL_NONE"
+      - "00050_NORMAL_NONE"
+      - "00051_NORMAL_NONE"
+      - "00052_NORMAL_NONE"
+      - "00053_NORMAL_NONE"
+      - "00074_NORMAL_NONE"
+      - "00075_NORMAL_NONE"
+      - "00076_NORMAL_NONE"
+      - "00088_NORMAL_NONE"
+      - "00089_NORMAL_NONE"
+      - "00103_NORMAL_NONE"
+      - "00105_NORMAL_NONE"
+
+      # Own Tempo Rockruff and Dusk Form Lycanroc originated from a limited
+      # Mystery Gift. They remain excluded under the no-event availability rule.
+      - "00744_OWN_TEMPO_NONE"
+      - "00745_DUSK_NONE"
+
+      # Cosplay Pikachu is ORAS-only and cannot be transferred.
+      - "00025_BELLE_NONE"
+      - "00025_LIBRE_NONE"
+      - "00025_PHD_NONE"
+      - "00025_POP_STAR_NONE"
+      - "00025_ROCK_STAR_NONE"
+
+      # Temporary Castform weather states are not retained HOME forms.
+      - "00351_RAINY_NONE"
+      - "00351_SNOWY_NONE"
+      - "00351_SUNNY_NONE"
+
+      # Regional forms introduced after Generation VII.
+      - "00052_GALAR_NONE"
+      - "00058_HISUI_NONE"
+      - "00059_HISUI_NONE"
+      - "00079_GALAR_NONE"
+      - "00080_GALAR_NONE"
+      - "00122_GALAR_NONE"
+      - "00128_PALDEA_COMBAT_BREED_NONE"
+      - "00128_PALDEA_BLAZE_BREED_NONE"
+      - "00128_PALDEA_AQUA_BREED_NONE"
+      - "00199_GALAR_NONE"
+      - "00215_HISUI_FEMALE"
+      - "00215_HISUI_MALE"
+      - "00222_GALAR_NONE"
+      - "00549_HISUI_NONE"
+      - "00550_WHITE_STRIPED_NONE"
+      - "00570_HISUI_NONE"
+      - "00571_HISUI_NONE"
+      - "00705_HISUI_NONE"
+      - "00706_HISUI_NONE"
+      - "00724_HISUI_NONE"
 
   lgpe:
     complete: true

@@ -591,3 +591,74 @@ def test_sm_keeps_oricorio_and_zygarde_stored_forms() -> None:
 
     for entry in (baile, pom_pom, pau, sensu, fifty, ten_percent):
         assert entry.availability.is_available_in(GameColumn.SM) is True
+
+
+def test_usum_regional_catalog_contains_400_non_event_species() -> None:
+    """The updated Alola Dex has 403 entries; three event species are omitted."""
+    rule = load_project_game_rules().games[GameColumn.USUM]
+    covered = set(rule.national_dex)
+
+    for start, end in rule.national_dex_ranges:
+        covered.update(range(start, end + 1))
+
+    assert rule.complete is False
+    assert len(covered) == 400
+    assert 722 in covered  # Rowlet remains the first Alola starter.
+    assert 803 in covered  # Poipole was introduced in Ultra Sun/Moon.
+    assert 806 in covered  # Blacephalon is available in Ultra Sun.
+    assert 801 not in covered  # Magearna requires an external QR-code gift.
+    assert 802 not in covered  # Marshadow requires an event distribution.
+    assert 807 not in covered  # Zeraora requires an event distribution.
+
+
+def test_usum_prefers_alolan_forms_during_normal_play() -> None:
+    rules = load_project_game_rules()
+    normal, alolan = apply_game_availability(
+        (
+            build_entry(national_dex=26, home_id="00026_NORMAL_FEMALE"),
+            build_entry(national_dex=26, home_id="00026_ALOLA_NONE"),
+        ),
+        rules,
+    )
+
+    assert normal.availability.is_available_in(GameColumn.USUM) is False
+    assert alolan.availability.is_available_in(GameColumn.USUM) is True
+
+
+def test_usum_excludes_event_only_dusk_lycanroc_line() -> None:
+    rules = load_project_game_rules()
+    regular, own_tempo, midday, dusk = apply_game_availability(
+        (
+            build_entry(national_dex=744, home_id="00744_NORMAL_NONE"),
+            build_entry(national_dex=744, home_id="00744_OWN_TEMPO_NONE"),
+            build_entry(national_dex=745, home_id="00745_MIDDAY_NONE"),
+            build_entry(national_dex=745, home_id="00745_DUSK_NONE"),
+        ),
+        rules,
+    )
+
+    assert regular.availability.is_available_in(GameColumn.USUM) is True
+    assert own_tempo.availability.is_available_in(GameColumn.USUM) is False
+    assert midday.availability.is_available_in(GameColumn.USUM) is True
+    assert dusk.availability.is_available_in(GameColumn.USUM) is False
+
+
+def test_usum_excludes_later_regional_forms() -> None:
+    rules = load_project_game_rules()
+    normal, galarian, hisuian, paldean = apply_game_availability(
+        (
+            build_entry(national_dex=52, home_id="00052_ALOLA_NONE"),
+            build_entry(national_dex=52, home_id="00052_GALAR_NONE"),
+            build_entry(national_dex=215, home_id="00215_HISUI_FEMALE"),
+            build_entry(
+                national_dex=128,
+                home_id="00128_PALDEA_COMBAT_BREED_NONE",
+            ),
+        ),
+        rules,
+    )
+
+    assert normal.availability.is_available_in(GameColumn.USUM) is True
+    assert galarian.availability.is_available_in(GameColumn.USUM) is False
+    assert hisuian.availability.is_available_in(GameColumn.USUM) is False
+    assert paldean.availability.is_available_in(GameColumn.USUM) is False
