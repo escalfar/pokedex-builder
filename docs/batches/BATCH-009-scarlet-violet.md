@@ -2,36 +2,33 @@
 
 ## Objective
 
-Complete the Scarlet/Violet availability catalog using the Paldea, Kitakami,
-and Blueberry regional Pokédexes, including both DLC expansions.
+Complete Scarlet/Violet availability using the Paldea, Kitakami, and Blueberry
+regional Pokédexes, including both DLC expansions.
 
-## Coverage
+## Permanent Mystery Gift method
 
-- Paldea Pokédex: 400 species.
-- Kitakami Pokédex: 200 species.
-- Blueberry Pokédex: 243 species.
-- Union: 664 unique species.
-- Positive non-event set: 661 species.
+Pecharunt counts as `TRUE`, but only through the permanent Mystery Gift epilogue
+unlock. This follows the same policy used for permanent Mystery Gift unlocks in
+Legends: Z-A: the acquisition requirement is documented, but the Pokémon is
+still obtainable.
 
-Walking Wake, Iron Leaves, and Pecharunt remain unavailable because their
-acquisition depends on limited-time or externally distributed event content.
+Walking Wake and Iron Leaves remain `FALSE` because their native encounters are
+limited-time events.
 
 ## Form decisions
 
 - Paldean breeds, Bloodmoon Ursaluna, Roaming Gimmighoul, and other retained
   HOME forms belonging to included species remain available.
-- Cosplay Pikachu costumes are excluded.
-- Koraidon and Miraidon ride modes are excluded because they are temporary
-  states rather than depositable HOME forms.
+- Cosplay Pikachu costumes remain excluded.
+- Koraidon and Miraidon ride modes remain excluded because they are temporary,
+  non-depositable states.
 
 ## Sources
 
-- https://pokeapi.co/api/v2/pokedex/31/
-- https://pokeapi.co/api/v2/pokedex/32/
-- https://pokeapi.co/api/v2/pokedex/33/
-- https://scarletviolet.pokemon.com/en-gb/events/regulation-j/
+- Paldea, Kitakami, and Blueberry Pokédexes.
+- Official Scarlet/Violet Mystery Gift and epilogue documentation for Pecharunt.
 
 ## Tests
 
-Regression tests cover the three regional Pokédexes, event-only species,
-regional forms, temporary ride modes, and complete catalog coverage.
+Regression tests cover all three regional Pokédexes, Pecharunt, limited-time
+Paradox encounters, regional forms, temporary ride modes, and complete coverage.

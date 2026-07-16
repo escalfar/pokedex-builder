@@ -183,3 +183,23 @@ def test_filter_rejects_when_species_disappears() -> None:
             (candidate,),
             rules,
         )
+
+
+def test_project_rules_keep_eternal_flower_floette() -> None:
+    """Legends: Z-A makes Eternal Flower Floette a retained HOME form."""
+    rules_path = Path(__file__).resolve().parents[1] / "data" / "form_rules.yaml"
+    rules = FormRules.from_yaml(rules_path)
+    variant = PokemonVariant(
+        national_dex=670,
+        pokemon="Floette",
+        species_api_name="floette",
+        variety_api_name="floette-eternal",
+        form_slug="eternal",
+        form_name="Eternal",
+        display_name="Eternal Flower Floette",
+        generation=6,
+        resource_url="https://pokeapi.co/api/v2/pokemon/10061/",
+        is_default=False,
+    )
+
+    assert evaluate_variant(variant, rules).excluded is False

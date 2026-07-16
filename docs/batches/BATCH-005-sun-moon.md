@@ -2,59 +2,40 @@
 
 **Feature branch:** `feature/catalog-game-availability`  
 **Batch:** 005  
-**Status:** Regional catalog foundation
+**Status:** Regional Pokédex and QR methods audited
 
 ## Objective
 
-Add the verified Pokémon Sun / Moon regional Pokédex core without prematurely classifying the additional Island Scan encounters.
+Classify the original Alola Pokédex together with permanent QR-based
+acquisition methods.
 
-## Scope
+## QR methods
 
-The original Alola Pokédex contains **302 species**. This batch classifies the **300 entries obtainable without external event distributions**:
-
-- Magearna is excluded from the obtainable set because it is received through an external QR-code gift.
-- Marshadow is excluded because it requires an event distribution.
-- Island Scan encounters remain pending for a separate audit, so `sm.complete` remains `false`.
+- Magearna counts as `TRUE`, but only through its permanent postgame QR Code.
+- Every daily Island Scan encounter counts as `TRUE`. Island Scan is activated
+  by accumulating QR Scanner points; it is not a timed event.
+- Marshadow remains `FALSE` because it requires an event distribution.
 
 ## Form handling
 
-The catalog gives form-specific precedence to the regional forms used in Alola. Original Kanto forms such as Rattata, Raichu, Sandshrew, Vulpix, Diglett, Meowth, Geodude, Grimer, Exeggutor, and Marowak are excluded where Sun/Moon only produces the Alolan form during normal gameplay.
-
-The catalog also:
-
-- Retains all four Oricorio styles.
-- Retains the stored 10% and 50% Zygarde forms available through the Reassembly Unit.
-- Retains Midday and Midnight Lycanroc across the paired games.
-- Excludes Own Tempo Rockruff, Dusk Lycanroc, and fused Necrozma forms because they were introduced in Ultra Sun / Ultra Moon.
-- Excludes later Galarian, Hisuian, and Paldean forms sharing covered National Dex numbers.
-- Excludes Cosplay Pikachu and temporary Castform weather states.
-
-Visible female and male differences remain available whenever the underlying stored form is obtainable.
+- Alolan forms take precedence where Sun/Moon normally produces the regional
+  form rather than the original Kanto form.
+- All four Oricorio styles and retained Zygarde forms remain available.
+- Own Tempo Rockruff, Dusk Lycanroc, fused Necrozma forms, later regional forms,
+  Cosplay Pikachu, and temporary Castform weather states remain unavailable.
 
 ## Coverage decision
 
-`sm.complete` remains `false`. Unmatched entries are still reported as unknown until Island Scan and any other non-regional acquisition methods receive a dedicated verification pass.
-
-Event-only Magearna and Marshadow are explicit verified-false entries rather than unknowns.
+`sm.complete` remains `false`, but Magearna and all Island Scan encounters are
+now verified rather than unknown.
 
 ## Sources
 
-- PokéAPI original Alola Pokédex (`pokedex/16`).
-- Pokémon Sun / Moon Alola Pokédex documentation.
-- Bulbapedia regional Pokédex and form documentation.
-- Serebii Sun / Moon Alola Pokédex and form references.
+- Official Pokémon Magearna QR Code documentation.
+- Sun/Moon Island Scan encounter tables.
+- PokéAPI original Alola Pokédex.
 
-## Tests added
+## Tests
 
-Regression tests verify that:
-
-- The non-event regional set contains 300 species.
-- Magearna and Marshadow are excluded from normal in-game obtainability.
-- Alolan forms override unavailable original forms for replaced Kanto lines.
-- Own Tempo Rockruff, Dusk Lycanroc, fused Necrozma, and later regional forms remain unavailable.
-- Oricorio and Zygarde retained forms inherit Sun/Moon availability.
-- Coverage distinguishes the verified regional tranche from pending Island Scan species.
-
-## Next step
-
-Audit Island Scan and any remaining non-regional Sun/Moon encounters before setting `sm.complete` to `true`.
+Regression tests verify Magearna, representative Island Scan encounters,
+Marshadow exclusion, regional-form precedence, and coverage accounting.

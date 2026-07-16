@@ -2,48 +2,47 @@
 
 **Feature branch:** `feature/catalog-game-availability`  
 **Batch:** 004  
-**Status:** Regional catalog foundation  
+**Status:** Regional and permanent post-National-Dex methods audited
 
 ## Objective
 
-Add the verified Omega Ruby / Alpha Sapphire regional Pokédex core to the game availability catalog without prematurely classifying the additional post-National-Dex encounters.
+Classify the updated Hoenn Pokédex together with permanently available
+post-National-Dex encounter systems.
 
-## Scope
+## Permanent encounter systems
 
-This batch classifies the 211-entry updated Hoenn Pokédex, excluding Jirachi because it requires an external event. All four Deoxys formes are retained because Deoxys is obtainable through the Delta Episode and can change forme in ORAS.
+The following methods count as `TRUE` because they remain available in every
+save and do not require a timed distribution:
 
-The resulting verified species set contains **210 National Dex species**.
+- Post-National-Dex DexNav encounters.
+- Daily Mirage Forest, Island, Cave, and Mountain encounters.
+- Conditional Mirage Spot and soaring Legendary encounters.
+
+Representative additions include Zorua through DexNav, Cresselia through
+Crescent Isle, and Zekrom/Reshiram through conditional Mirage Spots.
 
 ## Form handling
 
-The catalog explicitly excludes:
-
-- Cosplay Pikachu, because it cannot be transferred to Pokémon Bank or Pokémon HOME.
-- Castform weather transformations, because they are temporary battle states rather than retained HOME forms.
-- Alolan, Galarian, and Hisuian forms introduced after Generation VI when they share a National Dex number with a covered species.
-
-Visible female and male differences remain available when the underlying species is present because both appearances are valid stored Pokémon.
+- All four retained Deoxys Formes remain available. Deoxys is obtained during
+  the Delta Episode and can change Forme using the meteorite in Fallarbor Town.
+- Cosplay Pikachu and temporary Castform weather states remain unavailable.
+- Regional forms introduced after Generation VI are explicitly excluded so
+  they do not inherit species-level availability.
+- Jirachi remains unavailable because ORAS requires an external distribution.
 
 ## Coverage decision
 
-`oras.complete` remains `false` in this batch. ORAS also contains Pokémon obtainable after receiving the National Pokédex through DexNav, Mirage Spots, soaring encounters, gifts, and other methods. Those encounters require a separate verified pass before unmatched entries can safely be treated as unavailable.
+`oras.complete` remains `false` because the broader non-regional catalog still
+contains acquisition categories outside this focused pass. The methods listed
+above are nevertheless classified as verified permanent availability.
 
 ## Sources
 
-- PokéAPI updated Hoenn Pokédex (`pokedex/15`).
-- Pokémon Omega Ruby / Alpha Sapphire Delta Episode documentation for Deoxys.
-- Pokémon Bank and HOME transfer restrictions for Cosplay Pikachu.
+- PokéAPI updated Hoenn Pokédex.
+- Serebii ORAS DexNav and soaring/Mirage Spot references.
+- Pokémon Database and Bulbapedia Mirage Spot encounter lists.
 
-## Tests added
+## Tests
 
-Regression tests verify that:
-
-- The regional non-event set contains 210 species.
-- Jirachi is not classified as obtainable by this tranche.
-- Normal, Attack, Defense, and Speed Forme Deoxys are all retained and available.
-- Later regional forms do not inherit availability from their base species.
-- Coverage remains incomplete for entries outside the regional tranche.
-
-## Next step
-
-Complete the ORAS post-National-Dex availability pass before setting `oras.complete` to `true`.
+Regression tests cover DexNav, daily Mirage Spots, soaring Legendary
+encounters, Deoxys Formes, regional-form exclusions, and coverage accounting.

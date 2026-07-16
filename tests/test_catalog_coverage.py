@@ -296,6 +296,16 @@ def test_oras_regional_tranche_keeps_unmatched_entries_unknown() -> None:
             home_id="00252_NORMAL_NONE",
         ),
         build_entry(
+            national_dex=570,
+            name="Zorua",
+            home_id="00570_NORMAL_NONE",
+        ),
+        build_entry(
+            national_dex=488,
+            name="Cresselia",
+            home_id="00488_NORMAL_NONE",
+        ),
+        build_entry(
             national_dex=385,
             name="Jirachi",
             home_id="00385_NORMAL_NONE",
@@ -319,14 +329,14 @@ def test_oras_regional_tranche_keeps_unmatched_entries_unknown() -> None:
     )
 
     oras = report.games[GameColumn.ORAS]
-    assert oras.verified_true == 1
+    assert oras.verified_true == 3
     assert oras.verified_false == 0
     assert oras.unknown == 2
-    assert oras.percent == 33.33
+    assert oras.percent == 60.0
 
 
-def test_sm_regional_tranche_classifies_events_but_leaves_island_scan_unknown() -> None:
-    """The regional core is known; Island Scan receives a later audit pass."""
+def test_sm_qr_methods_are_classified_in_coverage() -> None:
+    """Magearna and Island Scan are verified QR-based methods."""
     catalog_path = (
         Path(__file__).resolve().parents[1] / "data" / "game_availability.yaml"
     )
@@ -350,16 +360,14 @@ def test_sm_regional_tranche_classifies_events_but_leaves_island_scan_unknown() 
     )
 
     sm = report.games[GameColumn.SM]
-    assert sm.verified_true == 1
-    assert sm.verified_false == 2
+    assert sm.verified_true == 2
+    assert sm.verified_false == 1
     assert sm.unknown == 1
     assert sm.percent == 75.0
 
 
-def test_usum_regional_tranche_classifies_events_but_leaves_island_scan_unknown() -> (
-    None
-):
-    """The regional core is known; external encounter systems get a later pass."""
+def test_usum_qr_and_ultra_warp_methods_are_classified_in_coverage() -> None:
+    """QR and Ultra Warp Ride entries are verified rather than unknown."""
     catalog_path = (
         Path(__file__).resolve().parents[1] / "data" / "game_availability.yaml"
     )
@@ -384,10 +392,10 @@ def test_usum_regional_tranche_classifies_events_but_leaves_island_scan_unknown(
     )
 
     usum = report.games[GameColumn.USUM]
-    assert usum.verified_true == 1
-    assert usum.verified_false == 3
-    assert usum.unknown == 1
-    assert usum.percent == 80.0
+    assert usum.verified_true == 3
+    assert usum.verified_false == 2
+    assert usum.unknown == 0
+    assert usum.percent == 100.0
 
 
 def test_swsh_regional_tranche_classifies_events_and_later_forms() -> None:
@@ -417,6 +425,11 @@ def test_swsh_regional_tranche_classifies_events_and_later_forms() -> None:
             name="Mew",
             home_id="00151_NORMAL_NONE",
         ),
+        build_entry(
+            national_dex=150,
+            name="Mewtwo",
+            home_id="00150_NORMAL_NONE",
+        ),
     )
 
     report = build_catalog_coverage_report(
@@ -431,10 +444,10 @@ def test_swsh_regional_tranche_classifies_events_and_later_forms() -> None:
     )
 
     swsh = report.games[GameColumn.SWSH]
-    assert swsh.verified_true == 1
+    assert swsh.verified_true == 2
     assert swsh.verified_false == 2
     assert swsh.unknown == 1
-    assert swsh.percent == 75.0
+    assert swsh.percent == 80.0
 
 
 def test_bdsp_complete_catalog_classifies_every_sample_row() -> None:
@@ -511,7 +524,47 @@ def test_sv_complete_catalog_classifies_every_sample_row() -> None:
     )
 
     sv = report.games[GameColumn.SV]
-    assert sv.verified_true == 2
-    assert sv.verified_false == 2
+    assert sv.verified_true == 3
+    assert sv.verified_false == 1
     assert sv.unknown == 0
     assert sv.percent == 100.0
+
+
+def test_za_complete_catalog_classifies_home_and_mystery_gift_rows() -> None:
+    """Completed Z-A rules classify HOME transfers and permanent gifts."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "game_availability.yaml"
+    )
+    game_rules = GameAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=152, name="Chikorita", home_id="00152_NORMAL_NONE"),
+        build_entry(
+            national_dex=670,
+            name="Eternal Flower Floette",
+            home_id="00670_ETERNAL_NONE",
+        ),
+        build_entry(national_dex=719, name="Diancie", home_id="00719_NORMAL_NONE"),
+        build_entry(
+            national_dex=705,
+            name="Hisuian Sliggoo",
+            home_id="00705_HISUI_NONE",
+        ),
+        build_entry(national_dex=906, name="Sprigatito", home_id="00906_NORMAL_NONE"),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        game_rules,
+        ShinyAvailabilityRules(
+            complete=False,
+            national_dex=frozenset(),
+            home_ids=frozenset(),
+            excluded_home_ids=frozenset(),
+        ),
+    )
+
+    za = report.games[GameColumn.ZA]
+    assert za.verified_true == 4
+    assert za.verified_false == 1
+    assert za.unknown == 0
+    assert za.percent == 100.0

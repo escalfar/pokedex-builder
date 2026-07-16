@@ -2,57 +2,45 @@
 
 **Feature branch:** `feature/catalog-game-availability`  
 **Batch:** 007  
-**Status:** Regional Pokédex tranche completed; transferable extras pending
+**Status:** Regional Pokédexes and Dynamax Adventures audited
 
 ## Objective
 
-Add the verified Sword/Shield availability core from the three Generation VIII
-regional Pokédexes:
+Classify the Galar, Isle of Armor, and Crown Tundra Pokédexes together with
+permanently available Dynamax Adventures encounters.
 
-- Galar Pokédex
-- Isle of Armor Pokédex
-- Crown Tundra Pokédex
+## Dynamax Adventures
 
-The rules remain deliberately incomplete because several Pokémon can be used in
-Sword/Shield without belonging to any of those three Pokédexes, including some
-Dynamax Adventure encounters and HOME-transfer-only species.
+Dynamax Adventures count as `TRUE` because the Max Lair remains permanently
+available in the Crown Tundra. The catalog adds:
+
+- Legendary Pokémon available as the final special encounter.
+- Ultra Beasts unlocked after the Crown Tundra clue progression.
+- The Hoenn first-partner lines that are exclusive to Dynamax Adventures among
+  non-special encounters.
+
+Representative verified rows include Mewtwo, Xerneas, Nihilego, Sceptile, and
+Swampert.
+
+## Form and event decisions
+
+- Supported Alolan and Galarian forms remain available.
+- Hisuian and Paldean forms remain unavailable.
+- Zarude and Dada Zarude remain `FALSE` because they require event distributions.
+- Ice Rider and Shadow Rider Calyrex remain unavailable as stored HOME rows
+  because the fusion states cannot be deposited.
+
+## Coverage decision
+
+`swsh.complete` remains `false` because HOME-transfer-only compatible species
+outside the audited encounter systems still require a separate pass.
 
 ## Sources
 
-- PokéAPI `pokemon_dex_numbers.csv`, Pokédex IDs 27, 28, and 29.
-- Pokémon Database: Sword/Shield, Isle of Armor, and Crown Tundra Pokédex lists.
-- Pokémon HOME storage rules for fused Calyrex forms.
+- Galar, Isle of Armor, and Crown Tundra Pokédexes.
+- Bulbapedia and Serebii Dynamax Adventures encounter tables.
 
-The union of the three regional Pokédexes contains 584 species. Zarude is
-removed from the positive set because both Normal and Dada Zarude required event
-distributions, leaving 583 species classified as obtainable without an event.
+## Tests
 
-## Rules added
-
-- Species in the three regional Pokédexes inherit Sword/Shield availability.
-- Supported Alolan and Galarian forms inherit the species rule.
-- Hisuian and Paldean forms are explicitly excluded.
-- White-Striped Basculin is excluded because it was introduced in Legends:
-  Arceus.
-- Zarude and Dada Zarude are explicitly classified as unavailable without an
-  event.
-- Ice Rider and Shadow Rider Calyrex are excluded because fused states cannot
-  be deposited in Pokémon HOME; base Calyrex remains available.
-- Cosplay Pikachu costumes remain excluded because they cannot be transferred.
-
-## Tests added
-
-- The regional union contains exactly 583 non-event species.
-- Galarian and supported Alolan forms are accepted.
-- Later regional forms are rejected.
-- Zarude and fused Calyrex states are rejected.
-- Coverage distinguishes verified regional rows from transferable species that
-  are still pending audit.
-
-## Coverage status
-
-`swsh.complete` remains `false`.
-
-A later Sword/Shield audit will classify Pokémon outside the three regional
-Pokédexes that are nevertheless compatible through HOME transfer, gifts, or
-Dynamax Adventures.
+Regression tests verify Dynamax Adventures additions, regional forms, Zarude,
+Calyrex fusion states, and coverage accounting.

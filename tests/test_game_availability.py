@@ -457,20 +457,25 @@ def test_xy_only_includes_original_zygarde_form() -> None:
     assert power_construct.availability.is_available_in(GameColumn.XY) is False
 
 
-def test_oras_regional_catalog_contains_210_non_event_species() -> None:
-    """The updated Hoenn Dex has 211 entries; event-only Jirachi is omitted."""
-    rule = load_project_game_rules().games[GameColumn.ORAS]
-    covered = set(rule.national_dex)
+def test_oras_catalog_includes_permanent_post_national_dex_methods() -> None:
+    """DexNav, Mirage Spots, and soaring encounters count as permanent."""
+    rules = load_project_game_rules()
+    treecko, zorua, cresselia, zekrom, jirachi = apply_game_availability(
+        (
+            build_entry(national_dex=252, home_id="00252_NORMAL_NONE"),
+            build_entry(national_dex=570, home_id="00570_NORMAL_NONE"),
+            build_entry(national_dex=488, home_id="00488_NORMAL_NONE"),
+            build_entry(national_dex=644, home_id="00644_NORMAL_NONE"),
+            build_entry(national_dex=385, home_id="00385_NORMAL_NONE"),
+        ),
+        rules,
+    )
 
-    for start, end in rule.national_dex_ranges:
-        covered.update(range(start, end + 1))
+    for entry in (treecko, zorua, cresselia, zekrom):
+        assert entry.availability.is_available_in(GameColumn.ORAS) is True
 
-    assert rule.complete is False
-    assert len(covered) == 210
-    assert 252 in covered  # Treecko opens the updated Hoenn Pokédex.
-    assert 384 in covered  # Rayquaza is obtainable during normal play.
-    assert 385 not in covered  # Jirachi requires an external event.
-    assert 386 in covered  # Deoxys is obtainable in the Delta Episode.
+    # Jirachi still requires an external distribution in ORAS.
+    assert jirachi.availability.is_available_in(GameColumn.ORAS) is False
 
 
 def test_oras_keeps_all_deoxys_formes() -> None:
@@ -511,20 +516,24 @@ def test_oras_excludes_later_regional_forms_and_cosplay_pikachu() -> None:
     assert cosplay.availability.is_available_in(GameColumn.ORAS) is False
 
 
-def test_sm_regional_catalog_contains_300_non_event_species() -> None:
-    """The original Alola Dex has 302 entries; two require external gifts."""
-    rule = load_project_game_rules().games[GameColumn.SM]
-    covered = set(rule.national_dex)
+def test_sm_qr_methods_include_magearna_and_island_scan() -> None:
+    """Permanent QR-based methods count as obtainable in Sun/Moon."""
+    rules = load_project_game_rules()
+    magearna, chikorita, deino, samurott, marshadow = apply_game_availability(
+        (
+            build_entry(national_dex=801, home_id="00801_NORMAL_NONE"),
+            build_entry(national_dex=152, home_id="00152_NORMAL_NONE"),
+            build_entry(national_dex=633, home_id="00633_NORMAL_NONE"),
+            build_entry(national_dex=503, home_id="00503_NORMAL_NONE"),
+            build_entry(national_dex=802, home_id="00802_NORMAL_NONE"),
+        ),
+        rules,
+    )
 
-    for start, end in rule.national_dex_ranges:
-        covered.update(range(start, end + 1))
+    for entry in (magearna, chikorita, deino, samurott):
+        assert entry.availability.is_available_in(GameColumn.SM) is True
 
-    assert rule.complete is False
-    assert len(covered) == 300
-    assert 722 in covered
-    assert 800 in covered
-    assert 801 not in covered
-    assert 802 not in covered
+    assert marshadow.availability.is_available_in(GameColumn.SM) is False
 
 
 def test_sm_uses_alolan_forms_for_replaced_kanto_lines() -> None:
@@ -593,22 +602,25 @@ def test_sm_keeps_oricorio_and_zygarde_stored_forms() -> None:
         assert entry.availability.is_available_in(GameColumn.SM) is True
 
 
-def test_usum_regional_catalog_contains_400_non_event_species() -> None:
-    """The updated Alola Dex has 403 entries; three event species are omitted."""
-    rule = load_project_game_rules().games[GameColumn.USUM]
-    covered = set(rule.national_dex)
+def test_usum_qr_and_ultra_warp_ride_methods_are_obtainable() -> None:
+    """QR methods and Ultra Warp Ride are permanent USUM encounter systems."""
+    rules = load_project_game_rules()
+    magearna, bulbasaur, greninja, hippowdon, mewtwo, zeraora = apply_game_availability(
+        (
+            build_entry(national_dex=801, home_id="00801_NORMAL_NONE"),
+            build_entry(national_dex=1, home_id="00001_NORMAL_NONE"),
+            build_entry(national_dex=658, home_id="00658_NORMAL_NONE"),
+            build_entry(national_dex=450, home_id="00450_NORMAL_FEMALE"),
+            build_entry(national_dex=150, home_id="00150_NORMAL_NONE"),
+            build_entry(national_dex=807, home_id="00807_NORMAL_NONE"),
+        ),
+        rules,
+    )
 
-    for start, end in rule.national_dex_ranges:
-        covered.update(range(start, end + 1))
+    for entry in (magearna, bulbasaur, greninja, hippowdon, mewtwo):
+        assert entry.availability.is_available_in(GameColumn.USUM) is True
 
-    assert rule.complete is False
-    assert len(covered) == 400
-    assert 722 in covered  # Rowlet remains the first Alola starter.
-    assert 803 in covered  # Poipole was introduced in Ultra Sun/Moon.
-    assert 806 in covered  # Blacephalon is available in Ultra Sun.
-    assert 801 not in covered  # Magearna requires an external QR-code gift.
-    assert 802 not in covered  # Marshadow requires an event distribution.
-    assert 807 not in covered  # Zeraora requires an event distribution.
+    assert zeraora.availability.is_available_in(GameColumn.USUM) is False
 
 
 def test_usum_prefers_alolan_forms_during_normal_play() -> None:
@@ -664,20 +676,25 @@ def test_usum_excludes_later_regional_forms() -> None:
     assert paldean.availability.is_available_in(GameColumn.USUM) is False
 
 
-def test_swsh_regional_pokedex_union_contains_583_non_event_species() -> None:
-    """The three Galar-era regional Pokédexes cover 584 species before Zarude."""
-    rule = load_project_game_rules().games[GameColumn.SWSH]
-    covered = set(rule.national_dex)
+def test_swsh_includes_permanent_dynamax_adventure_encounters() -> None:
+    """Dynamax Adventures add permanent encounters beyond the regional Dexes."""
+    rules = load_project_game_rules()
+    sceptile, swampert, mewtwo, xerneas, nihilego, zarude = apply_game_availability(
+        (
+            build_entry(national_dex=254, home_id="00254_NORMAL_NONE"),
+            build_entry(national_dex=260, home_id="00260_NORMAL_NONE"),
+            build_entry(national_dex=150, home_id="00150_NORMAL_NONE"),
+            build_entry(national_dex=716, home_id="00716_NORMAL_NONE"),
+            build_entry(national_dex=793, home_id="00793_NORMAL_NONE"),
+            build_entry(national_dex=893, home_id="00893_NORMAL_NONE"),
+        ),
+        rules,
+    )
 
-    for start, end in rule.national_dex_ranges:
-        covered.update(range(start, end + 1))
+    for entry in (sceptile, swampert, mewtwo, xerneas, nihilego):
+        assert entry.availability.is_available_in(GameColumn.SWSH) is True
 
-    assert rule.complete is False
-    assert len(covered) == 583
-    assert 810 in covered  # Grookey starts the Generation VIII starter trio.
-    assert 891 in covered  # Kubfu is obtained during the Isle of Armor story.
-    assert 898 in covered  # Calyrex is caught during the Crown Tundra story.
-    assert 893 not in covered  # Zarude requires an event distribution.
+    assert zarude.availability.is_available_in(GameColumn.SWSH) is False
 
 
 def test_swsh_accepts_galarian_and_supported_alolan_forms() -> None:
@@ -728,6 +745,23 @@ def test_swsh_excludes_event_zarude_and_unstorable_calyrex_fusions() -> None:
     assert calyrex.availability.is_available_in(GameColumn.SWSH) is True
     assert ice.availability.is_available_in(GameColumn.SWSH) is False
     assert shadow.availability.is_available_in(GameColumn.SWSH) is False
+
+
+def test_pla_save_data_research_requests_are_obtainable() -> None:
+    """Permanent save-data research requests count as obtainable in PLA."""
+    rules = load_project_game_rules()
+    darkrai, shaymin_land, shaymin_sky = apply_game_availability(
+        (
+            build_entry(national_dex=491, home_id="00491_NORMAL_NONE"),
+            build_entry(national_dex=492, home_id="00492_NORMAL_NONE"),
+            build_entry(national_dex=492, home_id="00492_SKY_NONE"),
+        ),
+        rules,
+    )
+
+    assert darkrai.availability.is_available_in(GameColumn.PLA) is True
+    assert shaymin_land.availability.is_available_in(GameColumn.PLA) is True
+    assert shaymin_sky.availability.is_available_in(GameColumn.PLA) is True
 
 
 def test_bdsp_complete_catalog_covers_first_four_generations() -> None:
@@ -797,7 +831,7 @@ def test_bdsp_keeps_all_deoxys_formes_but_marks_them_unavailable() -> None:
     )
 
 
-def test_bdsp_handles_permanent_gifts_and_event_only_mythicals() -> None:
+def test_bdsp_handles_save_data_unlocks_and_event_only_mythicals() -> None:
     rules = load_project_game_rules()
     mew, jirachi, arceus, celebi, manaphy, darkrai, shaymin = apply_game_availability(
         (
@@ -831,7 +865,7 @@ def test_sv_complete_catalog_covers_three_regional_pokedexes() -> None:
     assert rule.includes_national_dex(1024) is True
     assert rule.includes_national_dex(1009) is False
     assert rule.includes_national_dex(1010) is False
-    assert rule.includes_national_dex(1025) is False
+    assert "01025_NORMAL_NONE" in rule.home_ids
 
 
 def test_sv_keeps_supported_regional_and_special_forms() -> None:
@@ -849,9 +883,10 @@ def test_sv_keeps_supported_regional_and_special_forms() -> None:
     assert all(entry.availability.is_available_in(GameColumn.SV) for entry in entries)
 
 
-def test_sv_excludes_event_only_species_and_temporary_ride_modes() -> None:
+def test_sv_keeps_pecharunt_mystery_gift_but_excludes_timed_events() -> None:
+    """The permanent Pecharunt epilogue gift counts; timed raids do not."""
     rules = load_project_game_rules()
-    entries = apply_game_availability(
+    walking_wake, iron_leaves, pecharunt, glide, drive = apply_game_availability(
         (
             build_entry(national_dex=1009, home_id="01009_NORMAL_NONE"),
             build_entry(national_dex=1010, home_id="01010_NORMAL_NONE"),
@@ -862,6 +897,67 @@ def test_sv_excludes_event_only_species_and_temporary_ride_modes() -> None:
         rules,
     )
 
-    assert all(
-        not entry.availability.is_available_in(GameColumn.SV) for entry in entries
+    assert walking_wake.availability.is_available_in(GameColumn.SV) is False
+    assert iron_leaves.availability.is_available_in(GameColumn.SV) is False
+    assert pecharunt.availability.is_available_in(GameColumn.SV) is True
+    assert glide.availability.is_available_in(GameColumn.SV) is False
+    assert drive.availability.is_available_in(GameColumn.SV) is False
+
+
+def test_za_catalog_covers_base_game_and_mega_dimension_species() -> None:
+    """The audited Z-A set combines the Lumiose and Mega Dimension Pokédexes."""
+    rule = load_project_game_rules().games[GameColumn.ZA]
+
+    assert rule.complete is True
+    assert rule.includes_national_dex(152) is True  # Chikorita, base game
+    assert rule.includes_national_dex(718) is True  # Zygarde, base game
+    assert rule.includes_national_dex(979) is True  # Annihilape, DLC
+    assert rule.includes_national_dex(1000) is True  # Gholdengo, DLC
+    assert rule.includes_national_dex(906) is False  # Not in either audited dex
+
+
+def test_za_keeps_eternal_floette_and_mystery_gift_species() -> None:
+    """Permanent Mystery Gift unlocks still count as obtainable in Z-A."""
+    rules = load_project_game_rules()
+    entries = apply_game_availability(
+        (
+            build_entry(national_dex=670, home_id="00670_ETERNAL_NONE"),
+            build_entry(national_dex=150, home_id="00150_NORMAL_NONE"),
+            build_entry(national_dex=719, home_id="00719_NORMAL_NONE"),
+            build_entry(national_dex=807, home_id="00807_NORMAL_NONE"),
+        ),
+        rules,
     )
+
+    assert all(entry.availability.is_available_in(GameColumn.ZA) for entry in entries)
+
+
+def test_za_keeps_compatible_regional_forms() -> None:
+    """Current HOME compatibility allows supported regional forms in Z-A."""
+    rules = load_project_game_rules()
+    entries = apply_game_availability(
+        (
+            build_entry(national_dex=26, home_id="00026_ALOLA_NONE"),
+            build_entry(national_dex=79, home_id="00079_GALAR_NONE"),
+            build_entry(national_dex=705, home_id="00705_HISUI_NONE"),
+            build_entry(national_dex=713, home_id="00713_HISUI_NONE"),
+        ),
+        rules,
+    )
+
+    assert all(entry.availability.is_available_in(GameColumn.ZA) for entry in entries)
+
+
+def test_za_keeps_storable_alternate_forms_from_audited_species() -> None:
+    """Stored alternate forms remain available when no form exclusion applies."""
+    rules = load_project_game_rules()
+    entries = apply_game_availability(
+        (
+            build_entry(national_dex=479, home_id="00479_WASH_NONE"),
+            build_entry(national_dex=710, home_id="00710_SUPER_NONE"),
+            build_entry(national_dex=720, home_id="00720_UNBOUND_NONE"),
+        ),
+        rules,
+    )
+
+    assert all(entry.availability.is_available_in(GameColumn.ZA) for entry in entries)
