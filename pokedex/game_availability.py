@@ -35,8 +35,20 @@ class GameRule:
     """
 
     national_dex: frozenset[int]
+    national_dex_ranges: tuple[tuple[int, int], ...]
     home_ids: frozenset[str]
     excluded_home_ids: frozenset[str]
+
+    def includes_national_dex(self, national_dex: int) -> bool:
+        """Return whether a species-level rule includes this Pokédex number.
+
+        Explicit numbers and inclusive ranges are intentionally supported at
+        the same time. Ranges keep large regional Pokédex rules readable, while
+        individual numbers remain useful for isolated additions.
+        """
+        return national_dex in self.national_dex or any(
+            start <= national_dex <= end for start, end in self.national_dex_ranges
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -98,6 +110,11 @@ class GameAvailabilityRules:
                     "national_dex",
                     yaml_key,
                 ),
+                national_dex_ranges=_read_dex_ranges(
+                    raw_rule,
+                    "national_dex_ranges",
+                    yaml_key,
+                ),
                 home_ids=_read_string_set(raw_rule, "home_ids", yaml_key),
                 excluded_home_ids=_read_string_set(
                     raw_rule,
@@ -134,7 +151,8 @@ def _build_entry_availability(
 
         # A form-specific exclusion always wins over species-level inclusion.
         available = (
-            entry.national_dex in rule.national_dex or entry.home_id in rule.home_ids
+            rule.includes_national_dex(entry.national_dex)
+            or entry.home_id in rule.home_ids
         )
         if entry.home_id in rule.excluded_home_ids:
             available = False
@@ -186,3 +204,45 @@ def _read_string_set(
         result.add(item.strip().upper())
 
     return frozenset(result)
+
+
+def _read_dex_ranges(
+    payload: dict[str, Any],
+    key: str,
+    game_key: str,
+) -> tuple[tuple[int, int], ...]:
+    """Read inclusive National Pokédex ranges from YAML.
+
+    Each range is represented as a two-item list, for example ``[1, 150]``.
+    Rejecting reversed or malformed ranges prevents silent over-classification.
+    """
+    value = payload.get(key, [])
+    if not isinstance(value, list):
+        raise ConfigurationError(
+            f"Game rule '{game_key}.{key}' must contain a YAML list."
+        )
+
+    ranges: list[tuple[int, int]] = []
+    for item in value:
+        if (
+            not isinstance(item, list)
+            or len(item) != 2
+            or any(
+                isinstance(bound, bool) or not isinstance(bound, int) or bound <= 0
+                for bound in item
+            )
+        ):
+            raise ConfigurationError(
+                f"Game rule '{game_key}.{key}' must contain two-item "
+                "positive integer ranges."
+            )
+
+        start, end = item
+        if start > end:
+            raise ConfigurationError(
+                f"Game rule '{game_key}.{key}' contains a reversed range: "
+                f"{start}-{end}."
+            )
+        ranges.append((start, end))
+
+    return tuple(ranges)

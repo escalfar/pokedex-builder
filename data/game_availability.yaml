@@ -1,47 +1,92 @@
-version: "1.0"
+version: "1.1"
 
-# This catalog is deliberately marked incomplete until every supported game is
-# populated and cross-checked. Empty rules produce FALSE rather than guessing.
+# The catalog remains incomplete while the other nine game groups are audited.
+# Unclassified variants continue to appear as FALSE in exports and as unknown
+# in Catalog_Coverage.json.
 complete: false
 
 games:
   xy:
     national_dex: []
+    national_dex_ranges: []
     home_ids: []
     excluded_home_ids: []
+
   oras:
     national_dex: []
+    national_dex_ranges: []
     home_ids: []
     excluded_home_ids: []
+
   sm:
     national_dex: []
+    national_dex_ranges: []
     home_ids: []
     excluded_home_ids: []
+
   usum:
     national_dex: []
+    national_dex_ranges: []
     home_ids: []
     excluded_home_ids: []
+
   lgpe:
+    # The paired games support the original Kanto collection through Mewtwo.
+    # Species-level inclusion also covers the 18 Alolan forms obtainable from
+    # repeatable NPC trades or by evolving those traded forms.
     national_dex: []
+    national_dex_ranges:
+      - [1, 150]
     home_ids: []
-    excluded_home_ids: []
+
+    # Regional forms introduced after Let's Go share a Kanto National Dex
+    # number, so they must override the broad 1-150 species range.
+    excluded_home_ids:
+      - "00052_GALAR_NONE"              # Galarian Meowth
+      - "00058_HISUI_NONE"              # Hisuian Growlithe
+      - "00059_HISUI_NONE"              # Hisuian Arcanine
+      - "00077_GALAR_NONE"              # Galarian Ponyta
+      - "00078_GALAR_NONE"              # Galarian Rapidash
+      - "00079_GALAR_NONE"              # Galarian Slowpoke
+      - "00080_GALAR_NONE"              # Galarian Slowbro
+      - "00083_GALAR_NONE"              # Galarian Farfetch'd
+      - "00100_HISUI_NONE"              # Hisuian Voltorb
+      - "00101_HISUI_NONE"              # Hisuian Electrode
+      - "00110_GALAR_NONE"              # Galarian Weezing
+      - "00122_GALAR_NONE"              # Galarian Mr. Mime
+      - "00128_PALDEA_COMBAT_BREED_NONE" # Paldean Tauros: Combat Breed
+      - "00128_PALDEA_BLAZE_BREED_NONE"  # Paldean Tauros: Blaze Breed
+      - "00128_PALDEA_AQUA_BREED_NONE"   # Paldean Tauros: Aqua Breed
+      - "00144_GALAR_NONE"              # Galarian Articuno
+      - "00145_GALAR_NONE"              # Galarian Zapdos
+      - "00146_GALAR_NONE"              # Galarian Moltres
+
   swsh:
     national_dex: []
+    national_dex_ranges: []
     home_ids: []
     excluded_home_ids: []
+
   pla:
     national_dex: []
+    national_dex_ranges: []
     home_ids: []
     excluded_home_ids: []
+
   bdsp:
     national_dex: []
+    national_dex_ranges: []
     home_ids: []
     excluded_home_ids: []
+
   sv:
     national_dex: []
+    national_dex_ranges: []
     home_ids: []
     excluded_home_ids: []
+
   za:
     national_dex: []
+    national_dex_ranges: []
     home_ids: []
     excluded_home_ids: []

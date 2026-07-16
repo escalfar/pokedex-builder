@@ -129,7 +129,10 @@ def _build_game_coverage(
     for entry in entries:
         if entry.home_id in rule.excluded_home_ids:
             verified_false += 1
-        elif entry.national_dex in rule.national_dex or entry.home_id in rule.home_ids:
+        elif (
+            rule.includes_national_dex(entry.national_dex)
+            or entry.home_id in rule.home_ids
+        ):
             verified_true += 1
 
     return CoverageCounts(

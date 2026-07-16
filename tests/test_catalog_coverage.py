@@ -34,12 +34,14 @@ def build_entry(
 def build_game_rules() -> GameAvailabilityRules:
     empty_rule = GameRule(
         national_dex=frozenset(),
+        national_dex_ranges=(),
         home_ids=frozenset(),
         excluded_home_ids=frozenset(),
     )
     games = {game: empty_rule for game in GAME_COLUMNS}
     games[GameColumn.XY] = GameRule(
         national_dex=frozenset({1}),
+        national_dex_ranges=(),
         home_ids=frozenset({"00002_NORMAL_NONE"}),
         excluded_home_ids=frozenset({"00003_NORMAL_NONE"}),
     )
@@ -145,3 +147,47 @@ def test_export_coverage_json(tmp_path: Path) -> None:
     assert payload["complete"] is False
     assert payload["games"]["X/Y"]["verified"] == 1
     assert payload["shiny"]["percent"] == 100.0
+
+
+def test_game_coverage_counts_dex_range_as_verified_true() -> None:
+    entries = (
+        build_entry(
+            national_dex=1,
+            name="Bulbasaur",
+            home_id="00001_NORMAL_NONE",
+        ),
+        build_entry(
+            national_dex=151,
+            name="Mew",
+            home_id="00151_NORMAL_NONE",
+        ),
+    )
+
+    empty_rule = GameRule(
+        national_dex=frozenset(),
+        national_dex_ranges=(),
+        home_ids=frozenset(),
+        excluded_home_ids=frozenset(),
+    )
+    games = {game: empty_rule for game in GAME_COLUMNS}
+    games[GameColumn.LGPE] = GameRule(
+        national_dex=frozenset(),
+        national_dex_ranges=((1, 150),),
+        home_ids=frozenset(),
+        excluded_home_ids=frozenset(),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        GameAvailabilityRules(complete=False, games=games),
+        ShinyAvailabilityRules(
+            complete=False,
+            national_dex=frozenset(),
+            home_ids=frozenset(),
+            excluded_home_ids=frozenset(),
+        ),
+    )
+
+    lgpe = report.games[GameColumn.LGPE]
+    assert lgpe.verified_true == 1
+    assert lgpe.unknown == 1
