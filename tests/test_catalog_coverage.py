@@ -435,3 +435,50 @@ def test_swsh_regional_tranche_classifies_events_and_later_forms() -> None:
     assert swsh.verified_false == 2
     assert swsh.unknown == 1
     assert swsh.percent == 75.0
+
+
+def test_bdsp_complete_catalog_classifies_every_sample_row() -> None:
+    """A completed BDSP audit treats unmatched later species as verified false."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "game_availability.yaml"
+    )
+    game_rules = GameAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(
+            national_dex=1,
+            name="Bulbasaur",
+            home_id="00001_NORMAL_NONE",
+        ),
+        build_entry(
+            national_dex=26,
+            name="Alolan Raichu",
+            home_id="00026_ALOLA_NONE",
+        ),
+        build_entry(
+            national_dex=386,
+            name="Attack Forme Deoxys",
+            home_id="00386_ATTACK_NONE",
+        ),
+        build_entry(
+            national_dex=906,
+            name="Sprigatito",
+            home_id="00906_NORMAL_NONE",
+        ),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        game_rules,
+        ShinyAvailabilityRules(
+            complete=False,
+            national_dex=frozenset(),
+            home_ids=frozenset(),
+            excluded_home_ids=frozenset(),
+        ),
+    )
+
+    bdsp = report.games[GameColumn.BDSP]
+    assert bdsp.verified_true == 1
+    assert bdsp.verified_false == 3
+    assert bdsp.unknown == 0
+    assert bdsp.percent == 100.0

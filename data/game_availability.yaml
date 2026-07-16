@@ -831,11 +831,93 @@ games:
       - "00901_BLOODMOON_NONE"
 
   bdsp:
-    complete: false
+    complete: true
+    # Sources: BDSP National Pokédex and the official postgame guides. The
+    # games support the first 493 species, but event-only, transfer-only, and
+    # later regional forms are excluded below. Permanent save-data gifts such
+    # as Mew and Jirachi remain included because they do not require a timed
+    # distribution.
     national_dex: []
-    national_dex_ranges: []
+    national_dex_ranges:
+      - [1, 493]
     home_ids: []
-    excluded_home_ids: []
+    excluded_home_ids:
+      # Regional forms introduced outside Sinnoh are not compatible with BDSP.
+      - "00019_ALOLA_NONE"
+      - "00020_ALOLA_NONE"
+      - "00026_ALOLA_NONE"
+      - "00027_ALOLA_NONE"
+      - "00028_ALOLA_NONE"
+      - "00037_ALOLA_NONE"
+      - "00038_ALOLA_NONE"
+      - "00050_ALOLA_NONE"
+      - "00051_ALOLA_NONE"
+      - "00052_ALOLA_NONE"
+      - "00052_GALAR_NONE"
+      - "00053_ALOLA_NONE"
+      - "00058_HISUI_NONE"
+      - "00059_HISUI_NONE"
+      - "00074_ALOLA_NONE"
+      - "00075_ALOLA_NONE"
+      - "00076_ALOLA_NONE"
+      - "00077_GALAR_NONE"
+      - "00078_GALAR_NONE"
+      - "00079_GALAR_NONE"
+      - "00080_GALAR_NONE"
+      - "00083_GALAR_NONE"
+      - "00088_ALOLA_NONE"
+      - "00089_ALOLA_NONE"
+      - "00100_HISUI_NONE"
+      - "00101_HISUI_NONE"
+      - "00103_ALOLA_NONE"
+      - "00105_ALOLA_NONE"
+      - "00110_GALAR_NONE"
+      - "00122_GALAR_NONE"
+      - "00128_PALDEA_AQUA_BREED_NONE"
+      - "00128_PALDEA_BLAZE_BREED_NONE"
+      - "00128_PALDEA_COMBAT_BREED_NONE"
+      - "00144_GALAR_NONE"
+      - "00145_GALAR_NONE"
+      - "00146_GALAR_NONE"
+      - "00157_HISUI_NONE"
+      - "00194_PALDEA_NONE"
+      - "00199_GALAR_NONE"
+      - "00211_HISUI_NONE"
+      - "00215_HISUI_FEMALE"
+      - "00215_HISUI_MALE"
+      - "00222_GALAR_NONE"
+      - "00263_GALAR_NONE"
+      - "00264_GALAR_NONE"
+
+      # Cosplay Pikachu costumes cannot be transferred into BDSP.
+      - "00025_BELLE_NONE"
+      - "00025_LIBRE_NONE"
+      - "00025_PHD_NONE"
+      - "00025_POP_STAR_NONE"
+      - "00025_ROCK_STAR_NONE"
+
+      # Castform weather appearances are temporary battle states rather than
+      # depositable forms in Brilliant Diamond or Shining Pearl.
+      - "00351_RAINY_NONE"
+      - "00351_SNOWY_NONE"
+      - "00351_SUNNY_NONE"
+
+      # Celebi and every Deoxys Forme are transfer-only and cannot receive the
+      # BDSP origin mark. Deoxys Formes remain in the project, as requested,
+      # but are explicitly unavailable for capture in this game pair.
+      - "00251_NORMAL_NONE"
+      - "00386_NORMAL_NONE"
+      - "00386_ATTACK_NONE"
+      - "00386_DEFENSE_NONE"
+      - "00386_SPEED_NONE"
+
+      # These Mythical encounters depended on expired Mystery Gift items or
+      # distributions. Phione depends on breeding the event-only Manaphy.
+      - "00489_NORMAL_NONE"
+      - "00490_NORMAL_NONE"
+      - "00491_NORMAL_NONE"
+      - "00492_NORMAL_NONE"
+      - "00492_SKY_NONE"
 
   sv:
     complete: false

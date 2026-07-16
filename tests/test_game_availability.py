@@ -728,3 +728,94 @@ def test_swsh_excludes_event_zarude_and_unstorable_calyrex_fusions() -> None:
     assert calyrex.availability.is_available_in(GameColumn.SWSH) is True
     assert ice.availability.is_available_in(GameColumn.SWSH) is False
     assert shadow.availability.is_available_in(GameColumn.SWSH) is False
+
+
+def test_bdsp_complete_catalog_covers_first_four_generations() -> None:
+    """BDSP supports the first 493 species before form-specific exclusions."""
+    rule = load_project_game_rules().games[GameColumn.BDSP]
+
+    assert rule.complete is True
+    assert rule.national_dex_ranges == ((1, 493),)
+    assert rule.includes_national_dex(1) is True
+    assert rule.includes_national_dex(493) is True
+    assert rule.includes_national_dex(494) is False
+
+
+def test_bdsp_keeps_supported_gender_and_platinum_forms() -> None:
+    rules = load_project_game_rules()
+    female, male, sandy, trash, wash = apply_game_availability(
+        (
+            build_entry(national_dex=25, home_id="00025_NORMAL_FEMALE"),
+            build_entry(national_dex=25, home_id="00025_NORMAL_MALE"),
+            build_entry(national_dex=413, home_id="00413_SANDY_NONE"),
+            build_entry(national_dex=413, home_id="00413_TRASH_NONE"),
+            build_entry(national_dex=479, home_id="00479_WASH_NONE"),
+        ),
+        rules,
+    )
+
+    for entry in (female, male, sandy, trash, wash):
+        assert entry.availability.is_available_in(GameColumn.BDSP) is True
+
+
+def test_bdsp_excludes_regional_cosplay_and_temporary_forms() -> None:
+    rules = load_project_game_rules()
+    alolan, galarian, hisuian, paldean, cosplay, rainy = apply_game_availability(
+        (
+            build_entry(national_dex=26, home_id="00026_ALOLA_NONE"),
+            build_entry(national_dex=77, home_id="00077_GALAR_NONE"),
+            build_entry(national_dex=58, home_id="00058_HISUI_NONE"),
+            build_entry(
+                national_dex=128,
+                home_id="00128_PALDEA_COMBAT_BREED_NONE",
+            ),
+            build_entry(national_dex=25, home_id="00025_LIBRE_NONE"),
+            build_entry(national_dex=351, home_id="00351_RAINY_NONE"),
+        ),
+        rules,
+    )
+
+    for entry in (alolan, galarian, hisuian, paldean, cosplay, rainy):
+        assert entry.availability.is_available_in(GameColumn.BDSP) is False
+
+
+def test_bdsp_keeps_all_deoxys_formes_but_marks_them_unavailable() -> None:
+    """Deoxys Formes stay in the dataset even though BDSP cannot originate them."""
+    rules = load_project_game_rules()
+    formes = apply_game_availability(
+        (
+            build_entry(national_dex=386, home_id="00386_NORMAL_NONE"),
+            build_entry(national_dex=386, home_id="00386_ATTACK_NONE"),
+            build_entry(national_dex=386, home_id="00386_DEFENSE_NONE"),
+            build_entry(national_dex=386, home_id="00386_SPEED_NONE"),
+        ),
+        rules,
+    )
+
+    assert all(
+        entry.availability.is_available_in(GameColumn.BDSP) is False for entry in formes
+    )
+
+
+def test_bdsp_handles_permanent_gifts_and_event_only_mythicals() -> None:
+    rules = load_project_game_rules()
+    mew, jirachi, arceus, celebi, manaphy, darkrai, shaymin = apply_game_availability(
+        (
+            build_entry(national_dex=151, home_id="00151_NORMAL_NONE"),
+            build_entry(national_dex=385, home_id="00385_NORMAL_NONE"),
+            build_entry(national_dex=493, home_id="00493_NORMAL_NONE"),
+            build_entry(national_dex=251, home_id="00251_NORMAL_NONE"),
+            build_entry(national_dex=490, home_id="00490_NORMAL_NONE"),
+            build_entry(national_dex=491, home_id="00491_NORMAL_NONE"),
+            build_entry(national_dex=492, home_id="00492_NORMAL_NONE"),
+        ),
+        rules,
+    )
+
+    assert mew.availability.is_available_in(GameColumn.BDSP) is True
+    assert jirachi.availability.is_available_in(GameColumn.BDSP) is True
+    assert arceus.availability.is_available_in(GameColumn.BDSP) is True
+    assert celebi.availability.is_available_in(GameColumn.BDSP) is False
+    assert manaphy.availability.is_available_in(GameColumn.BDSP) is False
+    assert darkrai.availability.is_available_in(GameColumn.BDSP) is False
+    assert shaymin.availability.is_available_in(GameColumn.BDSP) is False
