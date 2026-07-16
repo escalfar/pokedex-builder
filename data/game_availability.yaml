@@ -230,10 +230,165 @@ games:
 
   sm:
     complete: false
-    national_dex: []
-    national_dex_ranges: []
+    # Source: PokéAPI original Alola Pokédex (302 entries) for Sun/Moon.
+    # Magearna and Marshadow are event/gift-only. Island Scan encounters remain
+    # pending, so unmatched variants are still reported as unknown.
+    national_dex:
+      - 46
+      - 47
+      - 96
+      - 97
+      - 113
+      - 115
+      - 123
+      - 142
+      - 143
+      - 185
+      - 186
+      - 209
+      - 210
+      - 212
+      - 215
+      - 222
+      - 225
+      - 227
+      - 233
+      - 235
+      - 278
+      - 279
+      - 283
+      - 284
+      - 296
+      - 297
+      - 299
+      - 302
+      - 324
+      - 339
+      - 340
+      - 359
+      - 361
+      - 362
+      - 422
+      - 423
+      - 425
+      - 426
+      - 429
+      - 430
+      - 438
+      - 440
+      - 456
+      - 457
+      - 461
+      - 462
+      - 466
+      - 467
+      - 470
+      - 471
+      - 474
+      - 476
+      - 478
+      - 587
+      - 594
+      - 674
+      - 675
+      - 700
+      - 718
+    national_dex_ranges:
+      - [10, 12]
+      - [19, 22]
+      - [25, 28]
+      - [35, 42]
+      - [50, 68]
+      - [72, 76]
+      - [79, 82]
+      - [88, 94]
+      - [102, 105]
+      - [118, 121]
+      - [125, 137]
+      - [147, 149]
+      - [165, 174]
+      - [196, 200]
+      - [239, 242]
+      - [318, 321]
+      - [327, 330]
+      - [349, 351]
+      - [369, 376]
+      - [408, 411]
+      - [443, 448]
+      - [506, 508]
+      - [524, 526]
+      - [546, 549]
+      - [551, 553]
+      - [564, 569]
+      - [582, 584]
+      - [627, 630]
+      - [661, 663]
+      - [703, 709]
+      - [722, 800]
     home_ids: []
-    excluded_home_ids: []
+    excluded_home_ids:
+      - "00801_NORMAL_NONE"  # Magearna: external QR-code gift
+      - "00802_NORMAL_NONE"  # Marshadow: event distribution
+
+      # Sun/Moon produces the Alolan form for these lines. Gendered normal
+      # forms need both explicit IDs because exclusions are exact-match rules.
+      - "00019_NORMAL_FEMALE"
+      - "00019_NORMAL_MALE"
+      - "00020_NORMAL_FEMALE"
+      - "00020_NORMAL_MALE"
+      - "00026_NORMAL_FEMALE"
+      - "00026_NORMAL_MALE"
+      - "00027_NORMAL_NONE"
+      - "00028_NORMAL_NONE"
+      - "00037_NORMAL_NONE"
+      - "00038_NORMAL_NONE"
+      - "00050_NORMAL_NONE"
+      - "00051_NORMAL_NONE"
+      - "00052_NORMAL_NONE"
+      - "00053_NORMAL_NONE"
+      - "00074_NORMAL_NONE"
+      - "00075_NORMAL_NONE"
+      - "00076_NORMAL_NONE"
+      - "00088_NORMAL_NONE"
+      - "00089_NORMAL_NONE"
+      - "00103_NORMAL_NONE"
+      - "00105_NORMAL_NONE"
+
+      # Cosplay Pikachu is ORAS-only and cannot be transferred.
+      - "00025_BELLE_NONE"
+      - "00025_LIBRE_NONE"
+      - "00025_PHD_NONE"
+      - "00025_POP_STAR_NONE"
+      - "00025_ROCK_STAR_NONE"
+
+      # Temporary Castform weather states are not retained HOME forms.
+      - "00351_RAINY_NONE"
+      - "00351_SNOWY_NONE"
+      - "00351_SUNNY_NONE"
+
+      # Introduced in Ultra Sun/Ultra Moon.
+      - "00744_OWN_TEMPO_NONE"
+      - "00745_DUSK_NONE"
+      - "00800_DAWN_NONE"
+      - "00800_DUSK_NONE"
+
+      # Regional forms introduced after Generation VII.
+      - "00052_GALAR_NONE"
+      - "00058_HISUI_NONE"
+      - "00059_HISUI_NONE"
+      - "00079_GALAR_NONE"
+      - "00080_GALAR_NONE"
+      - "00128_PALDEA_COMBAT_BREED_NONE"
+      - "00128_PALDEA_BLAZE_BREED_NONE"
+      - "00128_PALDEA_AQUA_BREED_NONE"
+      - "00199_GALAR_NONE"
+      - "00215_HISUI_NONE"
+      - "00222_GALAR_NONE"
+      - "00549_HISUI_NONE"
+      - "00628_HISUI_NONE"
+      - "00705_HISUI_NONE"
+      - "00706_HISUI_NONE"
+      - "00724_HISUI_NONE"
 
   usum:
     complete: false

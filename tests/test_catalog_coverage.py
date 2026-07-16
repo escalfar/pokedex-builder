@@ -323,3 +323,34 @@ def test_oras_regional_tranche_keeps_unmatched_entries_unknown() -> None:
     assert oras.verified_false == 0
     assert oras.unknown == 2
     assert oras.percent == 33.33
+
+
+def test_sm_regional_tranche_classifies_events_but_leaves_island_scan_unknown() -> None:
+    """The regional core is known; Island Scan receives a later audit pass."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "game_availability.yaml"
+    )
+    game_rules = GameAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=722, name="Rowlet", home_id="00722_NORMAL_NONE"),
+        build_entry(national_dex=801, name="Magearna", home_id="00801_NORMAL_NONE"),
+        build_entry(national_dex=802, name="Marshadow", home_id="00802_NORMAL_NONE"),
+        build_entry(national_dex=1, name="Bulbasaur", home_id="00001_NORMAL_NONE"),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        game_rules,
+        ShinyAvailabilityRules(
+            complete=False,
+            national_dex=frozenset(),
+            home_ids=frozenset(),
+            excluded_home_ids=frozenset(),
+        ),
+    )
+
+    sm = report.games[GameColumn.SM]
+    assert sm.verified_true == 1
+    assert sm.verified_false == 2
+    assert sm.unknown == 1
+    assert sm.percent == 75.0

@@ -509,3 +509,85 @@ def test_oras_excludes_later_regional_forms_and_cosplay_pikachu() -> None:
     assert alolan.availability.is_available_in(GameColumn.ORAS) is False
     assert hisuian.availability.is_available_in(GameColumn.ORAS) is False
     assert cosplay.availability.is_available_in(GameColumn.ORAS) is False
+
+
+def test_sm_regional_catalog_contains_300_non_event_species() -> None:
+    """The original Alola Dex has 302 entries; two require external gifts."""
+    rule = load_project_game_rules().games[GameColumn.SM]
+    covered = set(rule.national_dex)
+
+    for start, end in rule.national_dex_ranges:
+        covered.update(range(start, end + 1))
+
+    assert rule.complete is False
+    assert len(covered) == 300
+    assert 722 in covered
+    assert 800 in covered
+    assert 801 not in covered
+    assert 802 not in covered
+
+
+def test_sm_uses_alolan_forms_for_replaced_kanto_lines() -> None:
+    rules = load_project_game_rules()
+    normal_rattata, alolan_rattata, pikachu, normal_raichu, alolan_raichu = (
+        apply_game_availability(
+            (
+                build_entry(national_dex=19, home_id="00019_NORMAL_FEMALE"),
+                build_entry(national_dex=19, home_id="00019_ALOLA_NONE"),
+                build_entry(national_dex=25, home_id="00025_NORMAL_FEMALE"),
+                build_entry(national_dex=26, home_id="00026_NORMAL_FEMALE"),
+                build_entry(national_dex=26, home_id="00026_ALOLA_NONE"),
+            ),
+            rules,
+        )
+    )
+
+    assert normal_rattata.availability.is_available_in(GameColumn.SM) is False
+    assert alolan_rattata.availability.is_available_in(GameColumn.SM) is True
+    assert pikachu.availability.is_available_in(GameColumn.SM) is True
+    assert normal_raichu.availability.is_available_in(GameColumn.SM) is False
+    assert alolan_raichu.availability.is_available_in(GameColumn.SM) is True
+
+
+def test_sm_excludes_forms_introduced_in_usum_or_later() -> None:
+    rules = load_project_game_rules()
+    rockruff, own_tempo, midnight, dusk, necrozma, dawn, hisuian = (
+        apply_game_availability(
+            (
+                build_entry(national_dex=744, home_id="00744_NORMAL_NONE"),
+                build_entry(national_dex=744, home_id="00744_OWN_TEMPO_NONE"),
+                build_entry(national_dex=745, home_id="00745_MIDNIGHT_NONE"),
+                build_entry(national_dex=745, home_id="00745_DUSK_NONE"),
+                build_entry(national_dex=800, home_id="00800_NORMAL_NONE"),
+                build_entry(national_dex=800, home_id="00800_DAWN_NONE"),
+                build_entry(national_dex=724, home_id="00724_HISUI_NONE"),
+            ),
+            rules,
+        )
+    )
+
+    assert rockruff.availability.is_available_in(GameColumn.SM) is True
+    assert own_tempo.availability.is_available_in(GameColumn.SM) is False
+    assert midnight.availability.is_available_in(GameColumn.SM) is True
+    assert dusk.availability.is_available_in(GameColumn.SM) is False
+    assert necrozma.availability.is_available_in(GameColumn.SM) is True
+    assert dawn.availability.is_available_in(GameColumn.SM) is False
+    assert hisuian.availability.is_available_in(GameColumn.SM) is False
+
+
+def test_sm_keeps_oricorio_and_zygarde_stored_forms() -> None:
+    rules = load_project_game_rules()
+    baile, pom_pom, pau, sensu, fifty, ten_percent = apply_game_availability(
+        (
+            build_entry(national_dex=741, home_id="00741_NORMAL_NONE"),
+            build_entry(national_dex=741, home_id="00741_POM_POM_NONE"),
+            build_entry(national_dex=741, home_id="00741_PAU_NONE"),
+            build_entry(national_dex=741, home_id="00741_SENSU_NONE"),
+            build_entry(national_dex=718, home_id="00718_NORMAL_NONE"),
+            build_entry(national_dex=718, home_id="00718_10_NONE"),
+        ),
+        rules,
+    )
+
+    for entry in (baile, pom_pom, pau, sensu, fifty, ten_percent):
+        assert entry.availability.is_available_in(GameColumn.SM) is True
