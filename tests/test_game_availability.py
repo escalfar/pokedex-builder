@@ -256,3 +256,93 @@ def test_load_rules_rejects_reversed_dex_range(tmp_path: Path) -> None:
         match="reversed range",
     ):
         GameAvailabilityRules.from_yaml(path)
+
+
+def test_legends_arceus_hisuian_form_overrides_normal_form() -> None:
+    games = empty_rules()
+    games[GameColumn.PLA] = GameRule(
+        national_dex=frozenset({724}),
+        national_dex_ranges=(),
+        home_ids=frozenset(),
+        excluded_home_ids=frozenset({"00724_NORMAL_NONE"}),
+    )
+    rules = GameAvailabilityRules(complete=False, games=games)
+
+    normal, hisuian = apply_game_availability(
+        (
+            build_entry(national_dex=724, home_id="00724_NORMAL_NONE"),
+            build_entry(national_dex=724, home_id="00724_HISUI_NONE"),
+        ),
+        rules,
+    )
+
+    assert normal.availability.is_available_in(GameColumn.PLA) is False
+    assert hisuian.availability.is_available_in(GameColumn.PLA) is True
+
+
+def test_legends_arceus_only_includes_white_striped_basculin() -> None:
+    games = empty_rules()
+    games[GameColumn.PLA] = GameRule(
+        national_dex=frozenset({550}),
+        national_dex_ranges=(),
+        home_ids=frozenset(),
+        excluded_home_ids=frozenset({"00550_NORMAL_NONE", "00550_BLUE_STRIPED_NONE"}),
+    )
+    rules = GameAvailabilityRules(complete=False, games=games)
+
+    red, blue, white = apply_game_availability(
+        (
+            build_entry(national_dex=550, home_id="00550_NORMAL_NONE"),
+            build_entry(national_dex=550, home_id="00550_BLUE_STRIPED_NONE"),
+            build_entry(national_dex=550, home_id="00550_WHITE_STRIPED_NONE"),
+        ),
+        rules,
+    )
+
+    assert red.availability.is_available_in(GameColumn.PLA) is False
+    assert blue.availability.is_available_in(GameColumn.PLA) is False
+    assert white.availability.is_available_in(GameColumn.PLA) is True
+
+
+def test_legends_arceus_accepts_both_sneasel_forms() -> None:
+    games = empty_rules()
+    games[GameColumn.PLA] = GameRule(
+        national_dex=frozenset({215}),
+        national_dex_ranges=(),
+        home_ids=frozenset(),
+        excluded_home_ids=frozenset(),
+    )
+    rules = GameAvailabilityRules(complete=False, games=games)
+
+    normal, hisuian = apply_game_availability(
+        (
+            build_entry(national_dex=215, home_id="00215_NORMAL_FEMALE"),
+            build_entry(national_dex=215, home_id="00215_HISUI_FEMALE"),
+        ),
+        rules,
+    )
+
+    assert normal.availability.is_available_in(GameColumn.PLA) is True
+    assert hisuian.availability.is_available_in(GameColumn.PLA) is True
+
+
+def test_legends_arceus_excludes_bloodmoon_ursaluna() -> None:
+    games = empty_rules()
+    games[GameColumn.PLA] = GameRule(
+        national_dex=frozenset({901}),
+        national_dex_ranges=(),
+        home_ids=frozenset(),
+        excluded_home_ids=frozenset({"00901_BLOODMOON_NONE"}),
+    )
+    rules = GameAvailabilityRules(complete=False, games=games)
+
+    normal, bloodmoon = apply_game_availability(
+        (
+            build_entry(national_dex=901, home_id="00901_NORMAL_NONE"),
+            build_entry(national_dex=901, home_id="00901_BLOODMOON_NONE"),
+        ),
+        rules,
+    )
+
+    assert normal.availability.is_available_in(GameColumn.PLA) is True
+    assert bloodmoon.availability.is_available_in(GameColumn.PLA) is False

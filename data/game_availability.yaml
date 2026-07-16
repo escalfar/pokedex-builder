@@ -68,10 +68,130 @@ games:
     excluded_home_ids: []
 
   pla:
-    national_dex: []
-    national_dex_ranges: []
+    # Source: Hisui Pokédex in Pokémon Legends: Arceus (242 species).
+    # Species-level rules cover all retained variants unless a form-specific
+    # exclusion below records that only another regional or cosmetic form is
+    # obtainable in the game.
+    national_dex:
+      - 25
+      - 26
+      - 41
+      - 42
+      - 46
+      - 47
+      - 54
+      - 55
+      - 58
+      - 59
+      - 81
+      - 82
+      - 100
+      - 101
+      - 108
+      - 122
+      - 123
+      - 125
+      - 126
+      - 129
+      - 130
+      - 143
+      - 169
+      - 172
+      - 173
+      - 175
+      - 176
+      - 185
+      - 190
+      - 193
+      - 200
+      - 201
+      - 207
+      - 208
+      - 211
+      - 212
+      - 220
+      - 221
+      - 223
+      - 224
+      - 226
+      - 233
+      - 234
+      - 239
+      - 240
+      - 242
+      - 299
+      - 315
+      - 339
+      - 340
+      - 355
+      - 356
+      - 358
+      - 570
+      - 571
+      - 627
+      - 628
+      - 641
+      - 642
+      - 645
+      - 700
+      - 712
+      - 713
+
+    national_dex_ranges:
+      - [35, 38]
+      - [63, 68]
+      - [72, 78]
+      - [92, 95]
+      - [111, 114]
+      - [133, 137]
+      - [155, 157]
+      - [196, 198]
+      - [214, 217]
+      - [265, 269]
+      - [280, 282]
+      - [361, 365]
+      - [387, 493]
+      - [501, 503]
+      - [548, 550]
+      - [704, 706]
+      - [722, 724]
+      - [899, 905]
+
     home_ids: []
-    excluded_home_ids: []
+
+    excluded_home_ids:
+      # Only the Hisuian final evolutions of the three first partners exist.
+      - "00157_NORMAL_NONE"
+      - "00503_NORMAL_NONE"
+      - "00724_NORMAL_NONE"
+
+      # These evolutionary lines use their Hisuian forms in Legends: Arceus.
+      - "00058_NORMAL_NONE"
+      - "00059_NORMAL_NONE"
+      - "00100_NORMAL_NONE"
+      - "00101_NORMAL_NONE"
+      - "00211_NORMAL_NONE"
+      - "00549_NORMAL_NONE"
+      - "00570_NORMAL_NONE"
+      - "00571_NORMAL_NONE"
+      - "00628_NORMAL_NONE"
+      - "00705_NORMAL_NONE"
+      - "00706_NORMAL_NONE"
+      - "00713_NORMAL_NONE"
+
+      # Basculin is limited to the White-Striped Form in Hisui. PokéAPI's
+      # default Red-Striped variety is represented internally as NORMAL.
+      - "00550_NORMAL_NONE"
+      - "00550_BLUE_STRIPED_NONE"
+
+      # Regional forms from other regions that share an included species ID.
+      - "00026_ALOLA_NONE"
+      - "00077_GALAR_NONE"
+      - "00078_GALAR_NONE"
+      - "00122_GALAR_NONE"
+
+      # Bloodmoon Ursaluna was introduced later and is not obtainable in PLA.
+      - "00901_BLOODMOON_NONE"
 
   bdsp:
     national_dex: []
