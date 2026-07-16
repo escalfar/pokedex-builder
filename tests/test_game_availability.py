@@ -346,3 +346,31 @@ def test_legends_arceus_excludes_bloodmoon_ursaluna() -> None:
 
     assert normal.availability.is_available_in(GameColumn.PLA) is True
     assert bloodmoon.availability.is_available_in(GameColumn.PLA) is False
+
+
+def test_load_rules_reads_per_game_complete_flag(tmp_path: Path) -> None:
+    path = tmp_path / "complete_game.yaml"
+    write_rules(path)
+    content = path.read_text(encoding="utf-8").replace(
+        "xy:\n    national_dex",
+        "xy:\n    complete: true\n    national_dex",
+    )
+    path.write_text(content, encoding="utf-8")
+
+    rules = GameAvailabilityRules.from_yaml(path)
+
+    assert rules.games[GameColumn.XY].complete is True
+    assert rules.games[GameColumn.SM].complete is False
+
+
+def test_load_rules_rejects_non_boolean_game_complete(tmp_path: Path) -> None:
+    path = tmp_path / "invalid_complete.yaml"
+    write_rules(path)
+    content = path.read_text(encoding="utf-8").replace(
+        "xy:\n    national_dex",
+        "xy:\n    complete: yes-please\n    national_dex",
+    )
+    path.write_text(content, encoding="utf-8")
+
+    with pytest.raises(ConfigurationError, match="xy.complete.*boolean"):
+        GameAvailabilityRules.from_yaml(path)

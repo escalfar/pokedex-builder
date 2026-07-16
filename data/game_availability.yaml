@@ -7,30 +7,35 @@ complete: false
 
 games:
   xy:
+    complete: false
     national_dex: []
     national_dex_ranges: []
     home_ids: []
     excluded_home_ids: []
 
   oras:
+    complete: false
     national_dex: []
     national_dex_ranges: []
     home_ids: []
     excluded_home_ids: []
 
   sm:
+    complete: false
     national_dex: []
     national_dex_ranges: []
     home_ids: []
     excluded_home_ids: []
 
   usum:
+    complete: false
     national_dex: []
     national_dex_ranges: []
     home_ids: []
     excluded_home_ids: []
 
   lgpe:
+    complete: true
     # The paired games support the original Kanto collection through Mewtwo.
     # Species-level inclusion also covers the 18 Alolan forms obtainable from
     # repeatable NPC trades or by evolving those traded forms.
@@ -62,12 +67,14 @@ games:
       - "00146_GALAR_NONE"              # Galarian Moltres
 
   swsh:
+    complete: false
     national_dex: []
     national_dex_ranges: []
     home_ids: []
     excluded_home_ids: []
 
   pla:
+    complete: true
     # Source: Hisui Pokédex in Pokémon Legends: Arceus (242 species).
     # Species-level rules cover all retained variants unless a form-specific
     # exclusion below records that only another regional or cosmetic form is
@@ -194,18 +201,21 @@ games:
       - "00901_BLOODMOON_NONE"
 
   bdsp:
+    complete: false
     national_dex: []
     national_dex_ranges: []
     home_ids: []
     excluded_home_ids: []
 
   sv:
+    complete: false
     national_dex: []
     national_dex_ranges: []
     home_ids: []
     excluded_home_ids: []
 
   za:
+    complete: false
     national_dex: []
     national_dex_ranges: []
     home_ids: []

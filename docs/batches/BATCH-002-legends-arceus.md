@@ -3,7 +3,8 @@
 ## Objective
 
 Classify the Pokémon HOME-compatible variants obtainable in Pokémon Legends:
-Arceus for the `Legends Arceus` output column.
+Arceus for the `Legends Arceus` output column and mark the game catalog as
+fully audited.
 
 ## Sources
 
@@ -27,6 +28,8 @@ Arceus for the `Legends Arceus` output column.
 - Excluded Red-Striped and Blue-Striped Basculin; only White-Striped Basculin
   is available in Hisui.
 - Excluded Bloodmoon Ursaluna because it was introduced after PLA.
+- Marked the PLA game rule as complete, so variants absent from the audited
+  positive list are counted as verified unavailable instead of unknown.
 
 ## Validation
 
@@ -37,3 +40,4 @@ Regression tests cover:
 - Both forms of Sneasel.
 - Alolan Vulpix and exclusion of unrelated regional forms.
 - Bloodmoon Ursaluna exclusion.
+- Per-game completeness and 100% coverage behavior.

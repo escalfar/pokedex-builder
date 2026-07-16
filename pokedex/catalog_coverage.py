@@ -134,6 +134,10 @@ def _build_game_coverage(
             or entry.home_id in rule.home_ids
         ):
             verified_true += 1
+        elif rule.complete:
+            # Once a game has been fully audited, omission from its positive
+            # rules is an explicit unavailable decision rather than unknown.
+            verified_false += 1
 
     return CoverageCounts(
         total=len(entries),

@@ -38,6 +38,7 @@ class GameRule:
     national_dex_ranges: tuple[tuple[int, int], ...]
     home_ids: frozenset[str]
     excluded_home_ids: frozenset[str]
+    complete: bool = False
 
     def includes_national_dex(self, national_dex: int) -> bool:
         """Return whether a species-level rule includes this Pokédex number.
@@ -121,6 +122,7 @@ class GameAvailabilityRules:
                     "excluded_home_ids",
                     yaml_key,
                 ),
+                complete=_read_optional_bool(raw_rule, "complete", yaml_key),
             )
 
         return cls(complete=complete, games=parsed_games)
@@ -246,3 +248,19 @@ def _read_dex_ranges(
         ranges.append((start, end))
 
     return tuple(ranges)
+
+
+def _read_optional_bool(
+    payload: dict[str, Any],
+    key: str,
+    game_key: str,
+) -> bool:
+    """Read an optional boolean field from one game rule.
+
+    Per-game completeness lets an audited game classify every rule omission as
+    an explicit ``FALSE`` without requiring thousands of negative HOME IDs.
+    """
+    value = payload.get(key, False)
+    if not isinstance(value, bool):
+        raise ConfigurationError(f"Game rule '{game_key}.{key}' must be boolean.")
+    return value

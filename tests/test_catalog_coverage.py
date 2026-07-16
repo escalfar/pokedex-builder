@@ -191,3 +191,50 @@ def test_game_coverage_counts_dex_range_as_verified_true() -> None:
     lgpe = report.games[GameColumn.LGPE]
     assert lgpe.verified_true == 1
     assert lgpe.unknown == 1
+
+
+def test_complete_game_treats_unmatched_entries_as_verified_false() -> None:
+    entries = (
+        build_entry(
+            national_dex=1,
+            name="Bulbasaur",
+            home_id="00001_NORMAL_NONE",
+        ),
+        build_entry(
+            national_dex=151,
+            name="Mew",
+            home_id="00151_NORMAL_NONE",
+        ),
+    )
+
+    empty_rule = GameRule(
+        national_dex=frozenset(),
+        national_dex_ranges=(),
+        home_ids=frozenset(),
+        excluded_home_ids=frozenset(),
+    )
+    games = {game: empty_rule for game in GAME_COLUMNS}
+    games[GameColumn.LGPE] = GameRule(
+        national_dex=frozenset(),
+        national_dex_ranges=((1, 150),),
+        home_ids=frozenset(),
+        excluded_home_ids=frozenset(),
+        complete=True,
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        GameAvailabilityRules(complete=False, games=games),
+        ShinyAvailabilityRules(
+            complete=False,
+            national_dex=frozenset(),
+            home_ids=frozenset(),
+            excluded_home_ids=frozenset(),
+        ),
+    )
+
+    lgpe = report.games[GameColumn.LGPE]
+    assert lgpe.verified_true == 1
+    assert lgpe.verified_false == 1
+    assert lgpe.unknown == 0
+    assert lgpe.percent == 100.0
