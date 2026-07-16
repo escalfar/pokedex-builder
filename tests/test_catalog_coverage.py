@@ -649,3 +649,36 @@ def test_johto_shiny_catalog_classifies_sample_rows_as_verified_true() -> None:
     assert report.shiny.verified_false == 0
     assert report.shiny.unknown == 0
     assert report.shiny.percent == 100.0
+
+
+def test_hoenn_shiny_catalog_classifies_sample_rows_as_verified_true() -> None:
+    """The Hoenn range classifies standard, regional, and Deoxys rows."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    shiny_rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=252, name="Treecko", home_id="00252_NORMAL_NONE"),
+        build_entry(
+            national_dex=263,
+            name="Galarian Zigzagoon",
+            home_id="00263_GALAR_NONE",
+        ),
+        build_entry(national_dex=385, name="Jirachi", home_id="00385_NORMAL_NONE"),
+        build_entry(
+            national_dex=386,
+            name="Attack Forme Deoxys",
+            home_id="00386_ATTACK_NONE",
+        ),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        build_game_rules(),
+        shiny_rules,
+    )
+
+    assert report.shiny.verified_true == 4
+    assert report.shiny.verified_false == 0
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0

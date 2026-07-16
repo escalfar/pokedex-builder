@@ -28,6 +28,22 @@ national_dex_ranges:
   # used for Celebi under the project's source-priority rule.
   - [152, 251]
 
+  # Batch 14: Hoenn. Every retained HOME variant with Nat Dex 252-386
+  # has a legitimate non-event shiny method. This includes later regional
+  # variants associated with Hoenn species, such as Galarian Zigzagoon and
+  # Galarian Linoone.
+  #
+  # Jirachi is obtainable shiny through the North American Pokémon Colosseum
+  # Bonus Disc or Pokémon Channel. These are legacy game-based distributions,
+  # not limited-time Mystery Gift events. Pokémon GO is not used.
+  #
+  # Deoxys is permanently shiny-huntable through the AuroraTicket encounter in
+  # the Nintendo Switch re-releases of Pokémon FireRed and LeafGreen. The caught
+  # shiny can be changed among Normal, Attack, Defense, and Speed Formes in later
+  # compatible games, so all retained Deoxys forms are covered.
+  # Pokémon GO is not used.
+  - [252, 386]
+
 # Use form-level inclusions only when a species-wide rule would be too broad.
 home_ids: []
 

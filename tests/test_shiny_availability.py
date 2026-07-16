@@ -262,3 +262,45 @@ def test_johto_catalog_documents_celebi_legacy_method() -> None:
     assert "legacy installation" in content
     assert "Pokémon GO is therefore not" in content
     assert "used for Celebi under the project's source-priority rule" in content
+
+
+def test_hoenn_catalog_includes_regional_mythical_and_all_deoxys_formes() -> None:
+    """The Hoenn tranche covers retained regional and mythical variants."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+
+    treecko, galarian_zigzagoon, jirachi, normal, attack, defense, speed = (
+        apply_shiny_availability(
+            (
+                build_entry(national_dex=252, home_id="00252_NORMAL_NONE"),
+                build_entry(national_dex=263, home_id="00263_GALAR_NONE"),
+                build_entry(national_dex=385, home_id="00385_NORMAL_NONE"),
+                build_entry(national_dex=386, home_id="00386_NORMAL_NONE"),
+                build_entry(national_dex=386, home_id="00386_ATTACK_NONE"),
+                build_entry(national_dex=386, home_id="00386_DEFENSE_NONE"),
+                build_entry(national_dex=386, home_id="00386_SPEED_NONE"),
+            ),
+            rules,
+        )
+    )
+
+    assert treecko.obtainable_shiny is True
+    assert galarian_zigzagoon.obtainable_shiny is True
+    assert jirachi.obtainable_shiny is True
+    assert all(entry.obtainable_shiny for entry in (normal, attack, defense, speed))
+
+
+def test_hoenn_catalog_documents_legacy_jirachi_and_switch_deoxys_methods() -> None:
+    """Special Hoenn shiny routes must remain explicit and avoid GO."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    content = catalog_path.read_text(encoding="utf-8")
+
+    assert "Pokémon Colosseum" in content
+    assert "Bonus Disc or Pokémon Channel" in content
+    assert "AuroraTicket encounter" in content
+    assert "all retained Deoxys forms are covered" in content
+    assert content.count("Pokémon GO is not used.") >= 2
