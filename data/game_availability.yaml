@@ -1,17 +1,145 @@
-version: "1.1"
+version: "1.2"
 
-# The catalog remains incomplete while the other nine game groups are audited.
+# The catalog remains incomplete while the remaining seven game groups are audited.
 # Unclassified variants continue to appear as FALSE in exports and as unknown
 # in Catalog_Coverage.json.
 complete: false
 
 games:
   xy:
-    complete: false
-    national_dex: []
-    national_dex_ranges: []
+    complete: true
+    # Source: PokéAPI Central, Coastal, and Mountain Kalos Pokédexes.
+    # Together they contain 454 non-event species obtainable across X/Y.
+    # Diancie, Hoopa, and Volcanion are absent because they require events.
+    national_dex:
+      - 50
+      - 51
+      - 54
+      - 55
+      - 108
+      - 111
+      - 112
+      - 174
+      - 202
+      - 235
+      - 238
+      - 241
+      - 406
+      - 407
+      - 425
+      - 426
+      - 430
+      - 438
+      - 439
+      - 441
+      - 475
+      - 476
+      - 479
+      - 504
+      - 505
+      - 538
+      - 539
+      - 594
+      - 597
+      - 598
+
+    national_dex_ranges:
+      - [1, 18]
+      - [21, 34]
+      - [39, 45]
+      - [60, 76]
+      - [79, 85]
+      - [90, 95]
+      - [100, 105]
+      - [115, 124]
+      - [127, 136]
+      - [142, 150]
+      - [161, 172]
+      - [179, 189]
+      - [193, 199]
+      - [206, 230]
+      - [246, 248]
+      - [261, 264]
+      - [270, 272]
+      - [276, 284]
+      - [290, 321]
+      - [324, 330]
+      - [333, 342]
+      - [352, 354]
+      - [358, 360]
+      - [366, 373]
+      - [396, 400]
+      - [412, 419]
+      - [433, 435]
+      - [443, 455]
+      - [458, 464]
+      - [469, 473]
+      - [509, 516]
+      - [524, 528]
+      - [531, 534]
+      - [543, 545]
+      - [550, 553]
+      - [557, 561]
+      - [568, 571]
+      - [574, 584]
+      - [587, 591]
+      - [607, 625]
+      - [631, 635]
+      - [650, 718]
+
     home_ids: []
-    excluded_home_ids: []
+
+    excluded_home_ids:
+      # Cosplay Pikachu costumes are exclusive to Omega Ruby/Alpha Sapphire.
+      - "00025_BELLE_NONE"
+      - "00025_LIBRE_NONE"
+      - "00025_PHD_NONE"
+      - "00025_POP_STAR_NONE"
+      - "00025_ROCK_STAR_NONE"
+
+      # Regional forms introduced after Pokémon X and Y.
+      - "00026_ALOLA_NONE"
+      - "00027_ALOLA_NONE"
+      - "00028_ALOLA_NONE"
+      - "00050_ALOLA_NONE"
+      - "00051_ALOLA_NONE"
+      - "00074_ALOLA_NONE"
+      - "00075_ALOLA_NONE"
+      - "00076_ALOLA_NONE"
+      - "00079_GALAR_NONE"
+      - "00080_GALAR_NONE"
+      - "00083_GALAR_NONE"
+      - "00100_HISUI_NONE"
+      - "00101_HISUI_NONE"
+      - "00103_ALOLA_NONE"
+      - "00105_ALOLA_NONE"
+      - "00122_GALAR_NONE"
+      - "00128_PALDEA_AQUA_BREED_NONE"
+      - "00128_PALDEA_BLAZE_BREED_NONE"
+      - "00128_PALDEA_COMBAT_BREED_NONE"
+      - "00144_GALAR_NONE"
+      - "00145_GALAR_NONE"
+      - "00146_GALAR_NONE"
+      - "00194_PALDEA_NONE"
+      - "00199_GALAR_NONE"
+      - "00211_HISUI_NONE"
+      - "00215_HISUI_FEMALE"
+      - "00215_HISUI_MALE"
+      - "00222_GALAR_NONE"
+      - "00263_GALAR_NONE"
+      - "00264_GALAR_NONE"
+      - "00550_WHITE_STRIPED_NONE"
+      - "00570_HISUI_NONE"
+      - "00571_HISUI_NONE"
+      - "00618_GALAR_NONE"
+      - "00705_HISUI_NONE"
+      - "00706_HISUI_NONE"
+      - "00713_HISUI_NONE"
+
+      # X/Y only contain Zygarde's original 50% Forme with Aura Break.
+      - "00718_10_NONE"
+      - "00718_10_POWER_CONSTRUCT_NONE"
+      - "00718_50_POWER_CONSTRUCT_NONE"
 
   oras:
     complete: false

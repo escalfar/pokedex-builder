@@ -374,3 +374,84 @@ def test_load_rules_rejects_non_boolean_game_complete(tmp_path: Path) -> None:
 
     with pytest.raises(ConfigurationError, match="xy.complete.*boolean"):
         GameAvailabilityRules.from_yaml(path)
+
+
+def load_project_game_rules() -> GameAvailabilityRules:
+    """Load the production catalog used by integration-style rule tests."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "game_availability.yaml"
+    )
+    return GameAvailabilityRules.from_yaml(catalog_path)
+
+
+def test_xy_catalog_contains_454_non_event_species() -> None:
+    rule = load_project_game_rules().games[GameColumn.XY]
+    covered = set(rule.national_dex)
+
+    for start, end in rule.national_dex_ranges:
+        covered.update(range(start, end + 1))
+
+    assert rule.complete is True
+    assert len(covered) == 454
+    assert 650 in covered  # Chespin starts the Central Kalos Pokédex.
+    assert 718 in covered  # Zygarde closes the non-event Kalos collection.
+    assert 719 not in covered  # Diancie requires an event in X/Y.
+    assert 720 not in covered  # Hoopa requires an event in X/Y.
+    assert 721 not in covered  # Volcanion requires an event in X/Y.
+
+
+def test_xy_excludes_later_regional_and_cosplay_forms() -> None:
+    rules = load_project_game_rules()
+    normal, alolan, hisuian, cosplay = apply_game_availability(
+        (
+            build_entry(national_dex=26, home_id="00026_NORMAL_FEMALE"),
+            build_entry(national_dex=26, home_id="00026_ALOLA_NONE"),
+            build_entry(national_dex=100, home_id="00100_HISUI_NONE"),
+            build_entry(national_dex=25, home_id="00025_LIBRE_NONE"),
+        ),
+        rules,
+    )
+
+    assert normal.availability.is_available_in(GameColumn.XY) is True
+    assert alolan.availability.is_available_in(GameColumn.XY) is False
+    assert hisuian.availability.is_available_in(GameColumn.XY) is False
+    assert cosplay.availability.is_available_in(GameColumn.XY) is False
+
+
+def test_xy_keeps_forms_obtainable_in_generation_six() -> None:
+    rules = load_project_game_rules()
+    sandy_wormadam, wash_rotom, blue_basculin, super_pumpkaboo = (
+        apply_game_availability(
+            (
+                build_entry(national_dex=413, home_id="00413_SANDY_NONE"),
+                build_entry(national_dex=479, home_id="00479_WASH_NONE"),
+                build_entry(national_dex=550, home_id="00550_BLUE_STRIPED_NONE"),
+                build_entry(national_dex=710, home_id="00710_SUPER_NONE"),
+            ),
+            rules,
+        )
+    )
+
+    assert sandy_wormadam.availability.is_available_in(GameColumn.XY) is True
+    assert wash_rotom.availability.is_available_in(GameColumn.XY) is True
+    assert blue_basculin.availability.is_available_in(GameColumn.XY) is True
+    assert super_pumpkaboo.availability.is_available_in(GameColumn.XY) is True
+
+
+def test_xy_only_includes_original_zygarde_form() -> None:
+    rules = load_project_game_rules()
+    original, ten_percent, power_construct = apply_game_availability(
+        (
+            build_entry(national_dex=718, home_id="00718_NORMAL_NONE"),
+            build_entry(national_dex=718, home_id="00718_10_NONE"),
+            build_entry(
+                national_dex=718,
+                home_id="00718_50_POWER_CONSTRUCT_NONE",
+            ),
+        ),
+        rules,
+    )
+
+    assert original.availability.is_available_in(GameColumn.XY) is True
+    assert ten_percent.availability.is_available_in(GameColumn.XY) is False
+    assert power_construct.availability.is_available_in(GameColumn.XY) is False

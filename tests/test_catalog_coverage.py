@@ -238,3 +238,44 @@ def test_complete_game_treats_unmatched_entries_as_verified_false() -> None:
     assert lgpe.verified_false == 1
     assert lgpe.unknown == 0
     assert lgpe.percent == 100.0
+
+
+def test_xy_complete_catalog_reports_no_unknown_rows() -> None:
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "game_availability.yaml"
+    )
+    game_rules = GameAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(
+            national_dex=25,
+            name="Pikachu",
+            home_id="00025_NORMAL_NONE",
+        ),
+        build_entry(
+            national_dex=26,
+            name="Alolan Raichu",
+            home_id="00026_ALOLA_NONE",
+        ),
+        build_entry(
+            national_dex=721,
+            name="Volcanion",
+            home_id="00721_NORMAL_NONE",
+        ),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        game_rules,
+        ShinyAvailabilityRules(
+            complete=False,
+            national_dex=frozenset(),
+            home_ids=frozenset(),
+            excluded_home_ids=frozenset(),
+        ),
+    )
+
+    xy = report.games[GameColumn.XY]
+    assert xy.verified_true == 1
+    assert xy.verified_false == 2
+    assert xy.unknown == 0
+    assert xy.percent == 100.0
