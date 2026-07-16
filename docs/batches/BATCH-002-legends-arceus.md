@@ -7,12 +7,12 @@ Arceus for the `Legends Arceus` output column.
 
 ## Special acquisition methods
 
-- Darkrai is obtainable only when the Nintendo Switch has save data from
+- **Method: Save Data.** Darkrai is obtainable only through save data from
   Pokémon Brilliant Diamond or Pokémon Shining Pearl. The research request is
-  permanently available after viewing the end credits.
-- Shaymin is obtainable only when the console has save data from Pokémon Sword
-  or Pokémon Shield. Its research request is also permanently available after
-  the end credits.
+  available after viewing the end credits.
+- **Method: Save Data.** Shaymin is obtainable only through save data from
+  Pokémon Sword or Pokémon Shield. Its research request is available after the
+  end credits.
 - Both methods count as `TRUE` because they do not depend on a timed event.
 
 ## Rules retained

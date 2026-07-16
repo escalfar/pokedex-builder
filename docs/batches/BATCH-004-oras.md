@@ -14,9 +14,9 @@ post-National-Dex encounter systems.
 The following methods count as `TRUE` because they remain available in every
 save and do not require a timed distribution:
 
-- Post-National-Dex DexNav encounters.
-- Daily Mirage Forest, Island, Cave, and Mountain encounters.
-- Conditional Mirage Spot and soaring Legendary encounters.
+- **Method: DexNav.** Obtainable through DexNav after receiving the National Pokédex.
+- **Method: Mirage Spots.** Obtainable through daily Mirage Forest, Island, Cave, and Mountain encounters.
+- **Method: Soaring.** Obtainable through conditional Mirage Spot and soaring encounters.
 
 Representative additions include Zorua through DexNav, Cresselia through
 Crescent Isle, and Zekrom/Reshiram through conditional Mirage Spots.

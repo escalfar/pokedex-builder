@@ -7,8 +7,9 @@ regional Pokédexes, including both DLC expansions.
 
 ## Permanent Mystery Gift method
 
-Pecharunt counts as `TRUE`, but only through the permanent Mystery Gift epilogue
-unlock. This follows the same policy used for permanent Mystery Gift unlocks in
+Under **Method: Mystery Gift**, Pecharunt counts as `TRUE` but is obtainable
+only through Mystery Gift, which unlocks the epilogue. This follows the same
+policy used for Mystery Gift unlocks in
 Legends: Z-A: the acquisition requirement is documented, but the Pokémon is
 still obtainable.
 

@@ -6,14 +6,14 @@
 
 ## Objective
 
-Classify the original Alola Pokédex together with permanent QR-based
-acquisition methods.
+Classify the original Alola Pokédex together with QR Code acquisition
+methods.
 
 ## QR methods
 
-- Magearna counts as `TRUE`, but only through its permanent postgame QR Code.
-- Every daily Island Scan encounter counts as `TRUE`. Island Scan is activated
-  by accumulating QR Scanner points; it is not a timed event.
+- **Method: QR Code.** Magearna is obtainable only through QR Code.
+- **Method: Island Scan QR Code.** Island Scan species are obtainable only
+  through Island Scan QR Codes.
 - Marshadow remains `FALSE` because it requires an event distribution.
 
 ## Form handling

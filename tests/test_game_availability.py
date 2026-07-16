@@ -961,3 +961,29 @@ def test_za_keeps_storable_alternate_forms_from_audited_species() -> None:
     )
 
     assert all(entry.availability.is_available_in(GameColumn.ZA) for entry in entries)
+
+
+def test_special_acquisition_comments_use_standard_terminology() -> None:
+    """Treat acquisition comments as part of the catalog documentation contract."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "game_availability.yaml"
+    )
+    catalog_text = catalog_path.read_text(encoding="utf-8")
+
+    required_phrases = (
+        "# Method: QR Code",
+        "Magearna is obtainable only through QR Code.",
+        "# Method: Island Scan QR Code",
+        "Island Scan species are obtainable only through Island Scan QR Codes.",
+        "# Method: Mystery Gift",
+        "# Method: Ultra Warp Ride",
+        "# Method: Dynamax Adventures",
+        "# Method: DexNav / Mirage Spots / Soaring",
+    )
+
+    for phrase in required_phrases:
+        assert phrase in catalog_text
+
+    # QR acquisition must not be described as ordinary or permanent availability.
+    assert "permanent QR Code gift" not in catalog_text
+    assert "permanent QR-based method" not in catalog_text

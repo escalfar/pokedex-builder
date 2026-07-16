@@ -143,9 +143,9 @@ games:
 
   oras:
     complete: false
-    # Sources: updated Hoenn Pokédex, post-National-Dex DexNav, daily Mirage
-    # Spots, and conditional soaring encounters. DexNav, Mirage Spots, and
-    # soaring are permanent game systems, so their encounters count as TRUE.
+    # Sources: updated Hoenn Pokédex and post-National-Dex encounter systems.
+    # Method: DexNav / Mirage Spots / Soaring
+    # Obtainable through permanent in-game DexNav, Mirage Spot, or soaring encounters.
     # Jirachi remains excluded because it requires an external distribution.
     # Deoxys and all four retained Formes remain obtainable through the Delta
     # Episode and the in-game meteorite form-change mechanic.
@@ -384,9 +384,10 @@ games:
   sm:
     complete: false
     # Sources: original Alola Pokédex plus all daily Island Scan encounters.
-    # Island Scan is unlocked by accumulating QR Scanner points and therefore
-    # counts as a permanent QR-based method. Magearna also counts as TRUE but
-    # only through its permanent postgame QR Code gift. Marshadow remains event-only.
+    # Method: Island Scan QR Code
+    # Island Scan species are obtainable only through Island Scan QR Codes.
+    # Method: QR Code
+    # Magearna is obtainable only through QR Code. Marshadow remains event-only.
     national_dex:
       - 46
       - 47
@@ -508,7 +509,8 @@ games:
       - [703, 709]
       - [722, 800]
 
-    # Magearna: permanent QR Code gift after the main story.
+    # Method: QR Code
+    # Magearna is obtainable only through QR Code.
     home_ids:
       - "00801_NORMAL_NONE"
 
@@ -567,9 +569,14 @@ games:
   usum:
     complete: false
     # Sources: updated Alola Pokédex, Island Scan, and Ultra Warp Ride.
-    # Island Scan and Magearna use QR functionality; Ultra Warp Ride is a
-    # permanent in-game method for 20 non-Legendary species, Ultra Beasts, and
-    # prior-generation Legendary Pokémon. Marshadow and Zeraora remain event-only.
+    # Method: Island Scan QR Code
+    # Island Scan species are obtainable only through Island Scan QR Codes.
+    # Method: QR Code
+    # Magearna is obtainable only through QR Code.
+    # Method: Ultra Warp Ride
+    # Ultra Warp Ride is a permanent in-game method for non-Legendary species,
+    # Ultra Beasts, and prior-generation Legendary Pokémon.
+    # Marshadow and Zeraora remain event-only.
     national_dex:
       - 1
       - 4
@@ -735,7 +742,9 @@ games:
       - [722, 800]
       - [803, 806]
 
-    # Magearna: permanent QR Code gift; Marshadow and Zeraora stay excluded.
+    # Method: QR Code
+    # Magearna is obtainable only through QR Code.
+    # Marshadow and Zeraora stay excluded.
     home_ids:
       - "00801_NORMAL_NONE"
 
@@ -832,10 +841,11 @@ games:
 
   swsh:
     complete: false
-    # Sources: Galar, Isle of Armor, and Crown Tundra Pokédexes plus Dynamax
-    # Adventures. Dynamax Adventures permanently add the listed Legendary,
-    # Ultra Beast, and Hoenn first-partner lines even when they are absent from
-    # the three regional Pokédexes. Zarude remains event-only.
+    # Sources: Galar, Isle of Armor, and Crown Tundra Pokédexes.
+    # Method: Dynamax Adventures
+    # Obtainable through the permanent in-game Dynamax Adventures feature:
+    # listed Legendary Pokémon, Ultra Beasts, and Hoenn first-partner lines.
+    # Zarude remains event-only.
     national_dex:
       - 72
       - 73
@@ -1211,9 +1221,10 @@ games:
   sv:
     complete: true
     # Sources: Paldea, Kitakami, and Blueberry Pokédexes.
-    # Pecharunt is obtainable only through the permanent Mystery Gift epilogue
-    # unlock and therefore counts as TRUE. Walking Wake and Iron Leaves remain
-    # excluded because their native encounters are limited-time events.
+    # Method: Mystery Gift
+    # Pecharunt is obtainable only through Mystery Gift, which unlocks the epilogue.
+    # Walking Wake and Iron Leaves remain excluded because their native encounters
+    # are limited-time events.
     national_dex: []
 
     national_dex_ranges:
@@ -1320,7 +1331,8 @@ games:
       - [906, 1008]
       - [1011, 1024]
 
-    # Permanent Mystery Gift epilogue unlock (Pecharunt).
+    # Method: Mystery Gift
+    # Pecharunt is obtainable only through Mystery Gift.
     home_ids:
       - "01025_NORMAL_NONE"
 
@@ -1494,7 +1506,8 @@ games:
       # a distinct storable form instead of being filtered out globally.
       - "00670_ETERNAL_NONE"
 
-      # These Pokémon are obtainable through permanent Mystery Gift unlocks.
+      # Method: Mystery Gift
+      # These Pokémon are obtainable only through Mystery Gift.
       # They remain TRUE in the game-availability catalog because this column
       # records whether the Pokémon can be obtained in the game; event-free
       # shiny availability is tracked separately by the shiny catalog.

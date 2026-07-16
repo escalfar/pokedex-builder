@@ -11,8 +11,8 @@ permanently available Dynamax Adventures encounters.
 
 ## Dynamax Adventures
 
-Dynamax Adventures count as `TRUE` because the Max Lair remains permanently
-available in the Crown Tundra. The catalog adds:
+**Method: Dynamax Adventures.** These encounters are obtainable through the
+permanent Max Lair feature in the Crown Tundra. The catalog adds:
 
 - Legendary Pokémon available as the final special encounter.
 - Ultra Beasts unlocked after the Crown Tundra clue progression.

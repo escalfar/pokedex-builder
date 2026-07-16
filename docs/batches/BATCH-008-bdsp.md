@@ -11,7 +11,8 @@ species and all retained form-level exceptions.
 
 ## Save-data-only permanent unlocks
 
-The following rows count as `TRUE`, but only with qualifying save data:
+The following rows count as `TRUE` under **Method: Save Data** and are
+obtainable only through qualifying save data:
 
 - Mew: Pokémon: Let’s Go, Pikachu! or Let’s Go, Eevee! save data.
 - Jirachi: Pokémon Sword or Pokémon Shield save data.

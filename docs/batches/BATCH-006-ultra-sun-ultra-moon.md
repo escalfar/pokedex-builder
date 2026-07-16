@@ -11,13 +11,15 @@ that regional Pokédex.
 
 ## QR methods
 
-- Magearna counts as `TRUE`, but only through its permanent QR Code gift.
-- All daily Island Scan encounters count as `TRUE` through QR Scanner points.
+- **Method: QR Code.** Magearna is obtainable only through QR Code.
+- **Method: Island Scan QR Code.** Island Scan species are obtainable only
+  through Island Scan QR Codes.
 - Marshadow and Zeraora remain `FALSE` because they require event distributions.
 
 ## Ultra Warp Ride
 
-Ultra Warp Ride is a permanent in-game method and therefore counts as `TRUE`.
+**Method: Ultra Warp Ride.** These encounters are obtainable through a permanent
+in-game feature and therefore count as `TRUE`.
 The catalog includes:
 
 - The 20 repeatable non-Legendary species in the Ultra Space Wilds.
