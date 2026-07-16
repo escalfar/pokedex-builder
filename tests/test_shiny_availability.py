@@ -226,3 +226,39 @@ def test_kanto_catalog_documents_go_only_galarian_bird_exception() -> None:
     assert "00144_GALAR_NONE" in content
     assert "00145_GALAR_NONE" in content
     assert "00146_GALAR_NONE" in content
+
+
+def test_johto_catalog_includes_normal_regional_and_mythical_variants() -> None:
+    """The Johto tranche covers retained forms and the VC Crystal Celebi."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+
+    typhlosion, hisuian_typhlosion, paldean_wooper, celebi = apply_shiny_availability(
+        (
+            build_entry(national_dex=157, home_id="00157_NORMAL_NONE"),
+            build_entry(national_dex=157, home_id="00157_HISUI_NONE"),
+            build_entry(national_dex=194, home_id="00194_PALDEA_NONE"),
+            build_entry(national_dex=251, home_id="00251_NORMAL_NONE"),
+        ),
+        rules,
+    )
+
+    assert typhlosion.obtainable_shiny is True
+    assert hisuian_typhlosion.obtainable_shiny is True
+    assert paldean_wooper.obtainable_shiny is True
+    assert celebi.obtainable_shiny is True
+
+
+def test_johto_catalog_documents_celebi_legacy_method() -> None:
+    """Celebi's non-event shiny route must remain explicitly documented."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    content = catalog_path.read_text(encoding="utf-8")
+
+    assert "GS Ball encounter" in content
+    assert "legacy installation" in content
+    assert "Pokémon GO is therefore not" in content
+    assert "used for Celebi under the project's source-priority rule" in content

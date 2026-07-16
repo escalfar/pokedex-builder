@@ -613,3 +613,39 @@ def test_shiny_coverage_counts_dex_range_as_verified_true() -> None:
     assert report.shiny.verified_false == 1
     assert report.shiny.unknown == 0
     assert report.shiny.percent == 100.0
+
+
+def test_johto_shiny_catalog_classifies_sample_rows_as_verified_true() -> None:
+    """The Johto range should classify normal, regional, and Celebi rows."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    shiny_rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(
+            national_dex=157,
+            name="Typhlosion",
+            home_id="00157_NORMAL_NONE",
+        ),
+        build_entry(
+            national_dex=157,
+            name="Hisuian Typhlosion",
+            home_id="00157_HISUI_NONE",
+        ),
+        build_entry(
+            national_dex=251,
+            name="Celebi",
+            home_id="00251_NORMAL_NONE",
+        ),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        build_game_rules(),
+        shiny_rules,
+    )
+
+    assert report.shiny.verified_true == 3
+    assert report.shiny.verified_false == 0
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0

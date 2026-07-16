@@ -15,6 +15,19 @@ national_dex: []
 national_dex_ranges:
   - [1, 150]
 
+  # Batch 13: Johto. Every retained HOME variant with Nat Dex 152-251
+  # has a legitimate non-event shiny method. This includes later regional
+  # variants such as Hisuian Typhlosion, Hisuian Qwilfish, Hisuian Sneasel,
+  # Galarian Corsola, Galarian Slowking, and Paldean Wooper.
+  #
+  # Celebi is the special case in this tranche: it is obtainable shiny only
+  # from the in-game GS Ball encounter in the Nintendo 3DS Virtual Console
+  # release of Pokémon Crystal. The method is not a distribution event, but it
+  # now requires a legacy installation of Crystal and access to Pokémon Bank
+  # to move the result forward into Pokémon HOME. Pokémon GO is therefore not
+  # used for Celebi under the project's source-priority rule.
+  - [152, 251]
+
 # Use form-level inclusions only when a species-wide rule would be too broad.
 home_ids: []
 
