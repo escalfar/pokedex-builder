@@ -34,9 +34,11 @@ def build_entry(
 def write_rules(path: Path) -> None:
     path.write_text(
         """
-version: "1.0"
+version: "1.1"
 complete: false
 national_dex: [25]
+national_dex_ranges:
+  - [1, 10]
 home_ids: ["00026_ALOLA_NONE"]
 excluded_home_ids: ["00025_SPECIAL_NONE"]
 """.strip(),
@@ -52,6 +54,7 @@ def test_load_shiny_availability_rules(tmp_path: Path) -> None:
 
     assert rules.complete is False
     assert 25 in rules.national_dex
+    assert rules.national_dex_ranges == ((1, 10),)
     assert "00026_ALOLA_NONE" in rules.home_ids
 
 
@@ -59,6 +62,7 @@ def test_species_rule_applies_to_every_variant() -> None:
     rules = ShinyAvailabilityRules(
         complete=False,
         national_dex=frozenset({25}),
+        national_dex_ranges=(),
         home_ids=frozenset(),
         excluded_home_ids=frozenset(),
     )
@@ -75,10 +79,34 @@ def test_species_rule_applies_to_every_variant() -> None:
     assert special.obtainable_shiny is True
 
 
+def test_national_dex_range_applies_to_every_retained_variant() -> None:
+    rules = ShinyAvailabilityRules(
+        complete=False,
+        national_dex=frozenset(),
+        national_dex_ranges=((1, 150),),
+        home_ids=frozenset(),
+        excluded_home_ids=frozenset(),
+    )
+
+    normal, regional, outside = apply_shiny_availability(
+        (
+            build_entry(national_dex=26, home_id="00026_NORMAL_NONE"),
+            build_entry(national_dex=26, home_id="00026_ALOLA_NONE"),
+            build_entry(national_dex=151, home_id="00151_NORMAL_NONE"),
+        ),
+        rules,
+    )
+
+    assert normal.obtainable_shiny is True
+    assert regional.obtainable_shiny is True
+    assert outside.obtainable_shiny is False
+
+
 def test_home_id_rule_can_include_one_specific_variant() -> None:
     rules = ShinyAvailabilityRules(
         complete=False,
         national_dex=frozenset(),
+        national_dex_ranges=(),
         home_ids=frozenset({"00026_ALOLA_NONE"}),
         excluded_home_ids=frozenset(),
     )
@@ -99,6 +127,7 @@ def test_form_exclusion_overrides_species_inclusion() -> None:
     rules = ShinyAvailabilityRules(
         complete=False,
         national_dex=frozenset({25}),
+        national_dex_ranges=(),
         home_ids=frozenset(),
         excluded_home_ids=frozenset({"00025_SPECIAL_NONE"}),
     )
@@ -123,6 +152,7 @@ def test_apply_shiny_preserves_order_and_other_fields() -> None:
     rules = ShinyAvailabilityRules(
         complete=False,
         national_dex=frozenset({25}),
+        national_dex_ranges=(),
         home_ids=frozenset(),
         excluded_home_ids=frozenset(),
     )
@@ -149,6 +179,22 @@ def test_load_rules_rejects_invalid_dex_values(tmp_path: Path) -> None:
     with pytest.raises(
         ConfigurationError,
         match="positive integers",
+    ):
+        ShinyAvailabilityRules.from_yaml(path)
+
+
+def test_load_rules_rejects_reversed_range(tmp_path: Path) -> None:
+    path = tmp_path / "invalid.yaml"
+    write_rules(path)
+    content = path.read_text(encoding="utf-8").replace(
+        "  - [1, 10]",
+        "  - [10, 1]",
+    )
+    path.write_text(content, encoding="utf-8")
+
+    with pytest.raises(
+        ConfigurationError,
+        match="reversed range",
     ):
         ShinyAvailabilityRules.from_yaml(path)
 

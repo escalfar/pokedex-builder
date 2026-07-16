@@ -1,12 +1,21 @@
-version: "1.0"
+version: "1.1"
 
-# The catalog remains conservative until every retained HOME variant has been
-# checked against ordinary in-game encounters, breeding, gifts, and shiny locks.
-# Unlisted entries stay FALSE rather than being guessed.
+# The catalog is completed in small, audited tranches. Unlisted variants remain
+# unknown until a later batch classifies them explicitly.
 complete: false
 
-# Use National Dex numbers only when every retained variant follows the same
-# shiny-obtainability rule. Use ID HOME for form-specific exceptions.
+# Batch 12: Kanto species except Mew.
+# Every retained HOME variant whose National Dex number is 001-150 has a
+# permanent, non-event shiny acquisition method in at least one supported game
+# or in Pokémon GO. This includes regional variants sharing those numbers.
 national_dex: []
+national_dex_ranges:
+  - [1, 150]
+
+# Use form-level inclusions only when a species-wide rule would be too broad.
 home_ids: []
-excluded_home_ids: []
+
+excluded_home_ids:
+  # Shiny Mew has only been obtainable through event-limited distributions or
+  # event/ticket research. It therefore does not satisfy the project rule.
+  - "00151_NORMAL_NONE"

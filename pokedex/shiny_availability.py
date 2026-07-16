@@ -14,13 +14,15 @@ from pokedex.models import PokemonEntry
 class ShinyAvailabilityRules:
     """Curated rules for obtaining shiny Pokémon without event distribution.
 
-    Species-level inclusion is convenient when every retained variant can be
-    obtained shiny through ordinary gameplay. Form-level inclusions and
-    exclusions handle exceptions such as shiny-locked special forms.
+    Species-level inclusions cover cases where every retained HOME variant can
+    be obtained shiny through permanent gameplay. Inclusive National Dex ranges
+    keep large audited tranches readable, while HOME IDs handle form-specific
+    exceptions and explicit shiny locks.
     """
 
     complete: bool
     national_dex: frozenset[int]
+    national_dex_ranges: tuple[tuple[int, int], ...]
     home_ids: frozenset[str]
     excluded_home_ids: frozenset[str]
 
@@ -52,8 +54,15 @@ class ShinyAvailabilityRules:
         return cls(
             complete=complete,
             national_dex=_read_positive_integer_set(payload, "national_dex"),
+            national_dex_ranges=_read_dex_ranges(payload, "national_dex_ranges"),
             home_ids=_read_string_set(payload, "home_ids"),
             excluded_home_ids=_read_string_set(payload, "excluded_home_ids"),
+        )
+
+    def includes_national_dex(self, national_dex: int) -> bool:
+        """Return whether a species-level shiny rule includes this number."""
+        return national_dex in self.national_dex or any(
+            start <= national_dex <= end for start, end in self.national_dex_ranges
         )
 
 
@@ -75,10 +84,11 @@ def _is_obtainable_shiny(
     entry: PokemonEntry,
     rules: ShinyAvailabilityRules,
 ) -> bool:
-    # Species-level rules cover the common case. A form-specific exclusion
-    # always wins because shiny locks frequently apply only to one variant.
+    # A form-specific exclusion always wins. This allows a broad species range
+    # to remain readable while preserving explicit shiny-lock exceptions.
     obtainable = (
-        entry.national_dex in rules.national_dex or entry.home_id in rules.home_ids
+        rules.includes_national_dex(entry.national_dex)
+        or entry.home_id in rules.home_ids
     )
 
     if entry.home_id in rules.excluded_home_ids:
@@ -104,6 +114,39 @@ def _read_positive_integer_set(
         result.add(item)
 
     return frozenset(result)
+
+
+def _read_dex_ranges(
+    payload: dict[str, Any],
+    key: str,
+) -> tuple[tuple[int, int], ...]:
+    """Read inclusive National Pokédex ranges from the shiny catalog."""
+    value = payload.get(key, [])
+    if not isinstance(value, list):
+        raise ConfigurationError(f"Shiny rule '{key}' must contain a YAML list.")
+
+    ranges: list[tuple[int, int]] = []
+    for item in value:
+        if (
+            not isinstance(item, list)
+            or len(item) != 2
+            or any(
+                isinstance(bound, bool) or not isinstance(bound, int) or bound <= 0
+                for bound in item
+            )
+        ):
+            raise ConfigurationError(
+                f"Shiny rule '{key}' must contain two-item positive integer ranges."
+            )
+
+        start, end = item
+        if start > end:
+            raise ConfigurationError(
+                f"Shiny rule '{key}' contains a reversed range: {start}-{end}."
+            )
+        ranges.append((start, end))
+
+    return tuple(ranges)
 
 
 def _read_string_set(

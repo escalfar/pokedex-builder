@@ -158,9 +158,14 @@ def _build_shiny_coverage(
         if entry.home_id in rules.excluded_home_ids:
             verified_false += 1
         elif (
-            entry.national_dex in rules.national_dex or entry.home_id in rules.home_ids
+            rules.includes_national_dex(entry.national_dex)
+            or entry.home_id in rules.home_ids
         ):
             verified_true += 1
+        elif rules.complete:
+            # A completed shiny catalog treats every omission as a verified
+            # negative decision, mirroring completed game catalogs.
+            verified_false += 1
 
     return CoverageCounts(
         total=len(entries),

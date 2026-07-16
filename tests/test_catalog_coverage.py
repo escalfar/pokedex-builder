@@ -76,6 +76,7 @@ def test_build_coverage_distinguishes_true_false_and_unknown() -> None:
     shiny_rules = ShinyAvailabilityRules(
         complete=False,
         national_dex=frozenset({1}),
+        national_dex_ranges=(),
         home_ids=frozenset({"00002_NORMAL_NONE"}),
         excluded_home_ids=frozenset({"00003_NORMAL_NONE"}),
     )
@@ -113,6 +114,7 @@ def test_empty_rules_report_zero_percent_coverage() -> None:
         ShinyAvailabilityRules(
             complete=False,
             national_dex=frozenset(),
+            national_dex_ranges=(),
             home_ids=frozenset(),
             excluded_home_ids=frozenset(),
         ),
@@ -136,6 +138,7 @@ def test_export_coverage_json(tmp_path: Path) -> None:
         ShinyAvailabilityRules(
             complete=False,
             national_dex=frozenset({1}),
+            national_dex_ranges=(),
             home_ids=frozenset(),
             excluded_home_ids=frozenset(),
         ),
@@ -185,6 +188,7 @@ def test_game_coverage_counts_dex_range_as_verified_true() -> None:
         ShinyAvailabilityRules(
             complete=False,
             national_dex=frozenset(),
+            national_dex_ranges=(),
             home_ids=frozenset(),
             excluded_home_ids=frozenset(),
         ),
@@ -230,6 +234,7 @@ def test_complete_game_treats_unmatched_entries_as_verified_false() -> None:
         ShinyAvailabilityRules(
             complete=False,
             national_dex=frozenset(),
+            national_dex_ranges=(),
             home_ids=frozenset(),
             excluded_home_ids=frozenset(),
         ),
@@ -271,6 +276,7 @@ def test_xy_complete_catalog_reports_no_unknown_rows() -> None:
         ShinyAvailabilityRules(
             complete=False,
             national_dex=frozenset(),
+            national_dex_ranges=(),
             home_ids=frozenset(),
             excluded_home_ids=frozenset(),
         ),
@@ -323,6 +329,7 @@ def test_oras_regional_tranche_keeps_unmatched_entries_unknown() -> None:
         ShinyAvailabilityRules(
             complete=False,
             national_dex=frozenset(),
+            national_dex_ranges=(),
             home_ids=frozenset(),
             excluded_home_ids=frozenset(),
         ),
@@ -354,6 +361,7 @@ def test_sm_qr_methods_are_classified_in_coverage() -> None:
         ShinyAvailabilityRules(
             complete=False,
             national_dex=frozenset(),
+            national_dex_ranges=(),
             home_ids=frozenset(),
             excluded_home_ids=frozenset(),
         ),
@@ -386,6 +394,7 @@ def test_usum_qr_and_ultra_warp_methods_are_classified_in_coverage() -> None:
         ShinyAvailabilityRules(
             complete=False,
             national_dex=frozenset(),
+            national_dex_ranges=(),
             home_ids=frozenset(),
             excluded_home_ids=frozenset(),
         ),
@@ -438,6 +447,7 @@ def test_swsh_regional_tranche_classifies_events_and_later_forms() -> None:
         ShinyAvailabilityRules(
             complete=False,
             national_dex=frozenset(),
+            national_dex_ranges=(),
             home_ids=frozenset(),
             excluded_home_ids=frozenset(),
         ),
@@ -485,6 +495,7 @@ def test_bdsp_complete_catalog_classifies_every_sample_row() -> None:
         ShinyAvailabilityRules(
             complete=False,
             national_dex=frozenset(),
+            national_dex_ranges=(),
             home_ids=frozenset(),
             excluded_home_ids=frozenset(),
         ),
@@ -518,6 +529,7 @@ def test_sv_complete_catalog_classifies_every_sample_row() -> None:
         ShinyAvailabilityRules(
             complete=False,
             national_dex=frozenset(),
+            national_dex_ranges=(),
             home_ids=frozenset(),
             excluded_home_ids=frozenset(),
         ),
@@ -558,6 +570,7 @@ def test_za_complete_catalog_classifies_home_and_mystery_gift_rows() -> None:
         ShinyAvailabilityRules(
             complete=False,
             national_dex=frozenset(),
+            national_dex_ranges=(),
             home_ids=frozenset(),
             excluded_home_ids=frozenset(),
         ),
@@ -568,3 +581,35 @@ def test_za_complete_catalog_classifies_home_and_mystery_gift_rows() -> None:
     assert za.verified_false == 1
     assert za.unknown == 0
     assert za.percent == 100.0
+
+
+def test_shiny_coverage_counts_dex_range_as_verified_true() -> None:
+    entries = (
+        build_entry(
+            national_dex=26,
+            name="Raichu",
+            home_id="00026_ALOLA_NONE",
+        ),
+        build_entry(
+            national_dex=151,
+            name="Mew",
+            home_id="00151_NORMAL_NONE",
+        ),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        build_game_rules(),
+        ShinyAvailabilityRules(
+            complete=False,
+            national_dex=frozenset(),
+            national_dex_ranges=((1, 150),),
+            home_ids=frozenset(),
+            excluded_home_ids=frozenset({"00151_NORMAL_NONE"}),
+        ),
+    )
+
+    assert report.shiny.verified_true == 1
+    assert report.shiny.verified_false == 1
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0
