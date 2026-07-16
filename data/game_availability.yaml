@@ -1,4 +1,4 @@
-version: "1.2"
+version: "1.3"
 
 # The catalog remains incomplete while the remaining seven game groups are audited.
 # Unclassified variants continue to appear as FALSE in exports and as unknown
@@ -143,10 +143,90 @@ games:
 
   oras:
     complete: false
-    national_dex: []
-    national_dex_ranges: []
+    # Source: PokéAPI updated Hoenn Pokédex (211 entries) for ORAS.
+    # Jirachi (#385) is omitted because it is event-only; Deoxys (#386)
+    # remains because the Delta Episode makes it obtainable in normal play.
+    # This batch covers the regional Pokédex core. Post-National-Dex DexNav,
+    # Mirage Spot, and soaring encounters remain pending for the next ORAS pass.
+    national_dex:
+      - 54
+      - 55
+      - 81
+      - 82
+      - 84
+      - 85
+      - 88
+      - 89
+      - 100
+      - 101
+      - 127
+      - 129
+      - 130
+      - 174
+      - 177
+      - 178
+      - 202
+      - 203
+      - 214
+      - 218
+      - 219
+      - 222
+      - 227
+      - 386
+      - 406
+      - 407
+      - 433
+      - 462
+      - 464
+
+    national_dex_ranges:
+      - [25, 28]
+      - [37, 45]
+      - [63, 68]
+      - [72, 76]
+      - [109, 112]
+      - [116, 121]
+      - [169, 172]
+      - [182, 184]
+      - [230, 232]
+      - [252, 384]
+      - [475, 478]
+
     home_ids: []
-    excluded_home_ids: []
+
+    excluded_home_ids:
+      # Cosplay Pikachu cannot be transferred to Pokémon Bank or HOME.
+      - "00025_BELLE_NONE"
+      - "00025_LIBRE_NONE"
+      - "00025_PHD_NONE"
+      - "00025_POP_STAR_NONE"
+      - "00025_ROCK_STAR_NONE"
+
+      # Temporary battle forms are not retained as independent HOME entries.
+      - "00351_RAINY_NONE"
+      - "00351_SNOWY_NONE"
+      - "00351_SUNNY_NONE"
+
+      # All four Deoxys formes are retained by the project. ORAS can change
+      # Deoxys between Normal, Attack, Defense, and Speed Forme in-game.
+
+      # Regional forms introduced after Generation VI share covered species IDs.
+      - "00026_ALOLA_NONE"
+      - "00027_ALOLA_NONE"
+      - "00028_ALOLA_NONE"
+      - "00037_ALOLA_NONE"
+      - "00038_ALOLA_NONE"
+      - "00074_ALOLA_NONE"
+      - "00075_ALOLA_NONE"
+      - "00076_ALOLA_NONE"
+      - "00088_ALOLA_NONE"
+      - "00089_ALOLA_NONE"
+      - "00100_HISUI_NONE"
+      - "00101_HISUI_NONE"
+      - "00110_GALAR_NONE"
+      - "00222_GALAR_NONE"
+      - "00263_GALAR_NONE"
+      - "00264_GALAR_NONE"
 
   sm:
     complete: false

@@ -1,4 +1,6 @@
 import json
+
+import pytest
 from pathlib import Path
 
 from pokedex.catalog_coverage import (
@@ -279,3 +281,45 @@ def test_xy_complete_catalog_reports_no_unknown_rows() -> None:
     assert xy.verified_false == 2
     assert xy.unknown == 0
     assert xy.percent == 100.0
+
+
+def test_oras_regional_tranche_keeps_unmatched_entries_unknown() -> None:
+    """ORAS stays incomplete until post-National-Dex encounters are audited."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "game_availability.yaml"
+    )
+    game_rules = GameAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(
+            national_dex=252,
+            name="Treecko",
+            home_id="00252_NORMAL_NONE",
+        ),
+        build_entry(
+            national_dex=385,
+            name="Jirachi",
+            home_id="00385_NORMAL_NONE",
+        ),
+        build_entry(
+            national_dex=1,
+            name="Bulbasaur",
+            home_id="00001_NORMAL_NONE",
+        ),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        game_rules,
+        ShinyAvailabilityRules(
+            complete=False,
+            national_dex=frozenset(),
+            home_ids=frozenset(),
+            excluded_home_ids=frozenset(),
+        ),
+    )
+
+    oras = report.games[GameColumn.ORAS]
+    assert oras.verified_true == 1
+    assert oras.verified_false == 0
+    assert oras.unknown == 2
+    assert oras.percent == 33.33

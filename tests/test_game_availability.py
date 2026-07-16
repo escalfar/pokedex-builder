@@ -455,3 +455,57 @@ def test_xy_only_includes_original_zygarde_form() -> None:
     assert original.availability.is_available_in(GameColumn.XY) is True
     assert ten_percent.availability.is_available_in(GameColumn.XY) is False
     assert power_construct.availability.is_available_in(GameColumn.XY) is False
+
+
+def test_oras_regional_catalog_contains_210_non_event_species() -> None:
+    """The updated Hoenn Dex has 211 entries; event-only Jirachi is omitted."""
+    rule = load_project_game_rules().games[GameColumn.ORAS]
+    covered = set(rule.national_dex)
+
+    for start, end in rule.national_dex_ranges:
+        covered.update(range(start, end + 1))
+
+    assert rule.complete is False
+    assert len(covered) == 210
+    assert 252 in covered  # Treecko opens the updated Hoenn Pokédex.
+    assert 384 in covered  # Rayquaza is obtainable during normal play.
+    assert 385 not in covered  # Jirachi requires an external event.
+    assert 386 in covered  # Deoxys is obtainable in the Delta Episode.
+
+
+def test_oras_keeps_all_deoxys_formes() -> None:
+    # ORAS lets Deoxys change between all four retained formes, so every
+    # corresponding HOME row inherits the species-level availability rule.
+    rules = load_project_game_rules()
+    normal, attack, defense, speed = apply_game_availability(
+        (
+            build_entry(national_dex=386, home_id="00386_NORMAL_NONE"),
+            build_entry(national_dex=386, home_id="00386_ATTACK_NONE"),
+            build_entry(national_dex=386, home_id="00386_DEFENSE_NONE"),
+            build_entry(national_dex=386, home_id="00386_SPEED_NONE"),
+        ),
+        rules,
+    )
+
+    assert normal.availability.is_available_in(GameColumn.ORAS) is True
+    assert attack.availability.is_available_in(GameColumn.ORAS) is True
+    assert defense.availability.is_available_in(GameColumn.ORAS) is True
+    assert speed.availability.is_available_in(GameColumn.ORAS) is True
+
+
+def test_oras_excludes_later_regional_forms_and_cosplay_pikachu() -> None:
+    rules = load_project_game_rules()
+    normal, alolan, hisuian, cosplay = apply_game_availability(
+        (
+            build_entry(national_dex=26, home_id="00026_NORMAL_FEMALE"),
+            build_entry(national_dex=26, home_id="00026_ALOLA_NONE"),
+            build_entry(national_dex=100, home_id="00100_HISUI_NONE"),
+            build_entry(national_dex=25, home_id="00025_LIBRE_NONE"),
+        ),
+        rules,
+    )
+
+    assert normal.availability.is_available_in(GameColumn.ORAS) is True
+    assert alolan.availability.is_available_in(GameColumn.ORAS) is False
+    assert hisuian.availability.is_available_in(GameColumn.ORAS) is False
+    assert cosplay.availability.is_available_in(GameColumn.ORAS) is False
