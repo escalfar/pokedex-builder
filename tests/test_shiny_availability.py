@@ -213,3 +213,16 @@ def test_load_rules_rejects_empty_home_id(tmp_path: Path) -> None:
         match="non-empty strings",
     ):
         ShinyAvailabilityRules.from_yaml(path)
+
+
+def test_kanto_catalog_documents_go_only_galarian_bird_exception() -> None:
+    """GO is documented only where it is the sole permanent shiny source."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    content = catalog_path.read_text(encoding="utf-8")
+
+    assert "only permanent, non-event legitimate source" in content
+    assert "00144_GALAR_NONE" in content
+    assert "00145_GALAR_NONE" in content
+    assert "00146_GALAR_NONE" in content

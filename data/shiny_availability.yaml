@@ -6,8 +6,11 @@ complete: false
 
 # Batch 12: Kanto species except Mew.
 # Every retained HOME variant whose National Dex number is 001-150 has a
-# permanent, non-event shiny acquisition method in at least one supported game
-# or in Pokémon GO. This includes regional variants sharing those numbers.
+# permanent, non-event shiny acquisition method. Pokémon GO is ignored when a
+# supported core game already provides such a method. The three shiny Galarian
+# legendary birds are the documented exception because GO is currently their
+# only permanent, non-event legitimate source:
+#   00144_GALAR_NONE, 00145_GALAR_NONE, 00146_GALAR_NONE.
 national_dex: []
 national_dex_ranges:
   - [1, 150]

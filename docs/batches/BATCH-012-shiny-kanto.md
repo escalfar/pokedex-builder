@@ -27,12 +27,14 @@ docs/batches/BATCH-012-shiny-kanto.md
 ### National Dex 001–150
 
 Every retained HOME variant sharing National Dex numbers 001–150 is marked
-`TRUE`. At least one permanent, non-event shiny acquisition method exists for
-these variants across compatible core games or Pokémon GO.
+`TRUE`. Pokémon GO is not used when a supported core game already supplies a
+permanent, non-event shiny method.
 
-This species-range rule intentionally includes regional variants. For example,
-the shiny Galarian legendary birds became permanently encounterable through
-Daily Adventure Incense after their Pokémon GO shiny debut.
+The exception is Galarian Articuno, Galarian Zapdos, and Galarian Moltres. Their
+Sword/Shield shiny distributions were limited events, while Pokémon GO now
+provides permanent shiny encounters through Daily Adventure Incense. Therefore
+GO is currently their only permanent, non-event legitimate shiny source, and
+the three variants remain `TRUE` with that exception documented explicitly.
 
 ### Mew
 
@@ -70,8 +72,10 @@ Regression coverage includes:
 
 ## Sources
 
-- Pokémon GO official announcement for permanent Daily Adventure Incense
-  updates and shiny Galarian legendary birds.
+- Pokémon GO official announcement for the permanent Daily Adventure Incense
+  shiny encounters for Galarian Articuno, Zapdos, and Moltres.
+- Serebii event records for the limited 2022 Sword/Shield distributions of the
+  same three shiny Galarian birds.
 - Bulbapedia list of unobtainable and shiny-locked Pokémon.
 - Serebii event records for historical shiny Mew distributions.
 
