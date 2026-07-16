@@ -388,3 +388,50 @@ def test_usum_regional_tranche_classifies_events_but_leaves_island_scan_unknown(
     assert usum.verified_false == 3
     assert usum.unknown == 1
     assert usum.percent == 80.0
+
+
+def test_swsh_regional_tranche_classifies_events_and_later_forms() -> None:
+    """Regional-Dex rows are verified while non-Dex transferable rows stay unknown."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "game_availability.yaml"
+    )
+    game_rules = GameAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(
+            national_dex=810,
+            name="Grookey",
+            home_id="00810_NORMAL_NONE",
+        ),
+        build_entry(
+            national_dex=893,
+            name="Zarude",
+            home_id="00893_NORMAL_NONE",
+        ),
+        build_entry(
+            national_dex=58,
+            name="Hisuian Growlithe",
+            home_id="00058_HISUI_NONE",
+        ),
+        build_entry(
+            national_dex=151,
+            name="Mew",
+            home_id="00151_NORMAL_NONE",
+        ),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        game_rules,
+        ShinyAvailabilityRules(
+            complete=False,
+            national_dex=frozenset(),
+            home_ids=frozenset(),
+            excluded_home_ids=frozenset(),
+        ),
+    )
+
+    swsh = report.games[GameColumn.SWSH]
+    assert swsh.verified_true == 1
+    assert swsh.verified_false == 2
+    assert swsh.unknown == 1
+    assert swsh.percent == 75.0

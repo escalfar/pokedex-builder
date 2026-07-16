@@ -1,6 +1,6 @@
-version: "1.3"
+version: "1.4"
 
-# The catalog remains incomplete while the remaining seven game groups are audited.
+# The catalog remains incomplete while the remaining game groups and transfer-only sets are audited.
 # Unclassified variants continue to appear as FALSE in exports and as unknown
 # in Catalog_Coverage.json.
 complete: false
@@ -578,10 +578,130 @@ games:
 
   swsh:
     complete: false
-    national_dex: []
-    national_dex_ranges: []
+    # Sources: Galar, Isle of Armor, and Crown Tundra regional Pokédexes.
+    # Their union contains 584 species. Zarude is removed from the positive
+    # set because both of its forms require event distributions. Pokémon that
+    # can be transferred or caught in Dynamax Adventures without appearing in
+    # these three regional Pokédexes remain pending for a later audit pass.
+    national_dex:
+      - 72
+      - 73
+      - 98
+      - 99
+      - 163
+      - 164
+      - 199
+      - 202
+      - 206
+      - 208
+      - 230
+      - 233
+      - 263
+      - 264
+      - 298
+      - 309
+      - 310
+      - 315
+      - 324
+      - 333
+      - 334
+      - 355
+      - 356
+      - 369
+      - 415
+      - 416
+      - 470
+      - 471
+      - 674
+      - 675
+
+    national_dex_ranges:
+      - [1, 12]
+      - [25, 45]
+      - [50, 55]
+      - [58, 68]
+      - [77, 83]
+      - [90, 95]
+      - [102, 149]
+      - [169, 178]
+      - [182, 186]
+      - [194, 197]
+      - [211, 215]
+      - [220, 227]
+      - [236, 242]
+      - [246, 248]
+      - [270, 275]
+      - [278, 282]
+      - [290, 295]
+      - [302, 306]
+      - [318, 321]
+      - [328, 330]
+      - [337, 350]
+      - [359, 365]
+      - [371, 379]
+      - [403, 407]
+      - [420, 423]
+      - [425, 428]
+      - [434, 440]
+      - [442, 454]
+      - [458, 468]
+      - [473, 475]
+      - [477, 479]
+      - [506, 510]
+      - [517, 521]
+      - [524, 539]
+      - [543, 579]
+      - [582, 584]
+      - [587, 593]
+      - [595, 601]
+      - [605, 640]
+      - [659, 663]
+      - [677, 715]
+      - [736, 738]
+      - [742, 773]
+      - [776, 778]
+      - [780, 784]
+      - [810, 892]
+      - [894, 898]
+
     home_ids: []
-    excluded_home_ids: []
+
+    excluded_home_ids:
+      # Cosplay Pikachu costumes cannot be transferred to Sword/Shield.
+      - "00025_BELLE_NONE"
+      - "00025_LIBRE_NONE"
+      - "00025_PHD_NONE"
+      - "00025_POP_STAR_NONE"
+      - "00025_ROCK_STAR_NONE"
+
+      # Regional forms introduced after Generation VIII are not compatible.
+      - "00058_HISUI_NONE"
+      - "00059_HISUI_NONE"
+      - "00100_HISUI_NONE"
+      - "00101_HISUI_NONE"
+      - "00128_PALDEA_AQUA_BREED_NONE"
+      - "00128_PALDEA_BLAZE_BREED_NONE"
+      - "00128_PALDEA_COMBAT_BREED_NONE"
+      - "00194_PALDEA_NONE"
+      - "00211_HISUI_NONE"
+      - "00215_HISUI_FEMALE"
+      - "00215_HISUI_MALE"
+      - "00549_HISUI_NONE"
+      - "00550_WHITE_STRIPED_NONE"
+      - "00570_HISUI_NONE"
+      - "00571_HISUI_NONE"
+      - "00628_HISUI_NONE"
+      - "00705_HISUI_NONE"
+      - "00706_HISUI_NONE"
+      - "00713_HISUI_NONE"
+
+      # Zarude and Dada Zarude were distributed only through events.
+      - "00893_NORMAL_NONE"
+      - "00893_DADA_NONE"
+
+      # Calyrex fusion states cannot be deposited in Pokémon HOME.
+      - "00898_ICE_NONE"
+      - "00898_SHADOW_NONE"
 
   pla:
     complete: true

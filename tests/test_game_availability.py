@@ -662,3 +662,69 @@ def test_usum_excludes_later_regional_forms() -> None:
     assert galarian.availability.is_available_in(GameColumn.USUM) is False
     assert hisuian.availability.is_available_in(GameColumn.USUM) is False
     assert paldean.availability.is_available_in(GameColumn.USUM) is False
+
+
+def test_swsh_regional_pokedex_union_contains_583_non_event_species() -> None:
+    """The three Galar-era regional Pokédexes cover 584 species before Zarude."""
+    rule = load_project_game_rules().games[GameColumn.SWSH]
+    covered = set(rule.national_dex)
+
+    for start, end in rule.national_dex_ranges:
+        covered.update(range(start, end + 1))
+
+    assert rule.complete is False
+    assert len(covered) == 583
+    assert 810 in covered  # Grookey starts the Generation VIII starter trio.
+    assert 891 in covered  # Kubfu is obtained during the Isle of Armor story.
+    assert 898 in covered  # Calyrex is caught during the Crown Tundra story.
+    assert 893 not in covered  # Zarude requires an event distribution.
+
+
+def test_swsh_accepts_galarian_and_supported_alolan_forms() -> None:
+    rules = load_project_game_rules()
+    alolan, galarian = apply_game_availability(
+        (
+            build_entry(national_dex=26, home_id="00026_ALOLA_NONE"),
+            build_entry(national_dex=77, home_id="00077_GALAR_NONE"),
+        ),
+        rules,
+    )
+
+    assert alolan.availability.is_available_in(GameColumn.SWSH) is True
+    assert galarian.availability.is_available_in(GameColumn.SWSH) is True
+
+
+def test_swsh_excludes_later_regional_forms() -> None:
+    rules = load_project_game_rules()
+    hisuian, paldean, white_striped = apply_game_availability(
+        (
+            build_entry(national_dex=58, home_id="00058_HISUI_NONE"),
+            build_entry(national_dex=194, home_id="00194_PALDEA_NONE"),
+            build_entry(national_dex=550, home_id="00550_WHITE_STRIPED_NONE"),
+        ),
+        rules,
+    )
+
+    assert hisuian.availability.is_available_in(GameColumn.SWSH) is False
+    assert paldean.availability.is_available_in(GameColumn.SWSH) is False
+    assert white_striped.availability.is_available_in(GameColumn.SWSH) is False
+
+
+def test_swsh_excludes_event_zarude_and_unstorable_calyrex_fusions() -> None:
+    rules = load_project_game_rules()
+    zarude, dada, calyrex, ice, shadow = apply_game_availability(
+        (
+            build_entry(national_dex=893, home_id="00893_NORMAL_NONE"),
+            build_entry(national_dex=893, home_id="00893_DADA_NONE"),
+            build_entry(national_dex=898, home_id="00898_NORMAL_NONE"),
+            build_entry(national_dex=898, home_id="00898_ICE_NONE"),
+            build_entry(national_dex=898, home_id="00898_SHADOW_NONE"),
+        ),
+        rules,
+    )
+
+    assert zarude.availability.is_available_in(GameColumn.SWSH) is False
+    assert dada.availability.is_available_in(GameColumn.SWSH) is False
+    assert calyrex.availability.is_available_in(GameColumn.SWSH) is True
+    assert ice.availability.is_available_in(GameColumn.SWSH) is False
+    assert shadow.availability.is_available_in(GameColumn.SWSH) is False
