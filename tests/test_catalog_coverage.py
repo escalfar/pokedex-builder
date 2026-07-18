@@ -613,3 +613,252 @@ def test_shiny_coverage_counts_dex_range_as_verified_true() -> None:
     assert report.shiny.verified_false == 1
     assert report.shiny.unknown == 0
     assert report.shiny.percent == 100.0
+
+
+def test_johto_shiny_catalog_classifies_sample_rows_as_verified_true() -> None:
+    """The Johto range should classify normal, regional, and Celebi rows."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    shiny_rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(
+            national_dex=157,
+            name="Typhlosion",
+            home_id="00157_NORMAL_NONE",
+        ),
+        build_entry(
+            national_dex=157,
+            name="Hisuian Typhlosion",
+            home_id="00157_HISUI_NONE",
+        ),
+        build_entry(
+            national_dex=251,
+            name="Celebi",
+            home_id="00251_NORMAL_NONE",
+        ),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        build_game_rules(),
+        shiny_rules,
+    )
+
+    assert report.shiny.verified_true == 3
+    assert report.shiny.verified_false == 0
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0
+
+
+def test_hoenn_shiny_catalog_classifies_sample_rows_as_verified_true() -> None:
+    """The Hoenn range classifies standard, regional, and Deoxys rows."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    shiny_rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=252, name="Treecko", home_id="00252_NORMAL_NONE"),
+        build_entry(
+            national_dex=263,
+            name="Galarian Zigzagoon",
+            home_id="00263_GALAR_NONE",
+        ),
+        build_entry(national_dex=385, name="Jirachi", home_id="00385_NORMAL_NONE"),
+        build_entry(
+            national_dex=386,
+            name="Attack Forme Deoxys",
+            home_id="00386_ATTACK_NONE",
+        ),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        build_game_rules(),
+        shiny_rules,
+    )
+
+    assert report.shiny.verified_true == 4
+    assert report.shiny.verified_false == 0
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0
+
+
+def test_sinnoh_shiny_catalog_classifies_true_and_false_sample_rows() -> None:
+    """The Sinnoh tranche reports permanent and event-only rows correctly."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    shiny_rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=387, name="Turtwig", home_id="00387_NORMAL_NONE"),
+        build_entry(national_dex=490, name="Manaphy", home_id="00490_NORMAL_NONE"),
+        build_entry(national_dex=491, name="Darkrai", home_id="00491_NORMAL_NONE"),
+        build_entry(national_dex=492, name="Shaymin", home_id="00492_SKY_NONE"),
+        build_entry(national_dex=493, name="Arceus", home_id="00493_NORMAL_NONE"),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        build_game_rules(),
+        shiny_rules,
+    )
+
+    assert report.shiny.verified_true == 3
+    assert report.shiny.verified_false == 2
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0
+
+
+def test_unova_shiny_catalog_classifies_true_and_false_sample_rows() -> None:
+    """The Unova tranche reports HOME rewards and locked mythicals correctly."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    shiny_rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=494, name="Victini", home_id="00494_NORMAL_NONE"),
+        build_entry(national_dex=495, name="Snivy", home_id="00495_NORMAL_NONE"),
+        build_entry(national_dex=647, name="Keldeo", home_id="00647_NORMAL_NONE"),
+        build_entry(national_dex=648, name="Meloetta", home_id="00648_NORMAL_NONE"),
+        build_entry(national_dex=649, name="Genesect", home_id="00649_NORMAL_NONE"),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        build_game_rules(),
+        shiny_rules,
+    )
+
+    assert report.shiny.verified_true == 3
+    assert report.shiny.verified_false == 2
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0
+
+
+def test_kalos_shiny_catalog_classifies_true_and_false_sample_rows() -> None:
+    """The Kalos tranche reports permanent and excluded rows correctly."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    shiny_rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=650, name="Chespin", home_id="00650_NORMAL_NONE"),
+        build_entry(
+            national_dex=670,
+            name="Eternal Flower Floette",
+            home_id="00670_ETERNAL_NONE",
+        ),
+        build_entry(national_dex=718, name="Zygarde", home_id="00718_10_NONE"),
+        build_entry(national_dex=719, name="Diancie", home_id="00719_NORMAL_NONE"),
+        build_entry(national_dex=720, name="Hoopa", home_id="00720_NORMAL_NONE"),
+        build_entry(national_dex=721, name="Volcanion", home_id="00721_NORMAL_NONE"),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        build_game_rules(),
+        shiny_rules,
+    )
+
+    assert report.shiny.verified_true == 3
+    assert report.shiny.verified_false == 3
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0
+
+
+def test_alola_shiny_catalog_classifies_true_and_false_sample_rows() -> None:
+    """The Alola tranche reports permanent and excluded rows correctly."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    shiny_rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=722, name="Rowlet", home_id="00722_NORMAL_NONE"),
+        build_entry(national_dex=789, name="Cosmog", home_id="00789_NORMAL_NONE"),
+        build_entry(national_dex=791, name="Solgaleo", home_id="00791_NORMAL_NONE"),
+        build_entry(national_dex=792, name="Lunala", home_id="00792_NORMAL_NONE"),
+        build_entry(national_dex=800, name="Necrozma", home_id="00800_NORMAL_NONE"),
+        build_entry(national_dex=801, name="Magearna", home_id="00801_NORMAL_NONE"),
+        build_entry(national_dex=808, name="Meltan", home_id="00808_NORMAL_NONE"),
+        build_entry(national_dex=809, name="Melmetal", home_id="00809_NORMAL_NONE"),
+    )
+
+    report = build_catalog_coverage_report(entries, build_game_rules(), shiny_rules)
+
+    assert report.shiny.verified_true == 5
+    assert report.shiny.verified_false == 3
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0
+
+
+def test_galar_hisui_shiny_catalog_classifies_true_and_false_sample_rows() -> None:
+    """The Galar and Hisui tranche reports permanent and excluded rows."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    shiny_rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=810, name="Grookey", home_id="00810_NORMAL_NONE"),
+        build_entry(national_dex=888, name="Zacian", home_id="00888_NORMAL_NONE"),
+        build_entry(national_dex=891, name="Kubfu", home_id="00891_NORMAL_NONE"),
+        build_entry(national_dex=894, name="Regieleki", home_id="00894_NORMAL_NONE"),
+        build_entry(national_dex=898, name="Calyrex", home_id="00898_SHADOW_NONE"),
+        build_entry(national_dex=899, name="Wyrdeer", home_id="00899_NORMAL_NONE"),
+        build_entry(national_dex=905, name="Enamorus", home_id="00905_NORMAL_NONE"),
+    )
+
+    report = build_catalog_coverage_report(entries, build_game_rules(), shiny_rules)
+
+    assert report.shiny.verified_true == 4
+    assert report.shiny.verified_false == 3
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0
+
+
+def test_paldea_dlc_shiny_catalog_classifies_every_sample_row() -> None:
+    """The Generation IX tranche should leave no unknown sample rows."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    shiny_rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=906, name="Sprigatito", home_id="00906_NORMAL_NONE"),
+        build_entry(national_dex=999, name="Gimmighoul", home_id="00999_NORMAL_NONE"),
+        build_entry(national_dex=999, name="Gimmighoul", home_id="00999_ROAMING_NONE"),
+        build_entry(national_dex=1000, name="Gholdengo", home_id="01000_NORMAL_NONE"),
+        build_entry(national_dex=1001, name="Wo-Chien", home_id="01001_NORMAL_NONE"),
+        build_entry(national_dex=1011, name="Dipplin", home_id="01011_NORMAL_NONE"),
+        build_entry(national_dex=1017, name="Ogerpon", home_id="01017_NORMAL_NONE"),
+        build_entry(national_dex=1018, name="Archaludon", home_id="01018_NORMAL_NONE"),
+        build_entry(national_dex=1024, name="Terapagos", home_id="01024_NORMAL_NONE"),
+    )
+
+    report = build_catalog_coverage_report(entries, build_game_rules(), shiny_rules)
+
+    assert report.shiny.verified_true == 5
+    assert report.shiny.verified_false == 4
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0
+
+
+def test_completed_shiny_catalog_has_no_unknown_rows() -> None:
+    """The final catalog treats every unmatched retained form as audited FALSE."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    shiny_rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=1, name="Bulbasaur", home_id="00001_NORMAL_NONE"),
+        build_entry(national_dex=151, name="Mew", home_id="00151_NORMAL_NONE"),
+        build_entry(national_dex=999, name="Gimmighoul", home_id="00999_NORMAL_NONE"),
+        build_entry(national_dex=999, name="Gimmighoul", home_id="00999_ROAMING_NONE"),
+        build_entry(national_dex=1000, name="Gholdengo", home_id="01000_NORMAL_NONE"),
+    )
+
+    report = build_catalog_coverage_report(entries, build_game_rules(), shiny_rules)
+
+    assert report.shiny.verified_true == 3
+    assert report.shiny.verified_false == 2
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0
