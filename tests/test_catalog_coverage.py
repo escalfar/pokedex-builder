@@ -708,3 +708,29 @@ def test_sinnoh_shiny_catalog_classifies_true_and_false_sample_rows() -> None:
     assert report.shiny.verified_false == 2
     assert report.shiny.unknown == 0
     assert report.shiny.percent == 100.0
+
+
+def test_unova_shiny_catalog_classifies_true_and_false_sample_rows() -> None:
+    """The Unova tranche reports HOME rewards and locked mythicals correctly."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    shiny_rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=494, name="Victini", home_id="00494_NORMAL_NONE"),
+        build_entry(national_dex=495, name="Snivy", home_id="00495_NORMAL_NONE"),
+        build_entry(national_dex=647, name="Keldeo", home_id="00647_NORMAL_NONE"),
+        build_entry(national_dex=648, name="Meloetta", home_id="00648_NORMAL_NONE"),
+        build_entry(national_dex=649, name="Genesect", home_id="00649_NORMAL_NONE"),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        build_game_rules(),
+        shiny_rules,
+    )
+
+    assert report.shiny.verified_true == 3
+    assert report.shiny.verified_false == 2
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0

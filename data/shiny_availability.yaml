@@ -62,6 +62,24 @@ national_dex_ranges:
   # so they do not satisfy the project's non-event rule.
   - [387, 493]
 
+  # Batch 16: Unova. Retained HOME variants with Nat Dex 494-649 are
+  # classified here. Most species have permanent shiny methods in supported
+  # core games. The Mythical exceptions are documented below.
+  #
+  # Shiny Keldeo is a permanent Pokémon HOME Pokédex-completion reward for
+  # completing the Galar, Isle of Armor, and Crown Tundra Pokédexes from
+  # Pokémon Sword or Pokémon Shield. Both retained Keldeo forms are covered.
+  #
+  # Shiny Meloetta is a permanent Pokémon HOME Pokédex-completion reward for
+  # completing the Paldea, Kitakami, and Blueberry Pokédexes from Pokémon
+  # Scarlet or Pokémon Violet. Pokémon GO is not used for either reward.
+  #
+  # Victini and Genesect are excluded below. Victini has no permanent legal
+  # shiny method. Genesect's legal shiny releases have depended on limited
+  # distributions or rotating/event Pokémon GO availability, which does not
+  # satisfy the project's non-event rule.
+  - [494, 649]
+
 # Use form-level inclusions only when a species-wide rule would be too broad.
 home_ids: []
 
@@ -78,3 +96,10 @@ excluded_home_ids:
   # Pokémon GO research. Both retained forms therefore remain unavailable.
   - "00492_NORMAL_NONE"
   - "00492_SKY_NONE"
+  # Victini has no permanent legitimate shiny acquisition method.
+  - "00494_NORMAL_NONE"
+
+  # Genesect's legitimate shiny releases require limited distributions or
+  # rotating/event Pokémon GO availability. Pokémon GO is therefore not used.
+  - "00649_NORMAL_NONE"
+

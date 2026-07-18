@@ -348,3 +348,42 @@ def test_sinnoh_catalog_documents_special_shiny_methods() -> None:
     assert "Hall of Origin encounter" in content
     assert "limited-time Member Card" in content
     assert "limited-time Oak's Letter" in content
+
+
+def test_unova_catalog_classifies_home_rewards_and_shiny_locked_mythicals() -> None:
+    """Unova keeps permanent HOME rewards and excludes event-only mythicals."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+
+    victini, keldeo, resolute_keldeo, meloetta, genesect = apply_shiny_availability(
+        (
+            build_entry(national_dex=494, home_id="00494_NORMAL_NONE"),
+            build_entry(national_dex=647, home_id="00647_NORMAL_NONE"),
+            build_entry(national_dex=647, home_id="00647_RESOLUTE_NONE"),
+            build_entry(national_dex=648, home_id="00648_NORMAL_NONE"),
+            build_entry(national_dex=649, home_id="00649_NORMAL_NONE"),
+        ),
+        rules,
+    )
+
+    assert victini.obtainable_shiny is False
+    assert keldeo.obtainable_shiny is True
+    assert resolute_keldeo.obtainable_shiny is True
+    assert meloetta.obtainable_shiny is True
+    assert genesect.obtainable_shiny is False
+
+
+def test_unova_catalog_documents_permanent_home_rewards_and_exclusions() -> None:
+    """Special Unova shiny routes must remain explicit and auditable."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    content = catalog_path.read_text(encoding="utf-8")
+
+    assert "Galar, Isle of Armor, and Crown Tundra Pokédexes" in content
+    assert "Paldea, Kitakami, and Blueberry Pokédexes" in content
+    assert "Victini has no permanent legitimate shiny" in content
+    assert "rotating/event Pokémon GO availability" in content
+    assert "Pokémon GO is therefore not used" in content
