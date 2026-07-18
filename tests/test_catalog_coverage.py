@@ -790,3 +790,27 @@ def test_alola_shiny_catalog_classifies_true_and_false_sample_rows() -> None:
     assert report.shiny.verified_false == 3
     assert report.shiny.unknown == 0
     assert report.shiny.percent == 100.0
+
+
+def test_galar_hisui_shiny_catalog_classifies_true_and_false_sample_rows() -> None:
+    """The Galar and Hisui tranche reports permanent and excluded rows."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    shiny_rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=810, name="Grookey", home_id="00810_NORMAL_NONE"),
+        build_entry(national_dex=888, name="Zacian", home_id="00888_NORMAL_NONE"),
+        build_entry(national_dex=891, name="Kubfu", home_id="00891_NORMAL_NONE"),
+        build_entry(national_dex=894, name="Regieleki", home_id="00894_NORMAL_NONE"),
+        build_entry(national_dex=898, name="Calyrex", home_id="00898_SHADOW_NONE"),
+        build_entry(national_dex=899, name="Wyrdeer", home_id="00899_NORMAL_NONE"),
+        build_entry(national_dex=905, name="Enamorus", home_id="00905_NORMAL_NONE"),
+    )
+
+    report = build_catalog_coverage_report(entries, build_game_rules(), shiny_rules)
+
+    assert report.shiny.verified_true == 4
+    assert report.shiny.verified_false == 3
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0

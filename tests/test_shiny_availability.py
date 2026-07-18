@@ -507,3 +507,66 @@ def test_alola_catalog_documents_home_reward_and_event_exclusions() -> None:
     )
     assert "time-limited Pokémon HOME Mystery" in content
     assert "Shiny Melmetal requires evolving Shiny Meltan in Pokémon GO" in content
+
+
+def test_galar_hisui_catalog_classifies_permanent_methods_and_exclusions() -> None:
+    """Galar and Hisui keep permanent hunts and exclude locked species."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+
+    (
+        grookey,
+        zacian,
+        eternatus,
+        kubfu,
+        single_strike_urshifu,
+        dada_zarude,
+        regieleki,
+        glastrier,
+        shadow_rider_calyrex,
+        wyrdeer,
+        enamorus,
+    ) = apply_shiny_availability(
+        (
+            build_entry(national_dex=810, home_id="00810_NORMAL_NONE"),
+            build_entry(national_dex=888, home_id="00888_NORMAL_NONE"),
+            build_entry(national_dex=890, home_id="00890_NORMAL_NONE"),
+            build_entry(national_dex=891, home_id="00891_NORMAL_NONE"),
+            build_entry(national_dex=892, home_id="00892_SINGLE_STRIKE_NONE"),
+            build_entry(national_dex=893, home_id="00893_DADA_NONE"),
+            build_entry(national_dex=894, home_id="00894_NORMAL_NONE"),
+            build_entry(national_dex=896, home_id="00896_NORMAL_NONE"),
+            build_entry(national_dex=898, home_id="00898_SHADOW_NONE"),
+            build_entry(national_dex=899, home_id="00899_NORMAL_NONE"),
+            build_entry(national_dex=905, home_id="00905_NORMAL_NONE"),
+        ),
+        rules,
+    )
+
+    assert grookey.obtainable_shiny is True
+    assert zacian.obtainable_shiny is False
+    assert eternatus.obtainable_shiny is False
+    assert kubfu.obtainable_shiny is False
+    assert single_strike_urshifu.obtainable_shiny is False
+    assert dada_zarude.obtainable_shiny is False
+    assert regieleki.obtainable_shiny is True
+    assert glastrier.obtainable_shiny is False
+    assert shadow_rider_calyrex.obtainable_shiny is False
+    assert wyrdeer.obtainable_shiny is True
+    assert enamorus.obtainable_shiny is True
+
+
+def test_galar_hisui_catalog_documents_home_reward_and_shiny_locks() -> None:
+    """Special Galar and Hisui decisions must remain explicit and auditable."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    content = catalog_path.read_text(encoding="utf-8")
+
+    assert "Regieleki and Regidrago remain included" in content
+    assert "permanent Pokémon HOME gift for completing the Hisui Pokédex" in content
+    assert "limited-time shiny" in content
+    assert "briefly shiny raid-boss Urshifu" in content
+    assert "Calyrex are shiny-locked" in content
