@@ -134,6 +134,24 @@ national_dex_ranges:
   # to time-bound distributions, so it does not satisfy the project rule.
   - [810, 905]
 
+  # Batch 20: Paldea, Kitakami, and Blueberry. Retained HOME variants with
+  # Nat Dex 906-1025 are classified here. Ordinary species and evolutions are
+  # covered through permanent wild encounters, breeding, outbreaks, raids, or
+  # evolution methods in Pokémon Scarlet and Pokémon Violet.
+  #
+  # Chest Form Gimmighoul Is available in ZA's DLC, so Gholdengo satisfies the
+  # rule through evolution. Roaming Form Gimmighoul has no permanent non-event
+  # shiny route.
+  #
+  # The four Treasures of Ruin received shiny distributions after limited 2025
+  # raid challenges. Koraidon and Miraidon also received limited 2025 serial-code
+  # distributions. These event releases do not satisfy the project rule.
+  #
+  # Walking Wake, Iron Leaves, the Loyal Three, Ogerpon, the later Paradox
+  # legends, Terapagos, and Pecharunt have no permanent legitimate shiny route.
+  # Their retained catalog forms are excluded below.
+  - [906, 1025]
+
 # Use form-level inclusions only when a species-wide rule would be too broad.
 home_ids: []
 
@@ -209,4 +227,50 @@ excluded_home_ids:
   - "00898_NORMAL_NONE"
   - "00898_ICE_NONE"
   - "00898_SHADOW_NONE"
+
+  # Roaming Form Gimmighoul have no permanent non-event shiny route.
+  # Shiny Chest Form can be caught in ZA's DLC and Gholdengo depends
+  # on evolving a shiny Gimmighoul.
+  - "00999_ROAMING_NONE"
+
+  # The Treasures of Ruin were released shiny only through time-limited 2025
+  # raid-challenge rewards. Their permanent shrine encounters are shiny-locked.
+  - "01001_NORMAL_NONE"
+  - "01002_NORMAL_NONE"
+  - "01003_NORMAL_NONE"
+  - "01004_NORMAL_NONE"
+
+  # Koraidon and Miraidon received shiny serial-code distributions in 2025, but
+  # their permanent story encounters are shiny-locked. Every retained ride form
+  # therefore remains unavailable under the non-event rule.
+  - "01007_NORMAL_NONE"
+  - "01007_GLIDING_BUILD_NONE"
+  - "01007_LIMITED_BUILD_NONE"
+  - "01007_SPRINTING_BUILD_NONE"
+  - "01007_SWIMMING_BUILD_NONE"
+  - "01008_NORMAL_NONE"
+  - "01008_AQUATIC_MODE_NONE"
+  - "01008_DRIVE_MODE_NONE"
+  - "01008_GLIDE_MODE_NONE"
+  - "01008_LOW_POWER_MODE_NONE"
+
+  # Walking Wake and Iron Leaves are limited-event encounters and have no
+  # permanent legitimate shiny acquisition method.
+  - "01009_NORMAL_NONE"
+  - "01010_NORMAL_NONE"
+
+  # The Loyal Three and Ogerpon are shiny-locked in their permanent encounters.
+  - "01014_NORMAL_NONE"
+  - "01015_NORMAL_NONE"
+  - "01016_NORMAL_NONE"
+  - "01017_NORMAL_NONE"
+
+  # The Indigo Disk Paradox legends, Terapagos, and Pecharunt have no permanent
+  # legitimate shiny acquisition route.
+  - "01020_NORMAL_NONE"
+  - "01021_NORMAL_NONE"
+  - "01022_NORMAL_NONE"
+  - "01023_NORMAL_NONE"
+  - "01024_NORMAL_NONE"
+  - "01025_NORMAL_NONE"
 

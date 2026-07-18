@@ -570,3 +570,77 @@ def test_galar_hisui_catalog_documents_home_reward_and_shiny_locks() -> None:
     assert "limited-time shiny" in content
     assert "briefly shiny raid-boss Urshifu" in content
     assert "Calyrex are shiny-locked" in content
+
+
+def test_paldea_dlc_catalog_classifies_permanent_methods_and_exclusions() -> None:
+    """Generation IX keeps ordinary shiny hunts and excludes event-only locks."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+
+    (
+        sprigatito,
+        family_three_maushold,
+        shiny_gimmighoul,
+        gholdengo,
+        wo_chien,
+        koraidon,
+        miraidon_drive,
+        walking_wake,
+        dipplin,
+        okidogi,
+        ogerpon,
+        archaludon,
+        gouging_fire,
+        terapagos,
+        pecharunt,
+    ) = apply_shiny_availability(
+        (
+            build_entry(national_dex=906, home_id="00906_NORMAL_NONE"),
+            build_entry(national_dex=925, home_id="00925_FAMILY_OF_THREE_NONE"),
+            build_entry(national_dex=999, home_id="00999_NORMAL_NONE"),
+            build_entry(national_dex=1000, home_id="01000_NORMAL_NONE"),
+            build_entry(national_dex=1001, home_id="01001_NORMAL_NONE"),
+            build_entry(national_dex=1007, home_id="01007_NORMAL_NONE"),
+            build_entry(national_dex=1008, home_id="01008_DRIVE_MODE_NONE"),
+            build_entry(national_dex=1009, home_id="01009_NORMAL_NONE"),
+            build_entry(national_dex=1011, home_id="01011_NORMAL_NONE"),
+            build_entry(national_dex=1014, home_id="01014_NORMAL_NONE"),
+            build_entry(national_dex=1017, home_id="01017_NORMAL_NONE"),
+            build_entry(national_dex=1018, home_id="01018_NORMAL_NONE"),
+            build_entry(national_dex=1020, home_id="01020_NORMAL_NONE"),
+            build_entry(national_dex=1024, home_id="01024_NORMAL_NONE"),
+            build_entry(national_dex=1025, home_id="01025_NORMAL_NONE"),
+        ),
+        rules,
+    )
+
+    assert sprigatito.obtainable_shiny is True
+    assert family_three_maushold.obtainable_shiny is True
+    assert shiny_gimmighoul.obtainable_shiny is True
+    assert gholdengo.obtainable_shiny is True
+    assert wo_chien.obtainable_shiny is False
+    assert koraidon.obtainable_shiny is False
+    assert miraidon_drive.obtainable_shiny is False
+    assert walking_wake.obtainable_shiny is False
+    assert dipplin.obtainable_shiny is True
+    assert okidogi.obtainable_shiny is False
+    assert ogerpon.obtainable_shiny is False
+    assert archaludon.obtainable_shiny is True
+    assert gouging_fire.obtainable_shiny is False
+    assert terapagos.obtainable_shiny is False
+    assert pecharunt.obtainable_shiny is False
+
+
+def test_paldea_dlc_catalog_documents_event_only_and_shiny_locked_species() -> None:
+    """Generation IX exclusions must remain explicit and auditable."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    content = catalog_path.read_text(encoding="utf-8")
+
+    assert "Treasures of Ruin received shiny distributions" in content
+    assert "limited 2025 serial-code" in content
+    assert "Walking Wake, Iron Leaves, the Loyal Three, Ogerpon" in content
+    assert "Terapagos, and Pecharunt have no permanent" in content

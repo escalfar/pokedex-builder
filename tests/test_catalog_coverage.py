@@ -814,3 +814,27 @@ def test_galar_hisui_shiny_catalog_classifies_true_and_false_sample_rows() -> No
     assert report.shiny.verified_false == 3
     assert report.shiny.unknown == 0
     assert report.shiny.percent == 100.0
+
+
+def test_paldea_dlc_shiny_catalog_classifies_every_sample_row() -> None:
+    """The Generation IX tranche should leave no unknown sample rows."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    shiny_rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=906, name="Sprigatito", home_id="00906_NORMAL_NONE"),
+        build_entry(national_dex=999, name="Gimmighoul", home_id="00999_NORMAL_NONE"),
+        build_entry(national_dex=1001, name="Wo-Chien", home_id="01001_NORMAL_NONE"),
+        build_entry(national_dex=1011, name="Dipplin", home_id="01011_NORMAL_NONE"),
+        build_entry(national_dex=1017, name="Ogerpon", home_id="01017_NORMAL_NONE"),
+        build_entry(national_dex=1018, name="Archaludon", home_id="01018_NORMAL_NONE"),
+        build_entry(national_dex=1024, name="Terapagos", home_id="01024_NORMAL_NONE"),
+    )
+
+    report = build_catalog_coverage_report(entries, build_game_rules(), shiny_rules)
+
+    assert report.shiny.verified_true == 4
+    assert report.shiny.verified_false == 3
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0
