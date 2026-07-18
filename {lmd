@@ -1,0 +1,313 @@
+[33mcommit 3f524ec2d29db9907f68766c49a04213317330b5[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m, [m[1;31morigin/develop[m[33m)[m
+Merge: 373dd44 e8f42a2
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Sat Jul 18 02:38:50 2026 -0600
+
+    Merge branch 'feature/catalog-shiny' into develop
+    Ya se terminó el propceso
+
+[33mcommit e8f42a25b384fea9a17f9bc09b925653dd5bf19f[m[33m ([m[1;32mfeature/catalog-shiny[m[33m)[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Sat Jul 18 02:37:49 2026 -0600
+
+    Complete and audit shiny availability catalog
+
+[33mcommit 009439ffadad9043af832594a678c0bd4da77c2c[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Sat Jul 18 02:37:14 2026 -0600
+
+    Complete and audit shiny availability catalog
+
+[33mcommit 9fd9ec10b8b7137a2c826468dfe5b13f4a11c693[m[33m ([m[1;31morigin/feature/catalog-shiny[m[33m)[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Sat Jul 18 02:23:26 2026 -0600
+
+    Added Paldea Shiny Availability
+
+[33mcommit 6c8c39adc93738301fa1b77058851f639c4a84c9[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Sat Jul 18 01:38:46 2026 -0600
+
+    Added Galar y Hisui Shiny Availability
+
+[33mcommit 5b6db7f12d08586600c47ea066b7cc7378798416[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Sat Jul 18 01:26:30 2026 -0600
+
+    Added Alola Shiny Availability
+
+[33mcommit 4ba76dea46650b501b8ceac50f9dc99ed2ec6ec8[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Sat Jul 18 01:03:39 2026 -0600
+
+    Added Kalos Shiny Availability
+
+[33mcommit 2e7d6f72498e90596a4049019fa374cefcb59e25[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Sat Jul 18 00:49:38 2026 -0600
+
+    Added Unova Shiny Availability
+
+[33mcommit a14cf7cbe0d1394874b60290d6134c5c7bae632a[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Sat Jul 18 00:40:09 2026 -0600
+
+    Added Sinnoh Shiny Availability
+
+[33mcommit dc8a9f0aa4faadcd1fbb6beb7812b041fcb64b86[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Thu Jul 16 00:36:46 2026 -0600
+
+    Added Hoenn Shiny Availability
+
+[33mcommit c18a46b569c91a69b8dc7c0567fe2c9685be59f9[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Thu Jul 16 00:27:14 2026 -0600
+
+    Added Johto Shiny Availability
+
+[33mcommit 373dd44192bf03d781aaa7069d1a9a823c90766b[m[33m ([m[1;33mtag: [m[1;33mv0.5.0-game-availability[m[33m, [m[1;32mfeature/catalog-game-availability[m[33m)[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Thu Jul 16 00:02:50 2026 -0600
+
+    Complete game availability catalog
+
+[33mcommit 6711a834521047bc83a07956f7d1ac2d06c727c1[m[33m ([m[1;31morigin/feature/catalog-game-availability[m[33m)[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 23:45:46 2026 -0600
+
+    Added Kanto Shiny Availability
+
+[33mcommit 89e2ec933cf5e08fe48d52d3bc5ded9bba15709a[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 23:29:08 2026 -0600
+
+    Added Special Acquisition Methods
+
+[33mcommit fae7daa5d4d0a22ba145e357eb10164be69a755c[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 23:16:33 2026 -0600
+
+    Added ZA Availability
+
+[33mcommit a77a4035f484b57003fc970367a394f75594a4ef[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 21:27:45 2026 -0600
+
+    Added ScVi Availability
+
+[33mcommit cc16ed3ff4a45a12809cf99123c285ab7ff4d447[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 21:15:33 2026 -0600
+
+    Added BDSM Availability
+
+[33mcommit ebc0b988a3a0415ff5b107150d881cb1a590fdf4[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 21:03:39 2026 -0600
+
+    Added SwSh Availability
+
+[33mcommit 079adfa2b17d2bc1b75ff7a84478acde7cd74c9d[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 20:45:13 2026 -0600
+
+    Added USUM Availability
+
+[33mcommit 829ff0d4e3e4a9620244057b3327a72197f5737c[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 20:32:56 2026 -0600
+
+    Added SM Availability
+
+[33mcommit a37f316f388f0fef5ef9d2cbc89000758869b32d[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 20:16:20 2026 -0600
+
+    Added ORAS Availability
+
+[33mcommit 77f117fac70c25b91fea4f059cc7da2b973047df[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 19:47:21 2026 -0600
+
+    Added XY Availability
+
+[33mcommit d4f3d67ea8583f093a292ebe21846ca6ffdc8aa6[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 19:31:32 2026 -0600
+
+    Added _ Availavility
+
+[33mcommit 9fa1566a153b1a37a52e1bc262a329dde366d6f3[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 19:16:37 2026 -0600
+
+    Added PLA Availavility
+
+[33mcommit ce3fb3f417081c5137bd1afc27e0a2db0e94cc65[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 18:46:55 2026 -0600
+
+    Added LGPE Availavility
+
+[33mcommit 80f967ccc0c17fdc76b862942b8e41e1734d2d40[m[33m ([m[1;31morigin/feature/project-core[m[33m, [m[1;32mfeature/project-core[m[33m)[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 18:02:57 2026 -0600
+
+    Add GitHub Actions continuous integration
+
+[33mcommit ce71cee761f85d21ffca5af8cc9dba07819a4d20[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 17:59:10 2026 -0600
+
+    Added Documentation
+
+[33mcommit b1bc8e540fcc9ff2097bc56fbf379c2147e0e41a[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 17:54:40 2026 -0600
+
+    Add Selective Export
+
+[33mcommit 421d82050e0391b6fba577bea263b943d86f83b6[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 17:44:30 2026 -0600
+
+    Add Catalog Coverage
+
+[33mcommit 0187860050072ac816eb889570f63eeea59e71c5[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 17:12:41 2026 -0600
+
+    Add Excel generator
+
+[33mcommit 25072e8f54a55a2b736031ab5e06ea624eab834f[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 16:52:49 2026 -0600
+
+    Add shiny availability
+
+[33mcommit 3d248407d35fe7444311d696464154c07aaf30e5[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 16:43:03 2026 -0600
+
+    Add game availability
+
+[33mcommit 2cfe557364c0c9f65ae51bc2d4754d50f8f886d1[m[33m ([m[1;33mtag: [m[1;33mpre-refactor-v1[m[33m)[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 01:22:43 2026 -0600
+
+    Add preliminary CSV and JSON exporters
+
+[33mcommit a282a9d0d4aebef2ddedf23aec4677557adc540b[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 01:01:35 2026 -0600
+
+    Add preliminary Pokémon form models
+
+[33mcommit e2b7a9a23d2c0f1e1e11c568c4bce91e28fba375[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Wed Jul 15 00:43:53 2026 -0600
+
+    Add form naming and generation overrides
+
+[33mcommit aa218934f7d6153581fad1e816f8b2373acc68ca[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Tue Jul 14 23:57:26 2026 -0600
+
+    Add configurable form exclusion rules
+
+[33mcommit 5f44683c9780fad4f0d0d66dd7f15ff11dd9e07d[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Tue Jul 14 23:52:18 2026 -0600
+
+    Add configurable form exclusion rules
+
+[33mcommit 15af7bcb2f58e0a5332769272061b03b07fd94aa[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Tue Jul 14 23:13:35 2026 -0600
+
+    Add variety candidate transformation
+
+[33mcommit 321e29a07f8f7a21604e8853dcf90351f59b2b1b[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Tue Jul 14 22:56:26 2026 -0600
+
+    Add Pokémon species varieties
+
+[33mcommit f1038ddf3843ba2675f3745c0370e9f44d9f8150[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Tue Jul 14 22:26:57 2026 -0600
+
+    Add base species transformation and validation
+
+[33mcommit 7e598c84ce7bfb298a9d96542a3a9ee57c1f19b7[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Tue Jul 14 22:06:07 2026 -0600
+
+    Add normalized PokéAPI species details
+
+[33mcommit fcc6c909bdc5d95f3fabf81e11ca34b09163bd4e[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Tue Jul 14 21:48:05 2026 -0600
+
+    Add cached PokéAPI species client
+
+[33mcommit 309c97b753abd0162e19ad18c9e72578e8d51e4b[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Tue Jul 14 21:20:18 2026 -0600
+
+    Add application entry point
+
+[33mcommit a3aab0b10361717953e2bcb32388a7fb37755be9[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Tue Jul 14 21:13:19 2026 -0600
+
+    Add reusable HTTP client
+
+[33mcommit 7f1d0a5344994fef87224599c810cd794e7a6721[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Tue Jul 14 20:37:22 2026 -0600
+
+    Add centralized application logger
+
+[33mcommit fdf2615f29e31b33502594fc0bad850d2c71236e[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Tue Jul 14 20:32:46 2026 -0600
+
+    Add JSON cache infrastructure
+
+[33mcommit 572bff0318d702e56871774311222eb401f9e445[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Tue Jul 14 20:12:47 2026 -0600
+
+    Add core constants and data models
+
+[33mcommit 800ab7d3572d9e3ae14f109cd537f6669849f3d8[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Tue Jul 14 20:04:20 2026 -0600
+
+    Add validated application settings
+
+[33mcommit f3e1402ead1a2b33703ebca438b7dc4c41a49765[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Tue Jul 14 19:46:49 2026 -0600
+
+    Configure Black and pre-commit
+
+[33mcommit 7d8bb3a7a96588df4c300a910640036c8b3181b5[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Tue Jul 14 17:08:06 2026 -0600
+
+    Initialize project with uv
+
+[33mcommit 8fb6acd0d9d99557ba4c575c33af2c94c83af462[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Tue Jul 14 14:39:50 2026 -0600
+
+    Initial commit
+
+[33mcommit 8e344ff3c52e7fa64e7548d84a7772246ad55ce5[m
+Author: escalfar <escalfar@yahoo.com.mx>
+Date:   Tue Jul 14 14:38:05 2026 -0600
+
+    Initial commit
