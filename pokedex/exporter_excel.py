@@ -7,7 +7,6 @@ from pathlib import Path
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
-from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.worksheet.worksheet import Worksheet
 
 from pokedex.constants import OUTPUT_COLUMNS, ExcelSheet, GameColumn
@@ -20,6 +19,57 @@ _TITLE_FONT = Font(size=16, bold=True)
 _SUBTITLE_FONT = Font(size=11, italic=True)
 _BOOLEAN_TRUE_FILL = PatternFill("solid", fgColor="E2F0D9")
 _BOOLEAN_FALSE_FILL = PatternFill("solid", fgColor="FCE4D6")
+
+_EXCEL_BASE_FORM_LABELS: dict[str, str] = {
+    "Deoxys": "Normal",
+    "Wormadam": "Plant",
+    "Shaymin": "Land",
+    "Basculin": "Red",
+    "Pumpkaboo": "Medium",
+    "Gourgeist": "Medium",
+    "Oricorio": "Baile",
+    "Lycanroc": "Midday",
+    "Toxtricity": "Amped",
+    "Urshifu": "Single",
+    "Squawkabilly": "Green",
+    "Tatsugiri": "Curly",
+    "Gimmighoul": "Chest",
+}
+
+_EXCEL_FORM_LABEL_OVERRIDES: dict[str, dict[str, str]] = {
+    "Tauros": {
+        "Paldean Aqua Breed": "Paldean Aqua",
+        "Paldean Blaze Breed": "Paldean Blaze",
+        "Paldean Combat Breed": "Paldean Combat",
+    },
+    "Burmy": {
+        "Plant Cloak": "Plant",
+        "Sandy Cloak": "Sandy",
+        "Trash Cloak": "Trash",
+    },
+    "Basculin": {
+        "Blue Striped": "Blue",
+        "White Striped": "White",
+    },
+    "Pumpkaboo": {"Super": "Jumbo"},
+    "Gourgeist": {"Super": "Jumbo"},
+    "Urshifu": {"Rapid Strike": "Rapid"},
+    "Squawkabilly": {
+        "Blue Plumage": "Blue",
+        "White Plumage": "White",
+        "Yellow Plumage": "Yellow",
+    },
+}
+
+_FLOWER_FORM_ORDER: dict[str, int] = {
+    "Red Flower": 0,
+    "Yellow Flower": 1,
+    "Orange Flower": 2,
+    "Blue Flower": 3,
+    "White Flower": 4,
+    "Eternal": 5,
+}
+_FLOWER_SPECIES = {"Flabébé", "Floette", "Florges"}
 
 
 def export_excel(
@@ -87,11 +137,16 @@ def _populate_pokedex_sheet(
     headers = [column.value for column in OUTPUT_COLUMNS]
     sheet.append(headers)
 
-    for entry in entries:
+    for entry in _excel_ordered_entries(entries):
         export_row = entry.to_dict()
+        # The Excel presentation groups every form under its species name.
+        # CSV, JSON, and all domain objects retain the original internal name.
+        export_row["Nombre"] = _excel_display_name(entry)
         sheet.append([export_row[header] for header in headers])
 
     sheet.freeze_panes = "A2"
+    # Use a worksheet-level filter instead of an OOXML structured table.
+    # This preserves filtering in Excel while avoiding table repair warnings.
     sheet.auto_filter.ref = sheet.dimensions
     sheet.sheet_view.showGridLines = False
 
@@ -99,16 +154,6 @@ def _populate_pokedex_sheet(
         cell.fill = _HEADER_FILL
         cell.font = _HEADER_FONT
         cell.alignment = Alignment(horizontal="center", vertical="center")
-
-    table = Table(displayName="PokedexTable", ref=sheet.dimensions)
-    table.tableStyleInfo = TableStyleInfo(
-        name="TableStyleMedium2",
-        showFirstColumn=False,
-        showLastColumn=False,
-        showRowStripes=True,
-        showColumnStripes=False,
-    )
-    sheet.add_table(table)
 
     boolean_columns = {
         index + 1
@@ -126,6 +171,46 @@ def _populate_pokedex_sheet(
                 )
 
     _set_column_widths(sheet, headers)
+
+
+def _excel_ordered_entries(
+    entries: tuple[PokemonEntry, ...],
+) -> tuple[PokemonEntry, ...]:
+    """Return the Excel-only order without changing the domain collection."""
+    indexed_entries = tuple(enumerate(entries))
+
+    def sort_key(item: tuple[int, PokemonEntry]) -> tuple[int, int]:
+        original_index, entry = item
+        if entry.pokemon in _FLOWER_SPECIES:
+            return (entry.national_dex, _FLOWER_FORM_ORDER.get(entry.form, 99))
+        return (entry.national_dex, original_index)
+
+    return tuple(entry for _, entry in sorted(indexed_entries, key=sort_key))
+
+
+def _excel_display_name(entry: PokemonEntry) -> str:
+    """Return the Excel-only display name without changing domain data."""
+    if entry.form.casefold() == "normal":
+        base_form = _EXCEL_BASE_FORM_LABELS.get(entry.pokemon)
+        return f"{entry.pokemon} ({base_form})" if base_form else entry.pokemon
+
+    display_form = _excel_display_form(entry.pokemon, entry.form)
+    return f"{entry.pokemon} ({display_form})"
+
+
+def _excel_display_form(pokemon: str, form: str) -> str:
+    """Normalize selected form labels exclusively for the Excel Nombre column."""
+    override = _EXCEL_FORM_LABEL_OVERRIDES.get(pokemon, {}).get(form)
+    if override is not None:
+        return override
+
+    if pokemon == "Vivillon" and form.endswith(" Pattern"):
+        return form.removesuffix(" Pattern")
+
+    if pokemon in _FLOWER_SPECIES and form.endswith(" Flower"):
+        return form.removesuffix(" Flower")
+
+    return form
 
 
 def _populate_summary_sheet(

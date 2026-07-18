@@ -109,8 +109,10 @@ def test_export_excel_creates_four_expected_sheets(tmp_path: Path) -> None:
         sheet = workbook["Pokédex"]
         assert sheet.freeze_panes == "A2"
         assert sheet["A1"].value == "Nat Dex"
-        assert sheet["D2"].value == "Alolan Raichu"
+        assert sheet["D2"].value == "Raichu (Alolan)"
         assert sheet["R2"].value is True
+        assert sheet.auto_filter.ref == sheet.dimensions
+        assert len(sheet.tables) == 0
     finally:
         workbook.close()
 
@@ -147,3 +149,209 @@ def test_export_excel_summary_and_metadata(tmp_path: Path) -> None:
         assert validation["B4"].value == "OK"
     finally:
         workbook.close()
+
+
+def test_excel_name_starts_with_species_without_changing_other_exports(
+    tmp_path: Path,
+) -> None:
+    from openpyxl import load_workbook
+
+    from pokedex.exporter_excel import export_excel
+
+    entry = build_entry()
+    output_path = tmp_path / "Pokedex.xlsx"
+    export_excel((entry,), output_path)
+
+    workbook = load_workbook(output_path, data_only=True)
+    try:
+        assert workbook["Pokédex"]["D2"].value == "Raichu (Alolan)"
+    finally:
+        workbook.close()
+
+    assert entry.name == "Alolan Raichu"
+
+
+def _build_form_entry(
+    *,
+    national_dex: int,
+    pokemon: str,
+    form: str,
+    home_id: str,
+) -> PokemonEntry:
+    return PokemonEntry(
+        national_dex=national_dex,
+        pokemon=pokemon,
+        form=form,
+        name=pokemon if form == "Normal" else f"{form} {pokemon}",
+        generation=6,
+        home_id=home_id,
+        availability=GameAvailability(),
+        legendary_mythical=False,
+        obtainable_shiny=True,
+        gender=Gender.NONE,
+    )
+
+
+def test_excel_adds_selected_base_form_labels_only_to_nombre(
+    tmp_path: Path,
+) -> None:
+    from openpyxl import load_workbook
+
+    from pokedex.exporter_excel import export_excel
+
+    expected_labels = {
+        "Deoxys": "Normal",
+        "Wormadam": "Plant",
+        "Shaymin": "Land",
+        "Basculin": "Red",
+        "Pumpkaboo": "Medium",
+        "Gourgeist": "Medium",
+        "Oricorio": "Baile",
+        "Lycanroc": "Midday",
+        "Toxtricity": "Amped",
+        "Urshifu": "Single",
+        "Squawkabilly": "Green",
+        "Tatsugiri": "Curly",
+        "Gimmighoul": "Chest",
+    }
+    entries = tuple(
+        _build_form_entry(
+            national_dex=index,
+            pokemon=pokemon,
+            form="Normal",
+            home_id=f"{index:05d}_NORMAL_NONE",
+        )
+        for index, pokemon in enumerate(expected_labels, start=1)
+    )
+    output_path = tmp_path / "Pokedex.xlsx"
+    export_excel(entries, output_path)
+
+    workbook = load_workbook(output_path, data_only=True)
+    try:
+        names = [
+            workbook["Pokédex"].cell(row=row, column=4).value
+            for row in range(2, len(entries) + 2)
+        ]
+    finally:
+        workbook.close()
+
+    assert names == [
+        f"{pokemon} ({label})" for pokemon, label in expected_labels.items()
+    ]
+    assert [entry.name for entry in entries] == list(expected_labels)
+
+
+def test_excel_uses_matching_flower_order_and_eternal_floette_last(
+    tmp_path: Path,
+) -> None:
+    from openpyxl import load_workbook
+
+    from pokedex.exporter_excel import export_excel
+
+    forms_by_species = {
+        "Flabébé": (
+            "Blue Flower",
+            "Red Flower",
+            "White Flower",
+            "Orange Flower",
+            "Yellow Flower",
+        ),
+        "Floette": (
+            "Eternal",
+            "Blue Flower",
+            "Red Flower",
+            "White Flower",
+            "Orange Flower",
+            "Yellow Flower",
+        ),
+        "Florges": (
+            "Blue Flower",
+            "Red Flower",
+            "White Flower",
+            "Orange Flower",
+            "Yellow Flower",
+        ),
+    }
+    dex_numbers = {"Flabébé": 669, "Floette": 670, "Florges": 671}
+    entries = tuple(
+        _build_form_entry(
+            national_dex=dex_numbers[pokemon],
+            pokemon=pokemon,
+            form=form,
+            home_id=f"{dex_numbers[pokemon]:05d}_{form.upper().replace(' ', '_')}_NONE",
+        )
+        for pokemon, forms in forms_by_species.items()
+        for form in forms
+    )
+    output_path = tmp_path / "Pokedex.xlsx"
+    export_excel(entries, output_path)
+
+    workbook = load_workbook(output_path, data_only=True)
+    try:
+        names = [
+            workbook["Pokédex"].cell(row=row, column=4).value
+            for row in range(2, len(entries) + 2)
+        ]
+    finally:
+        workbook.close()
+
+    common_order = (
+        "Red Flower",
+        "Yellow Flower",
+        "Orange Flower",
+        "Blue Flower",
+        "White Flower",
+    )
+    expected_colors = ("Red", "Yellow", "Orange", "Blue", "White")
+    assert names == [
+        *(f"Flabébé ({color})" for color in expected_colors),
+        *(f"Floette ({color})" for color in expected_colors),
+        "Floette (Eternal)",
+        *(f"Florges ({color})" for color in expected_colors),
+    ]
+
+
+def test_excel_simplifies_selected_form_labels_only_in_nombre(tmp_path: Path) -> None:
+    from openpyxl import load_workbook
+
+    from pokedex.exporter_excel import export_excel
+
+    cases = (
+        (128, "Tauros", "Paldean Aqua Breed", "Tauros (Paldean Aqua)"),
+        (128, "Tauros", "Paldean Blaze Breed", "Tauros (Paldean Blaze)"),
+        (128, "Tauros", "Paldean Combat Breed", "Tauros (Paldean Combat)"),
+        (412, "Burmy", "Sandy Cloak", "Burmy (Sandy)"),
+        (412, "Burmy", "Trash Cloak", "Burmy (Trash)"),
+        (550, "Basculin", "Blue Striped", "Basculin (Blue)"),
+        (550, "Basculin", "White Striped", "Basculin (White)"),
+        (666, "Vivillon", "Poké Ball Pattern", "Vivillon (Poké Ball)"),
+        (710, "Pumpkaboo", "Super", "Pumpkaboo (Jumbo)"),
+        (711, "Gourgeist", "Super", "Gourgeist (Jumbo)"),
+        (892, "Urshifu", "Rapid Strike", "Urshifu (Rapid)"),
+        (931, "Squawkabilly", "Blue Plumage", "Squawkabilly (Blue)"),
+        (931, "Squawkabilly", "White Plumage", "Squawkabilly (White)"),
+        (931, "Squawkabilly", "Yellow Plumage", "Squawkabilly (Yellow)"),
+    )
+    entries = tuple(
+        _build_form_entry(
+            national_dex=dex,
+            pokemon=pokemon,
+            form=form,
+            home_id=f"{dex:05d}_{index}_NONE",
+        )
+        for index, (dex, pokemon, form, _) in enumerate(cases, start=1)
+    )
+    output_path = tmp_path / "Pokedex.xlsx"
+    export_excel(entries, output_path)
+
+    workbook = load_workbook(output_path, data_only=True)
+    try:
+        names = [
+            workbook["Pokédex"].cell(row=row, column=4).value
+            for row in range(2, len(entries) + 2)
+        ]
+    finally:
+        workbook.close()
+
+    assert names == [expected for *_, expected in cases]
+    assert [entry.form for entry in entries] == [form for _, _, form, _ in cases]

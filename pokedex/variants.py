@@ -11,6 +11,64 @@ from pokedex.pokeapi import SpeciesDetails, SpeciesVariety
 NORMAL_FORM_NAME = "Normal"
 NORMAL_FORM_SLUG = "normal"
 
+# PokéAPI exposes these HOME-persistent cosmetic forms through the forms
+# endpoint rather than the species varieties list.  The project models them
+# explicitly so every form stored independently by Pokémon HOME receives its
+# own catalog row.
+_SUPPLEMENTAL_FORMS: dict[str, tuple[tuple[str, str], ...]] = {
+    "burmy": (
+        ("sandy-cloak", "Sandy Cloak"),
+        ("trash-cloak", "Trash Cloak"),
+    ),
+    "vivillon": (
+        ("archipelago-pattern", "Archipelago Pattern"),
+        ("continental-pattern", "Continental Pattern"),
+        ("elegant-pattern", "Elegant Pattern"),
+        ("fancy-pattern", "Fancy Pattern"),
+        ("garden-pattern", "Garden Pattern"),
+        ("high-plains-pattern", "High Plains Pattern"),
+        ("icy-snow-pattern", "Icy Snow Pattern"),
+        ("jungle-pattern", "Jungle Pattern"),
+        ("marine-pattern", "Marine Pattern"),
+        ("modern-pattern", "Modern Pattern"),
+        ("monsoon-pattern", "Monsoon Pattern"),
+        ("ocean-pattern", "Ocean Pattern"),
+        ("poke-ball-pattern", "Poké Ball Pattern"),
+        ("polar-pattern", "Polar Pattern"),
+        ("river-pattern", "River Pattern"),
+        ("sandstorm-pattern", "Sandstorm Pattern"),
+        ("savanna-pattern", "Savanna Pattern"),
+        ("sun-pattern", "Sun Pattern"),
+        ("tundra-pattern", "Tundra Pattern"),
+    ),
+    "flabebe": (
+        ("blue-flower", "Blue Flower"),
+        ("orange-flower", "Orange Flower"),
+        ("white-flower", "White Flower"),
+        ("yellow-flower", "Yellow Flower"),
+    ),
+    "floette": (
+        ("blue-flower", "Blue Flower"),
+        ("orange-flower", "Orange Flower"),
+        ("white-flower", "White Flower"),
+        ("yellow-flower", "Yellow Flower"),
+    ),
+    "florges": (
+        ("blue-flower", "Blue Flower"),
+        ("orange-flower", "Orange Flower"),
+        ("white-flower", "White Flower"),
+        ("yellow-flower", "Yellow Flower"),
+    ),
+}
+
+_DEFAULT_FORM_PRESENTATION: dict[str, tuple[str, str]] = {
+    "burmy": ("Plant Cloak", "Plant Cloak Burmy"),
+    "vivillon": ("Meadow Pattern", "Meadow Pattern Vivillon"),
+    "flabebe": ("Red Flower", "Red Flower Flabébé"),
+    "floette": ("Red Flower", "Red Flower Floette"),
+    "florges": ("Red Flower", "Red Flower Florges"),
+}
+
 
 def build_pokemon_variants(
     details: Iterable[SpeciesDetails],
@@ -124,7 +182,7 @@ def _build_species_variants(
     detail: SpeciesDetails,
     species: PokemonSpecies,
 ) -> tuple[PokemonVariant, ...]:
-    return tuple(
+    api_variants = tuple(
         _build_variant(
             detail=detail,
             species=species,
@@ -132,6 +190,25 @@ def _build_species_variants(
         )
         for variety in detail.varieties
     )
+
+    supplemental = tuple(
+        PokemonVariant(
+            national_dex=species.national_dex,
+            pokemon=species.name,
+            species_api_name=detail.api_name,
+            variety_api_name=f"{detail.api_name}-{form_slug}",
+            form_slug=form_slug,
+            form_name=form_name,
+            display_name=f"{form_name} {species.name}",
+            generation=species.generation,
+            resource_url=f"synthetic://pokemon-form/{detail.api_name}-{form_slug}",
+            is_default=False,
+            gender=Gender.NONE,
+        )
+        for form_slug, form_name in _SUPPLEMENTAL_FORMS.get(detail.api_name, ())
+    )
+
+    return api_variants + supplemental
 
 
 def _build_variant(
@@ -149,7 +226,11 @@ def _build_variant(
     form_name = form_slug_to_name(form_slug)
 
     if variety.is_default:
-        display_name = species.name
+        default_presentation = _DEFAULT_FORM_PRESENTATION.get(detail.api_name)
+        if default_presentation is None:
+            display_name = species.name
+        else:
+            form_name, display_name = default_presentation
     else:
         display_name = f"{form_name} {species.name}"
 

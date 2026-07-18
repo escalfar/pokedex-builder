@@ -380,3 +380,110 @@ def test_validation_rejects_empty_collection() -> None:
         match="cannot be empty",
     ):
         validate_pokemon_variants(())
+
+
+def test_build_variants_adds_home_persistent_cosmetic_forms() -> None:
+    details = (
+        SpeciesDetails(
+            national_dex=412,
+            api_name="burmy",
+            english_name="Burmy",
+            generation=4,
+            is_legendary=False,
+            is_mythical=False,
+            resource_url="https://pokeapi.co/api/v2/pokemon-species/412/",
+            varieties=(
+                SpeciesVariety(
+                    api_name="burmy",
+                    resource_url="https://pokeapi.co/api/v2/pokemon/412/",
+                    is_default=True,
+                ),
+            ),
+        ),
+    )
+    species = (PokemonSpecies(national_dex=412, name="Burmy", generation=4),)
+
+    variants = build_pokemon_variants(details, species)
+
+    assert [variant.home_id for variant in variants] == [
+        "00412_NORMAL_NONE",
+        "00412_SANDY_CLOAK_NONE",
+        "00412_TRASH_CLOAK_NONE",
+    ]
+    assert variants[0].form_name == "Plant Cloak"
+
+
+def test_build_variants_adds_all_vivillon_patterns() -> None:
+    details = (
+        SpeciesDetails(
+            national_dex=666,
+            api_name="vivillon",
+            english_name="Vivillon",
+            generation=6,
+            is_legendary=False,
+            is_mythical=False,
+            resource_url="https://pokeapi.co/api/v2/pokemon-species/666/",
+            varieties=(
+                SpeciesVariety(
+                    api_name="vivillon",
+                    resource_url="https://pokeapi.co/api/v2/pokemon/666/",
+                    is_default=True,
+                ),
+            ),
+        ),
+    )
+    species = (PokemonSpecies(national_dex=666, name="Vivillon", generation=6),)
+
+    variants = build_pokemon_variants(details, species)
+
+    assert len(variants) == 20
+    assert variants[0].form_name == "Meadow Pattern"
+    assert {variant.form_name for variant in variants} >= {
+        "Fancy Pattern",
+        "Poké Ball Pattern",
+        "Tundra Pattern",
+    }
+
+
+@pytest.mark.parametrize(
+    ("national_dex", "api_name", "english_name"),
+    [
+        (669, "flabebe", "Flabébé"),
+        (670, "floette", "Floette"),
+        (671, "florges", "Florges"),
+    ],
+)
+def test_build_variants_adds_all_flower_colors(
+    national_dex: int, api_name: str, english_name: str
+) -> None:
+    details = (
+        SpeciesDetails(
+            national_dex=national_dex,
+            api_name=api_name,
+            english_name=english_name,
+            generation=6,
+            is_legendary=False,
+            is_mythical=False,
+            resource_url=f"https://pokeapi.co/api/v2/pokemon-species/{national_dex}/",
+            varieties=(
+                SpeciesVariety(
+                    api_name=api_name,
+                    resource_url=f"https://pokeapi.co/api/v2/pokemon/{national_dex}/",
+                    is_default=True,
+                ),
+            ),
+        ),
+    )
+    species = (
+        PokemonSpecies(national_dex=national_dex, name=english_name, generation=6),
+    )
+
+    variants = build_pokemon_variants(details, species)
+
+    assert {variant.form_name for variant in variants} == {
+        "Red Flower",
+        "Blue Flower",
+        "Orange Flower",
+        "White Flower",
+        "Yellow Flower",
+    }
