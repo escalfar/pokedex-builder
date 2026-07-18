@@ -1,8 +1,8 @@
-version: "1.1"
+version: "1.2"
 
-# The catalog is completed in small, audited tranches. Unlisted variants remain
-# unknown until a later batch classifies them explicitly.
-complete: false
+# Every retained HOME variant has now been audited. Entries matched by a range or
+# explicit inclusion are TRUE; explicit exclusions are FALSE.
+complete: true
 
 # Batch 12: Kanto species except Mew.
 # Every retained HOME variant whose National Dex number is 001-150 has a
@@ -139,9 +139,10 @@ national_dex_ranges:
   # covered through permanent wild encounters, breeding, outbreaks, raids, or
   # evolution methods in Pokémon Scarlet and Pokémon Violet.
   #
-  # Chest Form Gimmighoul Is available in ZA's DLC, so Gholdengo satisfies the
-  # rule through evolution. Roaming Form Gimmighoul has no permanent non-event
-  # shiny route.
+  # Chest Form Gimmighoul is permanently shiny obtainable through encounters in
+  # Pokémon Legends: Z-A – Mega Dimension. Gholdengo is therefore obtainable by
+  # evolving a shiny Chest Form Gimmighoul. Roaming Form remains excluded because
+  # its shiny availability is limited to time-bound Pokémon GO periods.
   #
   # The four Treasures of Ruin received shiny distributions after limited 2025
   # raid challenges. Koraidon and Miraidon also received limited 2025 serial-code
@@ -228,9 +229,9 @@ excluded_home_ids:
   - "00898_ICE_NONE"
   - "00898_SHADOW_NONE"
 
-  # Roaming Form Gimmighoul have no permanent non-event shiny route.
-  # Shiny Chest Form can be caught in ZA's DLC and Gholdengo depends
-  # on evolving a shiny Gimmighoul.
+  # Roaming Form Gimmighoul has no permanent non-event shiny route. Its shiny
+  # availability has depended on time-bound Pokémon GO periods. Chest Form and
+  # Gholdengo remain included through Pokémon Legends: Z-A – Mega Dimension.
   - "00999_ROAMING_NONE"
 
   # The Treasures of Ruin were released shiny only through time-limited 2025
@@ -273,4 +274,3 @@ excluded_home_ids:
   - "01023_NORMAL_NONE"
   - "01024_NORMAL_NONE"
   - "01025_NORMAL_NONE"
-

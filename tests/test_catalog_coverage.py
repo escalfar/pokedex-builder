@@ -825,6 +825,8 @@ def test_paldea_dlc_shiny_catalog_classifies_every_sample_row() -> None:
     entries = (
         build_entry(national_dex=906, name="Sprigatito", home_id="00906_NORMAL_NONE"),
         build_entry(national_dex=999, name="Gimmighoul", home_id="00999_NORMAL_NONE"),
+        build_entry(national_dex=999, name="Gimmighoul", home_id="00999_ROAMING_NONE"),
+        build_entry(national_dex=1000, name="Gholdengo", home_id="01000_NORMAL_NONE"),
         build_entry(national_dex=1001, name="Wo-Chien", home_id="01001_NORMAL_NONE"),
         build_entry(national_dex=1011, name="Dipplin", home_id="01011_NORMAL_NONE"),
         build_entry(national_dex=1017, name="Ogerpon", home_id="01017_NORMAL_NONE"),
@@ -834,7 +836,29 @@ def test_paldea_dlc_shiny_catalog_classifies_every_sample_row() -> None:
 
     report = build_catalog_coverage_report(entries, build_game_rules(), shiny_rules)
 
-    assert report.shiny.verified_true == 4
-    assert report.shiny.verified_false == 3
+    assert report.shiny.verified_true == 5
+    assert report.shiny.verified_false == 4
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0
+
+
+def test_completed_shiny_catalog_has_no_unknown_rows() -> None:
+    """The final catalog treats every unmatched retained form as audited FALSE."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    shiny_rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=1, name="Bulbasaur", home_id="00001_NORMAL_NONE"),
+        build_entry(national_dex=151, name="Mew", home_id="00151_NORMAL_NONE"),
+        build_entry(national_dex=999, name="Gimmighoul", home_id="00999_NORMAL_NONE"),
+        build_entry(national_dex=999, name="Gimmighoul", home_id="00999_ROAMING_NONE"),
+        build_entry(national_dex=1000, name="Gholdengo", home_id="01000_NORMAL_NONE"),
+    )
+
+    report = build_catalog_coverage_report(entries, build_game_rules(), shiny_rules)
+
+    assert report.shiny.verified_true == 3
+    assert report.shiny.verified_false == 2
     assert report.shiny.unknown == 0
     assert report.shiny.percent == 100.0

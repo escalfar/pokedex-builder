@@ -582,7 +582,8 @@ def test_paldea_dlc_catalog_classifies_permanent_methods_and_exclusions() -> Non
     (
         sprigatito,
         family_three_maushold,
-        shiny_gimmighoul,
+        chest_gimmighoul,
+        roaming_gimmighoul,
         gholdengo,
         wo_chien,
         koraidon,
@@ -600,6 +601,7 @@ def test_paldea_dlc_catalog_classifies_permanent_methods_and_exclusions() -> Non
             build_entry(national_dex=906, home_id="00906_NORMAL_NONE"),
             build_entry(national_dex=925, home_id="00925_FAMILY_OF_THREE_NONE"),
             build_entry(national_dex=999, home_id="00999_NORMAL_NONE"),
+            build_entry(national_dex=999, home_id="00999_ROAMING_NONE"),
             build_entry(national_dex=1000, home_id="01000_NORMAL_NONE"),
             build_entry(national_dex=1001, home_id="01001_NORMAL_NONE"),
             build_entry(national_dex=1007, home_id="01007_NORMAL_NONE"),
@@ -618,7 +620,8 @@ def test_paldea_dlc_catalog_classifies_permanent_methods_and_exclusions() -> Non
 
     assert sprigatito.obtainable_shiny is True
     assert family_three_maushold.obtainable_shiny is True
-    assert shiny_gimmighoul.obtainable_shiny is True
+    assert chest_gimmighoul.obtainable_shiny is True
+    assert roaming_gimmighoul.obtainable_shiny is False
     assert gholdengo.obtainable_shiny is True
     assert wo_chien.obtainable_shiny is False
     assert koraidon.obtainable_shiny is False
@@ -640,7 +643,39 @@ def test_paldea_dlc_catalog_documents_event_only_and_shiny_locked_species() -> N
     )
     content = catalog_path.read_text(encoding="utf-8")
 
+    assert "Mega Dimension" in content
+    assert "Roaming Form Gimmighoul has no permanent" in content
     assert "Treasures of Ruin received shiny distributions" in content
     assert "limited 2025 serial-code" in content
     assert "Walking Wake, Iron Leaves, the Loyal Three, Ogerpon" in content
     assert "Terapagos, and Pecharunt have no permanent" in content
+
+
+def test_shiny_catalog_is_marked_complete_after_final_audit() -> None:
+    """The final audit must classify every retained HOME variant."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+
+    assert rules.complete is True
+
+
+def test_gimmighoul_forms_remain_independently_classified() -> None:
+    """Chest and Roaming Form must never collapse into one shiny decision."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    chest, roaming, gholdengo = apply_shiny_availability(
+        (
+            build_entry(national_dex=999, home_id="00999_NORMAL_NONE"),
+            build_entry(national_dex=999, home_id="00999_ROAMING_NONE"),
+            build_entry(national_dex=1000, home_id="01000_NORMAL_NONE"),
+        ),
+        rules,
+    )
+
+    assert chest.obtainable_shiny is True
+    assert roaming.obtainable_shiny is False
+    assert gholdengo.obtainable_shiny is True
