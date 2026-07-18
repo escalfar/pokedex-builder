@@ -444,3 +444,66 @@ def test_kalos_catalog_documents_home_reward_and_special_exclusions() -> None:
     assert "Eternal Flower Floette has never been legitimately released" in content
     assert "permanent Legends: Z-A encounter is shiny-locked" in content
     assert "Hoopa has no permanent legitimate shiny" in content
+
+
+def test_alola_catalog_classifies_permanent_methods_and_exclusions() -> None:
+    """Alola keeps permanent hunts and excludes locked or event-only species."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+
+    (
+        rowlet,
+        cosmog,
+        solgaleo,
+        lunala,
+        necrozma,
+        magearna,
+        marshadow,
+        zeraora,
+        meltan,
+        melmetal,
+    ) = apply_shiny_availability(
+        (
+            build_entry(national_dex=722, home_id="00722_NORMAL_NONE"),
+            build_entry(national_dex=789, home_id="00789_NORMAL_NONE"),
+            build_entry(national_dex=791, home_id="00791_NORMAL_NONE"),
+            build_entry(national_dex=792, home_id="00792_NORMAL_NONE"),
+            build_entry(national_dex=800, home_id="00800_NORMAL_NONE"),
+            build_entry(national_dex=801, home_id="00801_NORMAL_NONE"),
+            build_entry(national_dex=802, home_id="00802_NORMAL_NONE"),
+            build_entry(national_dex=807, home_id="00807_NORMAL_NONE"),
+            build_entry(national_dex=808, home_id="00808_NORMAL_NONE"),
+            build_entry(national_dex=809, home_id="00809_NORMAL_NONE"),
+        ),
+        rules,
+    )
+
+    assert rowlet.obtainable_shiny is True
+    assert cosmog.obtainable_shiny is False
+    assert solgaleo.obtainable_shiny is True
+    assert lunala.obtainable_shiny is True
+    assert necrozma.obtainable_shiny is True
+    assert magearna.obtainable_shiny is False
+    assert marshadow.obtainable_shiny is False
+    assert zeraora.obtainable_shiny is False
+    assert meltan.obtainable_shiny is True
+    assert melmetal.obtainable_shiny is False
+
+
+def test_alola_catalog_documents_home_reward_and_event_exclusions() -> None:
+    """Special Alola shiny decisions must remain explicit and auditable."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    content = catalog_path.read_text(encoding="utf-8")
+
+    assert "permanent Pokémon HOME Pokédex-completion reward" in content
+    assert "Pokémon received in HOME cannot be transferred back to GO" in content
+    assert (
+        "Solgaleo and\n  # Lunala remain included through permanent Dynamax Adventures"
+        in content
+    )
+    assert "time-limited Pokémon HOME Mystery" in content
+    assert "Shiny Melmetal requires evolving Shiny Meltan in Pokémon GO" in content

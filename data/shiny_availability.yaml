@@ -99,6 +99,25 @@ national_dex_ranges:
   # legitimate shiny acquisition method.
   - [650, 721]
 
+  # Batch 18: Alola. Retained HOME variants with Nat Dex 722-809 are
+  # classified here. Most species have permanent shiny methods in supported
+  # games. The legendary and Mythical exceptions are documented below.
+  #
+  # The guardian deities, Ultra Beasts, and Necrozma are covered through
+  # permanent encounters such as Ultra Warp Ride and Dynamax Adventures.
+  #
+  # Shiny Meltan is a permanent Pokémon HOME Pokédex-completion reward for
+  # completing the Kanto Pokédex from Pokémon: Let's Go, Pikachu! or Pokémon:
+  # Let's Go, Eevee! Pokémon GO is not used because this permanent HOME method
+  # exists. Shiny Melmetal remains excluded because Meltan can evolve only in
+  # Pokémon GO, and Pokémon received in HOME cannot be transferred back to GO.
+  #
+  # Solgaleo and Lunala are obtainable shiny through permanent Dynamax
+  # Adventures encounters in The Crown Tundra. Cosmog, Cosmoem, Magearna,
+  # Marshadow, Zeraora, and Melmetal are excluded below because their legitimate
+  # shiny availability is unreleased or limited to time-bound events.
+  - [722, 809]
+
 # Use form-level inclusions only when a species-wide rule would be too broad.
 home_ids: []
 
@@ -134,4 +153,20 @@ excluded_home_ids:
   # forms remain unavailable because form changing does not create Shininess.
   - "00720_NORMAL_NONE"
   - "00720_UNBOUND_NONE"
+  # Cosmog and Cosmoem have never had a legitimate shiny release. Solgaleo and
+  # Lunala remain included through permanent Dynamax Adventures encounters.
+  - "00789_NORMAL_NONE"
+  - "00790_NORMAL_NONE"
+
+  # Magearna and Marshadow have no legitimate shiny acquisition method.
+  - "00801_NORMAL_NONE"
+  - "00802_NORMAL_NONE"
+
+  # Shiny Zeraora was available only as a time-limited Pokémon HOME Mystery
+  # Gift in 2020, so it does not satisfy the permanent non-event rule.
+  - "00807_NORMAL_NONE"
+
+  # Shiny Melmetal requires evolving Shiny Meltan in Pokémon GO during periods
+  # when Shiny Meltan is enabled. The permanent HOME reward cannot return to GO.
+  - "00809_NORMAL_NONE"
 

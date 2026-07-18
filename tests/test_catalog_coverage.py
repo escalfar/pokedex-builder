@@ -765,3 +765,28 @@ def test_kalos_shiny_catalog_classifies_true_and_false_sample_rows() -> None:
     assert report.shiny.verified_false == 3
     assert report.shiny.unknown == 0
     assert report.shiny.percent == 100.0
+
+
+def test_alola_shiny_catalog_classifies_true_and_false_sample_rows() -> None:
+    """The Alola tranche reports permanent and excluded rows correctly."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    shiny_rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=722, name="Rowlet", home_id="00722_NORMAL_NONE"),
+        build_entry(national_dex=789, name="Cosmog", home_id="00789_NORMAL_NONE"),
+        build_entry(national_dex=791, name="Solgaleo", home_id="00791_NORMAL_NONE"),
+        build_entry(national_dex=792, name="Lunala", home_id="00792_NORMAL_NONE"),
+        build_entry(national_dex=800, name="Necrozma", home_id="00800_NORMAL_NONE"),
+        build_entry(national_dex=801, name="Magearna", home_id="00801_NORMAL_NONE"),
+        build_entry(national_dex=808, name="Meltan", home_id="00808_NORMAL_NONE"),
+        build_entry(national_dex=809, name="Melmetal", home_id="00809_NORMAL_NONE"),
+    )
+
+    report = build_catalog_coverage_report(entries, build_game_rules(), shiny_rules)
+
+    assert report.shiny.verified_true == 5
+    assert report.shiny.verified_false == 3
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0
