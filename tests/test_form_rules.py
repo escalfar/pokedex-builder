@@ -203,3 +203,45 @@ def test_project_rules_keep_eternal_flower_floette() -> None:
     )
 
     assert evaluate_variant(variant, rules).excluded is False
+
+
+@pytest.mark.parametrize(
+    "api_name",
+    [
+        "pikachu-belle",
+        "pikachu-libre",
+        "pikachu-phd",
+        "pikachu-pop-star",
+        "pikachu-rock-star",
+        "castform-rainy",
+        "castform-snowy",
+        "castform-sunny",
+        "kyurem-black",
+        "kyurem-white",
+        "meloetta-pirouette",
+        "necrozma-dawn",
+        "necrozma-dusk",
+        "calyrex-ice",
+        "calyrex-shadow",
+        "koraidon-gliding-build",
+        "koraidon-limited-build",
+        "koraidon-sprinting-build",
+        "koraidon-swimming-build",
+        "miraidon-aquatic-mode",
+        "miraidon-drive-mode",
+        "miraidon-glide-mode",
+        "miraidon-low-power-mode",
+    ],
+)
+def test_project_rules_exclude_forms_not_stored_by_home(api_name: str) -> None:
+    rules_path = Path(__file__).resolve().parents[1] / "data" / "form_rules.yaml"
+    rules = FormRules.from_yaml(rules_path)
+    species_name, _, form_slug = api_name.partition("-")
+    variant = build_candidate(
+        species_api_name=species_name,
+        variety_api_name=api_name,
+        form_slug=form_slug,
+        is_default=False,
+    )
+
+    assert evaluate_variant(variant, rules).excluded is True

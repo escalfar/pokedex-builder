@@ -71,6 +71,30 @@ exclude:
     - terapagos
 
   excluded_api_names:
+    # Forms that Pokémon HOME cannot store as independent catalog entries.
+    - pikachu-belle
+    - pikachu-libre
+    - pikachu-phd
+    - pikachu-pop-star
+    - pikachu-rock-star
+    - castform-rainy
+    - castform-snowy
+    - castform-sunny
+    - kyurem-black
+    - kyurem-white
+    - meloetta-pirouette
+    - necrozma-dawn
+    - necrozma-dusk
+    - calyrex-ice
+    - calyrex-shadow
+    - koraidon-gliding-build
+    - koraidon-limited-build
+    - koraidon-sprinting-build
+    - koraidon-swimming-build
+    - miraidon-aquatic-mode
+    - miraidon-drive-mode
+    - miraidon-glide-mode
+    - miraidon-low-power-mode
     - darmanitan-galar-zen
     - greninja-battle-bond
     - greninja-ash
