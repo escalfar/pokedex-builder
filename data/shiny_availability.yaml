@@ -44,6 +44,24 @@ national_dex_ranges:
   # Pokémon GO is not used.
   - [252, 386]
 
+
+  # Batch 15: Sinnoh. Retained HOME variants with Nat Dex 387-493 are
+  # classified here. Most species have permanent shiny methods in supported
+  # core games. The special cases are documented below.
+  #
+  # Manaphy is obtainable shiny as a permanent Pokémon HOME gift for completing
+  # the Sinnoh Pokédex from Brilliant Diamond and Shining Pearl. Phione remains
+  # covered because it can be bred from Manaphy in compatible games.
+  #
+  # Arceus is permanently shiny-huntable in Brilliant Diamond and Shining Pearl
+  # through the Hall of Origin encounter after meeting the Pokémon Legends:
+  # Arceus save-data and progression requirements.
+  #
+  # Darkrai and both Shaymin forms are excluded below. Their legitimate shiny
+  # methods depend on limited-time event items or event-style Pokémon GO access,
+  # so they do not satisfy the project's non-event rule.
+  - [387, 493]
+
 # Use form-level inclusions only when a species-wide rule would be too broad.
 home_ids: []
 
@@ -51,3 +69,12 @@ excluded_home_ids:
   # Shiny Mew has only been obtainable through event-limited distributions or
   # event/ticket research. It therefore does not satisfy the project rule.
   - "00151_NORMAL_NONE"
+
+  # Darkrai requires a limited-time Member Card encounter or rotating/event
+  # Pokémon GO access. Neither is a permanent non-event method.
+  - "00491_NORMAL_NONE"
+
+  # Shaymin requires the limited-time Oak's Letter encounter or event-style
+  # Pokémon GO research. Both retained forms therefore remain unavailable.
+  - "00492_NORMAL_NONE"
+  - "00492_SKY_NONE"

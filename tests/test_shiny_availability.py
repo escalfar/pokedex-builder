@@ -304,3 +304,47 @@ def test_hoenn_catalog_documents_legacy_jirachi_and_switch_deoxys_methods() -> N
     assert "AuroraTicket encounter" in content
     assert "all retained Deoxys forms are covered" in content
     assert content.count("Pokémon GO is not used.") >= 2
+
+
+def test_sinnoh_catalog_classifies_permanent_and_event_only_methods() -> None:
+    """Sinnoh keeps permanent methods and excludes event-only mythicals."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+
+    turtwig, manaphy, phione, darkrai, shaymin, sky_shaymin, arceus = (
+        apply_shiny_availability(
+            (
+                build_entry(national_dex=387, home_id="00387_NORMAL_NONE"),
+                build_entry(national_dex=490, home_id="00490_NORMAL_NONE"),
+                build_entry(national_dex=489, home_id="00489_NORMAL_NONE"),
+                build_entry(national_dex=491, home_id="00491_NORMAL_NONE"),
+                build_entry(national_dex=492, home_id="00492_NORMAL_NONE"),
+                build_entry(national_dex=492, home_id="00492_SKY_NONE"),
+                build_entry(national_dex=493, home_id="00493_NORMAL_NONE"),
+            ),
+            rules,
+        )
+    )
+
+    assert turtwig.obtainable_shiny is True
+    assert manaphy.obtainable_shiny is True
+    assert phione.obtainable_shiny is True
+    assert darkrai.obtainable_shiny is False
+    assert shaymin.obtainable_shiny is False
+    assert sky_shaymin.obtainable_shiny is False
+    assert arceus.obtainable_shiny is True
+
+
+def test_sinnoh_catalog_documents_special_shiny_methods() -> None:
+    """Special Sinnoh shiny routes must remain explicit and auditable."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    content = catalog_path.read_text(encoding="utf-8")
+
+    assert "permanent Pokémon HOME gift" in content
+    assert "Hall of Origin encounter" in content
+    assert "limited-time Member Card" in content
+    assert "limited-time Oak's Letter" in content
