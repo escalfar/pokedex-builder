@@ -29,10 +29,7 @@ docs/batches/BATCH-020-shiny-paldea-kitagami-blueberry.md
 
 ### Gimmighoul and Gholdengo
 
-Chest Form and Roaming Form Gimmighoul remain `FALSE`. Shiny Chest Form has
-appeared only in limited-time Tera Raid Battle events and neither form has a
-permanent non-event shiny route. Gholdengo also remains `FALSE` because it must
-evolve from a shiny Gimmighoul.
+Chest Form and Gholdengo remain `TRUE`. Roaming Form Gimmighoul remains `FALSE`.
 
 ### Treasures of Ruin
 
@@ -69,7 +66,8 @@ through permanent wild, breeding, evolution, or outbreak methods.
 ## Tests added
 
 - Ordinary Paldea and DLC species classified as `TRUE`.
-- Both retained Gimmighoul forms and Gholdengo exclusions.
+- Both Gimmighoul Chest and Gholdengo inclusions.
+- Gimmighoul Roaming exclusion.
 - Treasures of Ruin and Koraidon/Miraidon exclusions.
 - Walking Wake, Iron Leaves, Loyal Three, Ogerpon, later Paradox legends,
   Terapagos, and Pecharunt exclusions.
