@@ -1,0 +1,132 @@
+version: "1.0"
+source:
+  title: "List of Pokémon with gender differences"
+  url: "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_with_gender_differences"
+
+# Every listed form is replaced by a Female/Male pair. Forms not listed remain
+# gender-neutral in the generated dataset. Regional forms therefore do not
+# inherit a species' normal-form difference automatically.
+gender_differences:
+  3: [normal]
+  12: [normal]
+  19: [normal]
+  20: [normal]
+  25: [normal]
+  26: [normal]
+  41: [normal]
+  42: [normal]
+  44: [normal]
+  45: [normal]
+  64: [normal]
+  65: [normal]
+  84: [normal]
+  85: [normal]
+  97: [normal]
+  111: [normal]
+  112: [normal]
+  118: [normal]
+  119: [normal]
+  123: [normal]
+  129: [normal]
+  130: [normal]
+  133: [normal]
+  154: [normal]
+  165: [normal]
+  166: [normal]
+  178: [normal]
+  185: [normal]
+  186: [normal]
+  190: [normal]
+  194: [normal]
+  195: [normal]
+  198: [normal]
+  202: [normal]
+  203: [normal]
+  207: [normal]
+  208: [normal]
+  212: [normal]
+  214: [normal]
+  215: [normal, hisui]
+  217: [normal]
+  221: [normal]
+  224: [normal]
+  229: [normal]
+  232: [normal]
+  255: [normal]
+  256: [normal]
+  257: [normal]
+  267: [normal]
+  269: [normal]
+  272: [normal]
+  274: [normal]
+  275: [normal]
+  307: [normal]
+  308: [normal]
+  315: [normal]
+  316: [normal]
+  317: [normal]
+  322: [normal]
+  323: [normal]
+  332: [normal]
+  350: [normal]
+  369: [normal]
+  396: [normal]
+  397: [normal]
+  398: [normal]
+  399: [normal]
+  400: [normal]
+  401: [normal]
+  402: [normal]
+  403: [normal]
+  404: [normal]
+  405: [normal]
+  407: [normal]
+  415: [normal]
+  417: [normal]
+  418: [normal]
+  419: [normal]
+  424: [normal]
+  443: [normal]
+  444: [normal]
+  445: [normal]
+  449: [normal]
+  450: [normal]
+  453: [normal]
+  454: [normal]
+  456: [normal]
+  457: [normal]
+  459: [normal]
+  460: [normal]
+  461: [normal]
+  464: [normal]
+  465: [normal]
+  473: [normal]
+  521: [normal]
+  592: [normal]
+  593: [normal]
+  668: [normal]
+  678: [normal]
+  876: [normal]
+  902: [normal]
+  916: [normal]
+
+# PokéAPI represents these genders as separate varieties. They are normalized
+# into the project's gender dimension so their IDs use FORM_FEMALE/FORM_MALE.
+source_gender_varieties:
+  unfezant-female: {gender: female, form_slug: normal}
+  unfezant-male: {gender: male, form_slug: normal}
+  frillish-female: {gender: female, form_slug: normal}
+  # PokéAPI uses the base/default variety name for these male forms.
+  frillish: {gender: male, form_slug: normal}
+  jellicent-female: {gender: female, form_slug: normal}
+  jellicent: {gender: male, form_slug: normal}
+  pyroar-female: {gender: female, form_slug: normal}
+  pyroar: {gender: male, form_slug: normal}
+  meowstic-female: {gender: female, form_slug: normal}
+  meowstic-male: {gender: male, form_slug: normal}
+  indeedee-female: {gender: female, form_slug: normal}
+  indeedee-male: {gender: male, form_slug: normal}
+  basculegion-female: {gender: female, form_slug: normal}
+  basculegion-male: {gender: male, form_slug: normal}
+  oinkologne-female: {gender: female, form_slug: normal}
+  oinkologne-male: {gender: male, form_slug: normal}

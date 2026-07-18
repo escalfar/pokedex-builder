@@ -1,0 +1,96 @@
+version: "1.0"
+
+regional_forms:
+  alola:
+    form_name: "Alolan"
+    generation: 7
+  galar:
+    form_name: "Galarian"
+    generation: 8
+  hisui:
+    form_name: "Hisuian"
+    generation: 8
+  paldea:
+    form_name: "Paldean"
+    generation: 9
+
+forms:
+  raichu-alola:
+    form_name: "Alolan"
+    display_name: "Alolan Raichu"
+    generation: 7
+
+  weezing-galar:
+    form_name: "Galarian"
+    display_name: "Galarian Weezing"
+    generation: 8
+
+  zoroark-hisui:
+    form_name: "Hisuian"
+    display_name: "Hisuian Zoroark"
+    generation: 8
+
+  tauros-paldea-combat-breed:
+    form_name: "Paldean Combat Breed"
+    display_name: "Paldean Tauros (Combat Breed)"
+    generation: 9
+
+  tauros-paldea-blaze-breed:
+    form_name: "Paldean Blaze Breed"
+    display_name: "Paldean Tauros (Blaze Breed)"
+    generation: 9
+
+  tauros-paldea-aqua-breed:
+    form_name: "Paldean Aqua Breed"
+    display_name: "Paldean Tauros (Aqua Breed)"
+    generation: 9
+
+  deoxys-attack:
+    form_name: "Attack"
+    display_name: "Attack Forme Deoxys"
+    generation: 3
+
+  deoxys-defense:
+    form_name: "Defense"
+    display_name: "Defense Forme Deoxys"
+    generation: 3
+
+  deoxys-speed:
+    form_name: "Speed"
+    display_name: "Speed Forme Deoxys"
+    generation: 3
+
+  rotom-heat:
+    form_name: "Heat"
+    display_name: "Heat Rotom"
+    generation: 4
+
+  rotom-wash:
+    form_name: "Wash"
+    display_name: "Wash Rotom"
+    generation: 4
+
+  rotom-frost:
+    form_name: "Frost"
+    display_name: "Frost Rotom"
+    generation: 4
+
+  rotom-fan:
+    form_name: "Fan"
+    display_name: "Fan Rotom"
+    generation: 4
+
+  rotom-mow:
+    form_name: "Mow"
+    display_name: "Mow Rotom"
+    generation: 4
+
+  shaymin-sky:
+    form_name: "Sky"
+    display_name: "Sky Forme Shaymin"
+    generation: 4
+
+  ursaluna-bloodmoon:
+    form_name: "Bloodmoon"
+    display_name: "Bloodmoon Ursaluna"
+    generation: 9

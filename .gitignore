@@ -22,3 +22,9 @@ output/*
 # Operating system
 .DS_Store
 Thumbs.db
+
+# Logs
+logs/
+
+# zips basura
+zips_gpt/

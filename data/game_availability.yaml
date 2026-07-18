@@ -1,0 +1,1527 @@
+version: "1.5"
+
+# The catalog remains incomplete while the remaining game groups and transfer-only sets are audited.
+# Unclassified variants continue to appear as FALSE in exports and as unknown
+# in Catalog_Coverage.json.
+complete: false
+
+games:
+  xy:
+    complete: true
+    # Source: PokéAPI Central, Coastal, and Mountain Kalos Pokédexes.
+    # Together they contain 454 non-event species obtainable across X/Y.
+    # Diancie, Hoopa, and Volcanion are absent because they require events.
+    national_dex:
+      - 50
+      - 51
+      - 54
+      - 55
+      - 108
+      - 111
+      - 112
+      - 174
+      - 202
+      - 235
+      - 238
+      - 241
+      - 406
+      - 407
+      - 425
+      - 426
+      - 430
+      - 438
+      - 439
+      - 441
+      - 475
+      - 476
+      - 479
+      - 504
+      - 505
+      - 538
+      - 539
+      - 594
+      - 597
+      - 598
+
+    national_dex_ranges:
+      - [1, 18]
+      - [21, 34]
+      - [39, 45]
+      - [60, 76]
+      - [79, 85]
+      - [90, 95]
+      - [100, 105]
+      - [115, 124]
+      - [127, 136]
+      - [142, 150]
+      - [161, 172]
+      - [179, 189]
+      - [193, 199]
+      - [206, 230]
+      - [246, 248]
+      - [261, 264]
+      - [270, 272]
+      - [276, 284]
+      - [290, 321]
+      - [324, 330]
+      - [333, 342]
+      - [352, 354]
+      - [358, 360]
+      - [366, 373]
+      - [396, 400]
+      - [412, 419]
+      - [433, 435]
+      - [443, 455]
+      - [458, 464]
+      - [469, 473]
+      - [509, 516]
+      - [524, 528]
+      - [531, 534]
+      - [543, 545]
+      - [550, 553]
+      - [557, 561]
+      - [568, 571]
+      - [574, 584]
+      - [587, 591]
+      - [607, 625]
+      - [631, 635]
+      - [650, 718]
+
+    home_ids: []
+
+    excluded_home_ids:
+      # Cosplay Pikachu costumes are exclusive to Omega Ruby/Alpha Sapphire.
+      - "00025_BELLE_NONE"
+      - "00025_LIBRE_NONE"
+      - "00025_PHD_NONE"
+      - "00025_POP_STAR_NONE"
+      - "00025_ROCK_STAR_NONE"
+
+      # Regional forms introduced after Pokémon X and Y.
+      - "00026_ALOLA_NONE"
+      - "00027_ALOLA_NONE"
+      - "00028_ALOLA_NONE"
+      - "00050_ALOLA_NONE"
+      - "00051_ALOLA_NONE"
+      - "00074_ALOLA_NONE"
+      - "00075_ALOLA_NONE"
+      - "00076_ALOLA_NONE"
+      - "00079_GALAR_NONE"
+      - "00080_GALAR_NONE"
+      - "00083_GALAR_NONE"
+      - "00100_HISUI_NONE"
+      - "00101_HISUI_NONE"
+      - "00103_ALOLA_NONE"
+      - "00105_ALOLA_NONE"
+      - "00122_GALAR_NONE"
+      - "00128_PALDEA_AQUA_BREED_NONE"
+      - "00128_PALDEA_BLAZE_BREED_NONE"
+      - "00128_PALDEA_COMBAT_BREED_NONE"
+      - "00144_GALAR_NONE"
+      - "00145_GALAR_NONE"
+      - "00146_GALAR_NONE"
+      - "00194_PALDEA_NONE"
+      - "00199_GALAR_NONE"
+      - "00211_HISUI_NONE"
+      - "00215_HISUI_FEMALE"
+      - "00215_HISUI_MALE"
+      - "00222_GALAR_NONE"
+      - "00263_GALAR_NONE"
+      - "00264_GALAR_NONE"
+      - "00550_WHITE_STRIPED_NONE"
+      - "00570_HISUI_NONE"
+      - "00571_HISUI_NONE"
+      - "00618_GALAR_NONE"
+      - "00705_HISUI_NONE"
+      - "00706_HISUI_NONE"
+      - "00713_HISUI_NONE"
+
+      # X/Y only contain Zygarde's original 50% Forme with Aura Break.
+      - "00718_10_NONE"
+      - "00718_10_POWER_CONSTRUCT_NONE"
+      - "00718_50_POWER_CONSTRUCT_NONE"
+
+  oras:
+    complete: false
+    # Sources: updated Hoenn Pokédex and post-National-Dex encounter systems.
+    # Method: DexNav / Mirage Spots / Soaring
+    # Obtainable through permanent in-game DexNav, Mirage Spot, or soaring encounters.
+    # Jirachi remains excluded because it requires an external distribution.
+    # Deoxys and all four retained Formes remain obtainable through the Delta
+    # Episode and the in-game meteorite form-change mechanic.
+    national_dex:
+      - 14
+      - 17
+      - 19
+      - 20
+      - 35
+      - 37
+      - 46
+      - 49
+      - 50
+      - 53
+      - 54
+      - 55
+      - 56
+      - 58
+      - 75
+      - 77
+      - 79
+      - 81
+      - 82
+      - 84
+      - 85
+      - 86
+      - 87
+      - 88
+      - 89
+      - 95
+      - 97
+      - 98
+      - 100
+      - 101
+      - 114
+      - 127
+      - 129
+      - 130
+      - 132
+      - 133
+      - 137
+      - 144
+      - 145
+      - 146
+      - 150
+      - 174
+      - 177
+      - 178
+      - 190
+      - 191
+      - 200
+      - 201
+      - 202
+      - 203
+      - 205
+      - 214
+      - 218
+      - 219
+      - 222
+      - 225
+      - 227
+      - 232
+      - 234
+      - 236
+      - 239
+      - 240
+      - 243
+      - 244
+      - 245
+      - 249
+      - 250
+      - 377
+      - 378
+      - 379
+      - 380
+      - 381
+      - 382
+      - 383
+      - 384
+      - 386
+      - 402
+      - 404
+      - 406
+      - 407
+      - 421
+      - 422
+      - 427
+      - 431
+      - 432
+      - 433
+      - 436
+      - 440
+      - 441
+      - 443
+      - 451
+      - 456
+      - 462
+      - 464
+      - 480
+      - 481
+      - 482
+      - 483
+      - 484
+      - 485
+      - 486
+      - 487
+      - 488
+      - 506
+      - 517
+      - 519
+      - 523
+      - 524
+      - 525
+      - 530
+      - 531
+      - 532
+      - 535
+      - 538
+      - 539
+      - 540
+      - 546
+      - 548
+      - 555
+      - 556
+      - 557
+      - 559
+      - 563
+      - 568
+      - 570
+      - 572
+      - 574
+      - 585
+      - 592
+      - 594
+      - 595
+      - 599
+      - 602
+      - 605
+      - 610
+      - 613
+      - 621
+      - 626
+      - 627
+      - 629
+      - 633
+      - 636
+      - 638
+      - 639
+      - 640
+      - 641
+      - 642
+      - 643
+      - 644
+      - 645
+      - 646
+      - 690
+      - 692
+      - 707
+      - 708
+      - 716
+      - 717
+
+    national_dex_ranges:
+      - [25, 28]
+      - [37, 45]
+      - [63, 68]
+      - [72, 76]
+      - [109, 112]
+      - [116, 121]
+      - [169, 172]
+      - [182, 184]
+      - [230, 232]
+      - [252, 384]
+      - [475, 478]
+
+    home_ids: []
+
+    # Explicit form exclusions override broad species-level method coverage.
+    excluded_home_ids:
+      - "00019_ALOLA_NONE"
+      - "00020_ALOLA_NONE"
+      - "00025_BELLE_NONE"
+      - "00025_LIBRE_NONE"
+      - "00025_PHD_NONE"
+      - "00025_POP_STAR_NONE"
+      - "00025_ROCK_STAR_NONE"
+      - "00026_ALOLA_NONE"
+      - "00027_ALOLA_NONE"
+      - "00028_ALOLA_NONE"
+      - "00037_ALOLA_NONE"
+      - "00038_ALOLA_NONE"
+      - "00052_ALOLA_NONE"
+      - "00052_GALAR_NONE"
+      - "00058_HISUI_NONE"
+      - "00059_HISUI_NONE"
+      - "00074_ALOLA_NONE"
+      - "00075_ALOLA_NONE"
+      - "00076_ALOLA_NONE"
+      - "00077_GALAR_NONE"
+      - "00078_GALAR_NONE"
+      - "00079_GALAR_NONE"
+      - "00080_GALAR_NONE"
+      - "00083_GALAR_NONE"
+      - "00088_ALOLA_NONE"
+      - "00089_ALOLA_NONE"
+      - "00100_HISUI_NONE"
+      - "00101_HISUI_NONE"
+      - "00110_GALAR_NONE"
+      - "00122_GALAR_NONE"
+      - "00128_PALDEA_AQUA_BREED_NONE"
+      - "00128_PALDEA_BLAZE_BREED_NONE"
+      - "00128_PALDEA_COMBAT_BREED_NONE"
+      - "00144_GALAR_NONE"
+      - "00145_GALAR_NONE"
+      - "00146_GALAR_NONE"
+      - "00194_PALDEA_NONE"
+      - "00199_GALAR_NONE"
+      - "00211_HISUI_NONE"
+      - "00215_HISUI_FEMALE"
+      - "00215_HISUI_MALE"
+      - "00222_GALAR_NONE"
+      - "00263_GALAR_NONE"
+      - "00264_GALAR_NONE"
+      - "00351_RAINY_NONE"
+      - "00351_SNOWY_NONE"
+      - "00351_SUNNY_NONE"
+      - "00549_HISUI_NONE"
+      - "00550_WHITE_STRIPED_NONE"
+      - "00570_HISUI_NONE"
+      - "00571_HISUI_NONE"
+      - "00618_GALAR_NONE"
+      - "00628_HISUI_NONE"
+      - "00705_HISUI_NONE"
+      - "00706_HISUI_NONE"
+      - "00713_HISUI_NONE"
+  sm:
+    complete: false
+    # Sources: original Alola Pokédex plus all daily Island Scan encounters.
+    # Method: Island Scan QR Code
+    # Island Scan species are obtainable only through Island Scan QR Codes.
+    # Method: QR Code
+    # Magearna is obtainable only through QR Code. Marshadow remains event-only.
+    national_dex:
+      - 46
+      - 47
+      - 69
+      - 96
+      - 97
+      - 111
+      - 113
+      - 115
+      - 116
+      - 123
+      - 142
+      - 143
+      - 152
+      - 155
+      - 158
+      - 183
+      - 185
+      - 186
+      - 209
+      - 210
+      - 212
+      - 215
+      - 220
+      - 222
+      - 225
+      - 227
+      - 233
+      - 235
+      - 278
+      - 279
+      - 283
+      - 284
+      - 288
+      - 296
+      - 297
+      - 299
+      - 302
+      - 315
+      - 324
+      - 339
+      - 340
+      - 359
+      - 361
+      - 362
+      - 363
+      - 397
+      - 404
+      - 422
+      - 423
+      - 425
+      - 426
+      - 429
+      - 430
+      - 438
+      - 440
+      - 456
+      - 457
+      - 461
+      - 462
+      - 466
+      - 467
+      - 468
+      - 470
+      - 471
+      - 474
+      - 476
+      - 478
+      - 497
+      - 500
+      - 503
+      - 534
+      - 542
+      - 543
+      - 574
+      - 578
+      - 587
+      - 594
+      - 599
+      - 604
+      - 607
+      - 610
+      - 633
+      - 674
+      - 675
+      - 700
+      - 718
+
+    national_dex_ranges:
+      - [10, 12]
+      - [19, 22]
+      - [25, 28]
+      - [35, 42]
+      - [50, 68]
+      - [72, 76]
+      - [79, 82]
+      - [88, 94]
+      - [102, 105]
+      - [118, 121]
+      - [125, 137]
+      - [147, 149]
+      - [165, 174]
+      - [196, 200]
+      - [239, 242]
+      - [318, 321]
+      - [327, 330]
+      - [349, 351]
+      - [369, 376]
+      - [408, 411]
+      - [443, 448]
+      - [506, 508]
+      - [524, 526]
+      - [546, 549]
+      - [551, 553]
+      - [564, 569]
+      - [582, 584]
+      - [627, 630]
+      - [661, 663]
+      - [703, 709]
+      - [722, 800]
+
+    # Method: QR Code
+    # Magearna is obtainable only through QR Code.
+    home_ids:
+      - "00801_NORMAL_NONE"
+
+    # Event-only, unsupported, temporary, or later-generation forms.
+    excluded_home_ids:
+      - "00802_NORMAL_NONE"
+      - "00019_NORMAL_FEMALE"
+      - "00019_NORMAL_MALE"
+      - "00020_NORMAL_FEMALE"
+      - "00020_NORMAL_MALE"
+      - "00026_NORMAL_FEMALE"
+      - "00026_NORMAL_MALE"
+      - "00027_NORMAL_NONE"
+      - "00028_NORMAL_NONE"
+      - "00037_NORMAL_NONE"
+      - "00038_NORMAL_NONE"
+      - "00050_NORMAL_NONE"
+      - "00051_NORMAL_NONE"
+      - "00052_NORMAL_NONE"
+      - "00053_NORMAL_NONE"
+      - "00074_NORMAL_NONE"
+      - "00075_NORMAL_NONE"
+      - "00076_NORMAL_NONE"
+      - "00088_NORMAL_NONE"
+      - "00089_NORMAL_NONE"
+      - "00103_NORMAL_NONE"
+      - "00105_NORMAL_NONE"
+      - "00025_BELLE_NONE"
+      - "00025_LIBRE_NONE"
+      - "00025_PHD_NONE"
+      - "00025_POP_STAR_NONE"
+      - "00025_ROCK_STAR_NONE"
+      - "00351_RAINY_NONE"
+      - "00351_SNOWY_NONE"
+      - "00351_SUNNY_NONE"
+      - "00744_OWN_TEMPO_NONE"
+      - "00745_DUSK_NONE"
+      - "00800_DAWN_NONE"
+      - "00800_DUSK_NONE"
+      - "00052_GALAR_NONE"
+      - "00058_HISUI_NONE"
+      - "00059_HISUI_NONE"
+      - "00079_GALAR_NONE"
+      - "00080_GALAR_NONE"
+      - "00128_PALDEA_COMBAT_BREED_NONE"
+      - "00128_PALDEA_BLAZE_BREED_NONE"
+      - "00128_PALDEA_AQUA_BREED_NONE"
+      - "00199_GALAR_NONE"
+      - "00215_HISUI_NONE"
+      - "00222_GALAR_NONE"
+      - "00549_HISUI_NONE"
+      - "00628_HISUI_NONE"
+      - "00705_HISUI_NONE"
+      - "00706_HISUI_NONE"
+      - "00724_HISUI_NONE"
+  usum:
+    complete: false
+    # Sources: updated Alola Pokédex, Island Scan, and Ultra Warp Ride.
+    # Method: Island Scan QR Code
+    # Island Scan species are obtainable only through Island Scan QR Codes.
+    # Method: QR Code
+    # Magearna is obtainable only through QR Code.
+    # Method: Ultra Warp Ride
+    # Ultra Warp Ride is a permanent in-game method for non-Legendary species,
+    # Ultra Beasts, and prior-generation Legendary Pokémon.
+    # Marshadow and Zeraora remain event-only.
+    national_dex:
+      - 1
+      - 4
+      - 7
+      - 15
+      - 18
+      - 95
+      - 108
+      - 111
+      - 113
+      - 115
+      - 116
+      - 144
+      - 145
+      - 146
+      - 150
+      - 190
+      - 195
+      - 212
+      - 219
+      - 220
+      - 233
+      - 235
+      - 243
+      - 244
+      - 245
+      - 249
+      - 250
+      - 253
+      - 256
+      - 259
+      - 271
+      - 274
+      - 277
+      - 280
+      - 299
+      - 306
+      - 308
+      - 324
+      - 326
+      - 334
+      - 357
+      - 359
+      - 363
+      - 377
+      - 378
+      - 379
+      - 380
+      - 381
+      - 382
+      - 383
+      - 384
+      - 388
+      - 391
+      - 394
+      - 419
+      - 450
+      - 452
+      - 460
+      - 469
+      - 474
+      - 476
+      - 478
+      - 479
+      - 480
+      - 481
+      - 482
+      - 483
+      - 484
+      - 485
+      - 486
+      - 487
+      - 488
+      - 531
+      - 542
+      - 558
+      - 561
+      - 581
+      - 587
+      - 604
+      - 607
+      - 610
+      - 618
+      - 638
+      - 639
+      - 640
+      - 641
+      - 642
+      - 643
+      - 644
+      - 645
+      - 646
+      - 652
+      - 655
+      - 658
+      - 664
+      - 679
+      - 689
+      - 695
+      - 716
+      - 717
+      - 718
+
+    national_dex_ranges:
+      - [10, 12]
+      - [19, 28]
+      - [35, 42]
+      - [46, 47]
+      - [50, 68]
+      - [72, 76]
+      - [79, 82]
+      - [86, 94]
+      - [96, 97]
+      - [102, 105]
+      - [118, 143]
+      - [147, 149]
+      - [163, 174]
+      - [177, 181]
+      - [185, 186]
+      - [196, 200]
+      - [204, 206]
+      - [209, 210]
+      - [214, 215]
+      - [222, 229]
+      - [238, 242]
+      - [246, 248]
+      - [278, 279]
+      - [283, 284]
+      - [296, 297]
+      - [302, 303]
+      - [309, 310]
+      - [318, 321]
+      - [327, 330]
+      - [339, 354]
+      - [361, 362]
+      - [366, 376]
+      - [408, 411]
+      - [422, 430]
+      - [438, 440]
+      - [443, 448]
+      - [456, 458]
+      - [461, 463]
+      - [466, 467]
+      - [470, 471]
+      - [506, 508]
+      - [524, 526]
+      - [546, 553]
+      - [559, 560]
+      - [564, 573]
+      - [582, 584]
+      - [592, 594]
+      - [605, 606]
+      - [619, 625]
+      - [627, 630]
+      - [636, 637]
+      - [661, 663]
+      - [667, 671]
+      - [674, 676]
+      - [686, 687]
+      - [690, 693]
+      - [696, 709]
+      - [714, 715]
+      - [722, 800]
+      - [803, 806]
+
+    # Method: QR Code
+    # Magearna is obtainable only through QR Code.
+    # Marshadow and Zeraora stay excluded.
+    home_ids:
+      - "00801_NORMAL_NONE"
+
+    # Event-only, unsupported, temporary, or later-generation forms.
+    excluded_home_ids:
+      - "00019_NORMAL_FEMALE"
+      - "00019_NORMAL_MALE"
+      - "00020_NORMAL_FEMALE"
+      - "00020_NORMAL_MALE"
+      - "00025_BELLE_NONE"
+      - "00025_LIBRE_NONE"
+      - "00025_PHD_NONE"
+      - "00025_POP_STAR_NONE"
+      - "00025_ROCK_STAR_NONE"
+      - "00026_NORMAL_FEMALE"
+      - "00026_NORMAL_MALE"
+      - "00027_NORMAL_NONE"
+      - "00028_NORMAL_NONE"
+      - "00037_NORMAL_NONE"
+      - "00038_NORMAL_NONE"
+      - "00050_NORMAL_NONE"
+      - "00051_NORMAL_NONE"
+      - "00052_GALAR_NONE"
+      - "00052_NORMAL_NONE"
+      - "00053_NORMAL_NONE"
+      - "00058_HISUI_NONE"
+      - "00059_HISUI_NONE"
+      - "00074_NORMAL_NONE"
+      - "00075_NORMAL_NONE"
+      - "00076_NORMAL_NONE"
+      - "00079_GALAR_NONE"
+      - "00080_GALAR_NONE"
+      - "00088_NORMAL_NONE"
+      - "00089_NORMAL_NONE"
+      - "00103_NORMAL_NONE"
+      - "00105_NORMAL_NONE"
+      - "00122_GALAR_NONE"
+      - "00128_PALDEA_AQUA_BREED_NONE"
+      - "00128_PALDEA_BLAZE_BREED_NONE"
+      - "00128_PALDEA_COMBAT_BREED_NONE"
+      - "00144_GALAR_NONE"
+      - "00145_GALAR_NONE"
+      - "00146_GALAR_NONE"
+      - "00199_GALAR_NONE"
+      - "00215_HISUI_FEMALE"
+      - "00215_HISUI_MALE"
+      - "00222_GALAR_NONE"
+      - "00351_RAINY_NONE"
+      - "00351_SNOWY_NONE"
+      - "00351_SUNNY_NONE"
+      - "00549_HISUI_NONE"
+      - "00550_WHITE_STRIPED_NONE"
+      - "00570_HISUI_NONE"
+      - "00571_HISUI_NONE"
+      - "00618_GALAR_NONE"
+      - "00705_HISUI_NONE"
+      - "00706_HISUI_NONE"
+      - "00724_HISUI_NONE"
+      - "00744_OWN_TEMPO_NONE"
+      - "00745_DUSK_NONE"
+      - "00802_NORMAL_NONE"
+      - "00807_NORMAL_NONE"
+  lgpe:
+    complete: true
+    # The paired games support the original Kanto collection through Mewtwo.
+    # Species-level inclusion also covers the 18 Alolan forms obtainable from
+    # repeatable NPC trades or by evolving those traded forms.
+    national_dex: []
+    national_dex_ranges:
+      - [1, 150]
+    home_ids: []
+
+    # Regional forms introduced after Let's Go share a Kanto National Dex
+    # number, so they must override the broad 1-150 species range.
+    excluded_home_ids:
+      - "00052_GALAR_NONE"              # Galarian Meowth
+      - "00058_HISUI_NONE"              # Hisuian Growlithe
+      - "00059_HISUI_NONE"              # Hisuian Arcanine
+      - "00077_GALAR_NONE"              # Galarian Ponyta
+      - "00078_GALAR_NONE"              # Galarian Rapidash
+      - "00079_GALAR_NONE"              # Galarian Slowpoke
+      - "00080_GALAR_NONE"              # Galarian Slowbro
+      - "00083_GALAR_NONE"              # Galarian Farfetch'd
+      - "00100_HISUI_NONE"              # Hisuian Voltorb
+      - "00101_HISUI_NONE"              # Hisuian Electrode
+      - "00110_GALAR_NONE"              # Galarian Weezing
+      - "00122_GALAR_NONE"              # Galarian Mr. Mime
+      - "00128_PALDEA_COMBAT_BREED_NONE" # Paldean Tauros: Combat Breed
+      - "00128_PALDEA_BLAZE_BREED_NONE"  # Paldean Tauros: Blaze Breed
+      - "00128_PALDEA_AQUA_BREED_NONE"   # Paldean Tauros: Aqua Breed
+      - "00144_GALAR_NONE"              # Galarian Articuno
+      - "00145_GALAR_NONE"              # Galarian Zapdos
+      - "00146_GALAR_NONE"              # Galarian Moltres
+
+  swsh:
+    complete: false
+    # Sources: Galar, Isle of Armor, and Crown Tundra Pokédexes.
+    # Method: Dynamax Adventures
+    # Obtainable through the permanent in-game Dynamax Adventures feature:
+    # listed Legendary Pokémon, Ultra Beasts, and Hoenn first-partner lines.
+    # Zarude remains event-only.
+    national_dex:
+      - 72
+      - 73
+      - 98
+      - 99
+      - 144
+      - 145
+      - 146
+      - 150
+      - 163
+      - 164
+      - 199
+      - 202
+      - 206
+      - 208
+      - 230
+      - 233
+      - 243
+      - 244
+      - 245
+      - 249
+      - 250
+      - 253
+      - 254
+      - 256
+      - 257
+      - 259
+      - 260
+      - 263
+      - 264
+      - 298
+      - 309
+      - 310
+      - 315
+      - 324
+      - 333
+      - 334
+      - 355
+      - 356
+      - 369
+      - 380
+      - 381
+      - 382
+      - 383
+      - 384
+      - 415
+      - 416
+      - 470
+      - 471
+      - 480
+      - 481
+      - 482
+      - 483
+      - 484
+      - 485
+      - 487
+      - 488
+      - 638
+      - 639
+      - 640
+      - 641
+      - 642
+      - 643
+      - 644
+      - 645
+      - 646
+      - 674
+      - 675
+      - 716
+      - 717
+      - 718
+      - 785
+      - 786
+      - 787
+      - 788
+      - 791
+      - 792
+      - 793
+      - 794
+      - 795
+      - 796
+      - 797
+      - 798
+      - 799
+      - 800
+      - 805
+      - 806
+
+    national_dex_ranges:
+      - [1, 12]
+      - [25, 45]
+      - [50, 55]
+      - [58, 68]
+      - [77, 83]
+      - [90, 95]
+      - [102, 149]
+      - [169, 178]
+      - [182, 186]
+      - [194, 197]
+      - [211, 215]
+      - [220, 227]
+      - [236, 242]
+      - [246, 248]
+      - [270, 275]
+      - [278, 282]
+      - [290, 295]
+      - [302, 306]
+      - [318, 321]
+      - [328, 330]
+      - [337, 350]
+      - [359, 365]
+      - [371, 379]
+      - [403, 407]
+      - [420, 423]
+      - [425, 428]
+      - [434, 440]
+      - [442, 454]
+      - [458, 468]
+      - [473, 475]
+      - [477, 479]
+      - [506, 510]
+      - [517, 521]
+      - [524, 539]
+      - [543, 579]
+      - [582, 584]
+      - [587, 593]
+      - [595, 601]
+      - [605, 640]
+      - [659, 663]
+      - [677, 715]
+      - [736, 738]
+      - [742, 773]
+      - [776, 778]
+      - [780, 784]
+      - [810, 892]
+      - [894, 898]
+
+    home_ids: []
+
+    # Unsupported, event-only, or non-depositable forms.
+    excluded_home_ids:
+      - "00025_BELLE_NONE"
+      - "00025_LIBRE_NONE"
+      - "00025_PHD_NONE"
+      - "00025_POP_STAR_NONE"
+      - "00025_ROCK_STAR_NONE"
+      - "00058_HISUI_NONE"
+      - "00059_HISUI_NONE"
+      - "00100_HISUI_NONE"
+      - "00101_HISUI_NONE"
+      - "00128_PALDEA_AQUA_BREED_NONE"
+      - "00128_PALDEA_BLAZE_BREED_NONE"
+      - "00128_PALDEA_COMBAT_BREED_NONE"
+      - "00194_PALDEA_NONE"
+      - "00211_HISUI_NONE"
+      - "00215_HISUI_FEMALE"
+      - "00215_HISUI_MALE"
+      - "00549_HISUI_NONE"
+      - "00550_WHITE_STRIPED_NONE"
+      - "00570_HISUI_NONE"
+      - "00571_HISUI_NONE"
+      - "00628_HISUI_NONE"
+      - "00705_HISUI_NONE"
+      - "00706_HISUI_NONE"
+      - "00713_HISUI_NONE"
+      - "00893_NORMAL_NONE"
+      - "00893_DADA_NONE"
+      - "00898_ICE_NONE"
+      - "00898_SHADOW_NONE"
+  pla:
+    complete: true
+    # Source: Hisui Pokédex in Pokémon Legends: Arceus (242 species).
+    # Darkrai is obtainable only with BDSP save data; Shaymin is obtainable only
+    # with Sword/Shield save data. Both are permanent research requests after
+    # viewing the end credits and therefore count as TRUE.
+    national_dex:
+      - 25
+      - 26
+      - 41
+      - 42
+      - 46
+      - 47
+      - 54
+      - 55
+      - 58
+      - 59
+      - 81
+      - 82
+      - 100
+      - 101
+      - 108
+      - 122
+      - 123
+      - 125
+      - 126
+      - 129
+      - 130
+      - 143
+      - 169
+      - 172
+      - 173
+      - 175
+      - 176
+      - 185
+      - 190
+      - 193
+      - 200
+      - 201
+      - 207
+      - 208
+      - 211
+      - 212
+      - 220
+      - 221
+      - 223
+      - 224
+      - 226
+      - 233
+      - 234
+      - 239
+      - 240
+      - 242
+      - 299
+      - 315
+      - 339
+      - 340
+      - 355
+      - 356
+      - 358
+      - 570
+      - 571
+      - 627
+      - 628
+      - 641
+      - 642
+      - 645
+      - 700
+      - 712
+      - 713
+
+    national_dex_ranges:
+      - [35, 38]
+      - [63, 68]
+      - [72, 78]
+      - [92, 95]
+      - [111, 114]
+      - [133, 137]
+      - [155, 157]
+      - [196, 198]
+      - [214, 217]
+      - [265, 269]
+      - [280, 282]
+      - [361, 365]
+      - [387, 493]
+      - [501, 503]
+      - [548, 550]
+      - [704, 706]
+      - [722, 724]
+      - [899, 905]
+
+    # Save-data-gated permanent research requests (Darkrai and both Shaymin forms).
+    home_ids:
+      - "00491_NORMAL_NONE"
+      - "00492_NORMAL_NONE"
+      - "00492_SKY_NONE"
+
+    # Forms not obtainable in Hisui despite sharing an included species ID.
+    excluded_home_ids:
+      - "00157_NORMAL_NONE"
+      - "00503_NORMAL_NONE"
+      - "00724_NORMAL_NONE"
+      - "00058_NORMAL_NONE"
+      - "00059_NORMAL_NONE"
+      - "00100_NORMAL_NONE"
+      - "00101_NORMAL_NONE"
+      - "00211_NORMAL_NONE"
+      - "00549_NORMAL_NONE"
+      - "00570_NORMAL_NONE"
+      - "00571_NORMAL_NONE"
+      - "00628_NORMAL_NONE"
+      - "00705_NORMAL_NONE"
+      - "00706_NORMAL_NONE"
+      - "00713_NORMAL_NONE"
+      - "00550_NORMAL_NONE"
+      - "00550_BLUE_STRIPED_NONE"
+      - "00026_ALOLA_NONE"
+      - "00077_GALAR_NONE"
+      - "00078_GALAR_NONE"
+      - "00122_GALAR_NONE"
+      - "00901_BLOODMOON_NONE"
+  bdsp:
+    complete: true
+    # Sources: BDSP National Pokédex and official save-data bonuses.
+    # Mew is obtainable only with Let's Go save data, Jirachi only with
+    # Sword/Shield save data, and Arceus only with qualifying completed
+    # Legends: Arceus save data. These permanent unlocks count as TRUE.
+    national_dex: []
+
+    national_dex_ranges:
+      - [1, 493]
+
+    # Permanent save-data rewards/unlock (Mew, Jirachi, and Arceus).
+    home_ids:
+      - "00151_NORMAL_NONE"
+      - "00385_NORMAL_NONE"
+      - "00493_NORMAL_NONE"
+
+    # Unsupported regional, temporary, transfer-only, or expired-event forms.
+    excluded_home_ids:
+      - "00019_ALOLA_NONE"
+      - "00020_ALOLA_NONE"
+      - "00026_ALOLA_NONE"
+      - "00027_ALOLA_NONE"
+      - "00028_ALOLA_NONE"
+      - "00037_ALOLA_NONE"
+      - "00038_ALOLA_NONE"
+      - "00050_ALOLA_NONE"
+      - "00051_ALOLA_NONE"
+      - "00052_ALOLA_NONE"
+      - "00052_GALAR_NONE"
+      - "00053_ALOLA_NONE"
+      - "00058_HISUI_NONE"
+      - "00059_HISUI_NONE"
+      - "00074_ALOLA_NONE"
+      - "00075_ALOLA_NONE"
+      - "00076_ALOLA_NONE"
+      - "00077_GALAR_NONE"
+      - "00078_GALAR_NONE"
+      - "00079_GALAR_NONE"
+      - "00080_GALAR_NONE"
+      - "00083_GALAR_NONE"
+      - "00088_ALOLA_NONE"
+      - "00089_ALOLA_NONE"
+      - "00100_HISUI_NONE"
+      - "00101_HISUI_NONE"
+      - "00103_ALOLA_NONE"
+      - "00105_ALOLA_NONE"
+      - "00110_GALAR_NONE"
+      - "00122_GALAR_NONE"
+      - "00128_PALDEA_AQUA_BREED_NONE"
+      - "00128_PALDEA_BLAZE_BREED_NONE"
+      - "00128_PALDEA_COMBAT_BREED_NONE"
+      - "00144_GALAR_NONE"
+      - "00145_GALAR_NONE"
+      - "00146_GALAR_NONE"
+      - "00157_HISUI_NONE"
+      - "00194_PALDEA_NONE"
+      - "00199_GALAR_NONE"
+      - "00211_HISUI_NONE"
+      - "00215_HISUI_FEMALE"
+      - "00215_HISUI_MALE"
+      - "00222_GALAR_NONE"
+      - "00263_GALAR_NONE"
+      - "00264_GALAR_NONE"
+      - "00025_BELLE_NONE"
+      - "00025_LIBRE_NONE"
+      - "00025_PHD_NONE"
+      - "00025_POP_STAR_NONE"
+      - "00025_ROCK_STAR_NONE"
+      - "00351_RAINY_NONE"
+      - "00351_SNOWY_NONE"
+      - "00351_SUNNY_NONE"
+      - "00251_NORMAL_NONE"
+      - "00386_NORMAL_NONE"
+      - "00386_ATTACK_NONE"
+      - "00386_DEFENSE_NONE"
+      - "00386_SPEED_NONE"
+      - "00489_NORMAL_NONE"
+      - "00490_NORMAL_NONE"
+      - "00491_NORMAL_NONE"
+      - "00492_NORMAL_NONE"
+      - "00492_SKY_NONE"
+  sv:
+    complete: true
+    # Sources: Paldea, Kitakami, and Blueberry Pokédexes.
+    # Method: Mystery Gift
+    # Pecharunt is obtainable only through Mystery Gift, which unlocks the epilogue.
+    # Walking Wake and Iron Leaves remain excluded because their native encounters
+    # are limited-time events.
+    national_dex: []
+
+    national_dex_ranges:
+      - [1, 9]
+      - [23, 28]
+      - [35, 40]
+      - [43, 45]
+      - [48, 62]
+      - [69, 76]
+      - [79, 82]
+      - [84, 94]
+      - [96, 97]
+      - [100, 103]
+      - [106, 107]
+      - [109, 113]
+      - [116, 117]
+      - [123, 123]
+      - [125, 126]
+      - [128, 137]
+      - [143, 143]
+      - [147, 149]
+      - [152, 164]
+      - [167, 168]
+      - [170, 174]
+      - [179, 200]
+      - [203, 207]
+      - [209, 212]
+      - [214, 221]
+      - [225, 225]
+      - [227, 237]
+      - [239, 240]
+      - [242, 242]
+      - [246, 248]
+      - [252, 262]
+      - [270, 275]
+      - [278, 289]
+      - [296, 299]
+      - [302, 302]
+      - [307, 308]
+      - [311, 314]
+      - [316, 317]
+      - [322, 326]
+      - [328, 336]
+      - [339, 342]
+      - [349, 350]
+      - [353, 358]
+      - [361, 362]
+      - [370, 376]
+      - [387, 398]
+      - [401, 405]
+      - [408, 411]
+      - [415, 419]
+      - [422, 426]
+      - [429, 430]
+      - [433, 438]
+      - [440, 440]
+      - [442, 450]
+      - [453, 454]
+      - [456, 457]
+      - [459, 462]
+      - [464, 464]
+      - [466, 467]
+      - [469, 479]
+      - [495, 503]
+      - [522, 523]
+      - [529, 530]
+      - [532, 534]
+      - [540, 542]
+      - [546, 553]
+      - [559, 560]
+      - [570, 581]
+      - [585, 586]
+      - [590, 591]
+      - [594, 596]
+      - [602, 604]
+      - [607, 615]
+      - [619, 620]
+      - [622, 625]
+      - [627, 630]
+      - [633, 637]
+      - [650, 658]
+      - [661, 673]
+      - [677, 678]
+      - [686, 687]
+      - [690, 693]
+      - [700, 709]
+      - [712, 715]
+      - [722, 745]
+      - [747, 754]
+      - [757, 758]
+      - [761, 766]
+      - [769, 770]
+      - [774, 775]
+      - [778, 779]
+      - [782, 784]
+      - [810, 823]
+      - [833, 834]
+      - [837, 849]
+      - [854, 861]
+      - [868, 879]
+      - [884, 887]
+      - [900, 902]
+      - [904, 904]
+      - [906, 1008]
+      - [1011, 1024]
+
+    # Method: Mystery Gift
+    # Pecharunt is obtainable only through Mystery Gift.
+    home_ids:
+      - "01025_NORMAL_NONE"
+
+    # Temporary ride modes remain unavailable as stored forms.
+    excluded_home_ids:
+      - "00025_BELLE_NONE"
+      - "00025_LIBRE_NONE"
+      - "00025_PHD_NONE"
+      - "00025_POP_STAR_NONE"
+      - "00025_ROCK_STAR_NONE"
+      - "01007_GLIDING_BUILD_NONE"
+      - "01007_LIMITED_BUILD_NONE"
+      - "01007_SPRINTING_BUILD_NONE"
+      - "01007_SWIMMING_BUILD_NONE"
+      - "01008_AQUATIC_MODE_NONE"
+      - "01008_DRIVE_MODE_NONE"
+      - "01008_GLIDE_MODE_NONE"
+      - "01008_LOW_POWER_MODE_NONE"
+  za:
+    # The base Lumiose Pokédex, Mega Dimension Pokédex, and current Pokémon
+    # HOME compatibility are audited here. Regional forms that can be brought
+    # into the game through HOME inherit species-level availability.
+    complete: true
+
+    # Union of the 232-species Lumiose Pokédex and the 132-species Mega
+    # Dimension Pokédex. The two regional lists do not overlap (364 species).
+    national_dex:
+      - 35
+      - 36
+      - 52
+      - 53
+      - 56
+      - 57
+      - 79
+      - 80
+      - 83
+      - 104
+      - 105
+      - 115
+      - 127
+      - 129
+      - 130
+      - 142
+      - 196
+      - 197
+      - 199
+      - 208
+      - 211
+      - 212
+      - 214
+      - 225
+      - 233
+      - 322
+      - 323
+      - 325
+      - 326
+      - 349
+      - 350
+      - 358
+      - 359
+      - 361
+      - 362
+      - 406
+      - 407
+      - 427
+      - 428
+      - 433
+      - 439
+      - 459
+      - 460
+      - 470
+      - 471
+      - 474
+      - 475
+      - 478
+      - 479
+      - 485
+      - 491
+      - 504
+      - 505
+      - 538
+      - 539
+      - 559
+      - 560
+      - 562
+      - 563
+      - 568
+      - 569
+      - 587
+      - 590
+      - 591
+      - 615
+      - 618
+      - 622
+      - 623
+      - 739
+      - 740
+      - 778
+      - 780
+      - 801
+      - 802
+      - 827
+      - 828
+      - 848
+      - 849
+      - 852
+      - 853
+      - 863
+      - 870
+      - 876
+      - 877
+      - 900
+      - 904
+      - 926
+      - 927
+      - 951
+      - 952
+      - 967
+
+    national_dex_ranges:
+      - [1, 9]
+      - [13, 18]
+      - [23, 26]
+      - [39, 42]
+      - [63, 71]
+      - [92, 95]
+      - [120, 123]
+      - [133, 137]
+      - [147, 150]
+      - [152, 154]
+      - [158, 160]
+      - [167, 169]
+      - [172, 174]
+      - [179, 181]
+      - [227, 229]
+      - [246, 248]
+      - [252, 260]
+      - [280, 282]
+      - [302, 310]
+      - [315, 319]
+      - [333, 336]
+      - [352, 354]
+      - [371, 376]
+      - [380, 384]
+      - [396, 398]
+      - [443, 445]
+      - [447, 450]
+      - [498, 500]
+      - [509, 518]
+      - [529, 531]
+      - [543, 545]
+      - [551, 553]
+      - [582, 584]
+      - [602, 604]
+      - [607, 609]
+      - [638, 640]
+      - [647, 721]
+      - [767, 770]
+      - [807, 809]
+      - [821, 823]
+      - [865, 867]
+      - [931, 937]
+      - [942, 945]
+      - [957, 959]
+      - [969, 973]
+      - [977, 979]
+      - [996, 1000]
+
+    home_ids:
+      # Eternal Flower Floette is obtainable in Legends: Z-A and is retained as
+      # a distinct storable form instead of being filtered out globally.
+      - "00670_ETERNAL_NONE"
+
+      # Method: Mystery Gift
+      # These Pokémon are obtainable only through Mystery Gift.
+      # They remain TRUE in the game-availability catalog because this column
+      # records whether the Pokémon can be obtained in the game; event-free
+      # shiny availability is tracked separately by the shiny catalog.
+      - "00150_NORMAL_NONE"  # Mewtwo
+      - "00719_NORMAL_NONE"  # Diancie
+      - "00807_NORMAL_NONE"  # Zeraora
+
+    excluded_home_ids:
+      # Regional forms are intentionally not excluded. Current HOME support
+      # allows compatible regional variants to be transferred into Z-A.
+
+      # Cosplay Pikachu costumes are not depositable HOME forms.
+      - "00025_BELLE_NONE"
+      - "00025_LIBRE_NONE"
+      - "00025_PHD_NONE"
+      - "00025_POP_STAR_NONE"
+      - "00025_ROCK_STAR_NONE"

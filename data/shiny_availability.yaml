@@ -1,0 +1,276 @@
+version: "1.2"
+
+# Every retained HOME variant has now been audited. Entries matched by a range or
+# explicit inclusion are TRUE; explicit exclusions are FALSE.
+complete: true
+
+# Batch 12: Kanto species except Mew.
+# Every retained HOME variant whose National Dex number is 001-150 has a
+# permanent, non-event shiny acquisition method. Pokémon GO is ignored when a
+# supported core game already provides such a method. The three shiny Galarian
+# legendary birds are the documented exception because GO is currently their
+# only permanent, non-event legitimate source:
+#   00144_GALAR_NONE, 00145_GALAR_NONE, 00146_GALAR_NONE.
+national_dex: []
+national_dex_ranges:
+  - [1, 150]
+
+  # Batch 13: Johto. Every retained HOME variant with Nat Dex 152-251
+  # has a legitimate non-event shiny method. This includes later regional
+  # variants such as Hisuian Typhlosion, Hisuian Qwilfish, Hisuian Sneasel,
+  # Galarian Corsola, Galarian Slowking, and Paldean Wooper.
+  #
+  # Celebi is the special case in this tranche: it is obtainable shiny only
+  # from the in-game GS Ball encounter in the Nintendo 3DS Virtual Console
+  # release of Pokémon Crystal. The method is not a distribution event, but it
+  # now requires a legacy installation of Crystal and access to Pokémon Bank
+  # to move the result forward into Pokémon HOME. Pokémon GO is therefore not
+  # used for Celebi under the project's source-priority rule.
+  - [152, 251]
+
+  # Batch 14: Hoenn. Every retained HOME variant with Nat Dex 252-386
+  # has a legitimate non-event shiny method. This includes later regional
+  # variants associated with Hoenn species, such as Galarian Zigzagoon and
+  # Galarian Linoone.
+  #
+  # Jirachi is obtainable shiny through the North American Pokémon Colosseum
+  # Bonus Disc or Pokémon Channel. These are legacy game-based distributions,
+  # not limited-time Mystery Gift events. Pokémon GO is not used.
+  #
+  # Deoxys is permanently shiny-huntable through the AuroraTicket encounter in
+  # the Nintendo Switch re-releases of Pokémon FireRed and LeafGreen. The caught
+  # shiny can be changed among Normal, Attack, Defense, and Speed Formes in later
+  # compatible games, so all retained Deoxys forms are covered.
+  # Pokémon GO is not used.
+  - [252, 386]
+
+
+  # Batch 15: Sinnoh. Retained HOME variants with Nat Dex 387-493 are
+  # classified here. Most species have permanent shiny methods in supported
+  # core games. The special cases are documented below.
+  #
+  # Manaphy is obtainable shiny as a permanent Pokémon HOME gift for completing
+  # the Sinnoh Pokédex from Brilliant Diamond and Shining Pearl. Phione remains
+  # covered because it can be bred from Manaphy in compatible games.
+  #
+  # Arceus is permanently shiny-huntable in Brilliant Diamond and Shining Pearl
+  # through the Hall of Origin encounter after meeting the Pokémon Legends:
+  # Arceus save-data and progression requirements.
+  #
+  # Darkrai and both Shaymin forms are excluded below. Their legitimate shiny
+  # methods depend on limited-time event items or event-style Pokémon GO access,
+  # so they do not satisfy the project's non-event rule.
+  - [387, 493]
+
+  # Batch 16: Unova. Retained HOME variants with Nat Dex 494-649 are
+  # classified here. Most species have permanent shiny methods in supported
+  # core games. The Mythical exceptions are documented below.
+  #
+  # Shiny Keldeo is a permanent Pokémon HOME Pokédex-completion reward for
+  # completing the Galar, Isle of Armor, and Crown Tundra Pokédexes from
+  # Pokémon Sword or Pokémon Shield. Both retained Keldeo forms are covered.
+  #
+  # Shiny Meloetta is a permanent Pokémon HOME Pokédex-completion reward for
+  # completing the Paldea, Kitakami, and Blueberry Pokédexes from Pokémon
+  # Scarlet or Pokémon Violet. Pokémon GO is not used for either reward.
+  #
+  # Victini and Genesect are excluded below. Victini has no permanent legal
+  # shiny method. Genesect's legal shiny releases have depended on limited
+  # distributions or rotating/event Pokémon GO availability, which does not
+  # satisfy the project's non-event rule.
+  - [494, 649]
+
+  # Batch 17: Kalos. Retained HOME variants with Nat Dex 650-721 are
+  # classified here. Most species have permanent shiny methods in supported
+  # games. The form and Mythical exceptions are documented below.
+  #
+  # Xerneas, Yveltal, and every retained Zygarde form are covered through
+  # permanent Dynamax Adventures encounters in The Crown Tundra. A caught
+  # Zygarde can be changed among its retained forms in compatible games.
+  #
+  # Shiny Volcanion is a permanent Pokémon HOME Pokédex-completion reward for
+  # completing the Lumiose, Hyperspace, and Mega Evolution Pokédexes from
+  # Pokémon Legends: Z-A. Pokémon GO is not used because this permanent HOME
+  # method exists.
+  #
+  # Eternal Flower Floette, Diancie, and both retained Hoopa forms are excluded
+  # below. Eternal Flower Floette has never had a legitimate release; Diancie's
+  # shiny releases have been limited distributions; and Hoopa has no permanent
+  # legitimate shiny acquisition method.
+  - [650, 721]
+
+  # Batch 18: Alola. Retained HOME variants with Nat Dex 722-809 are
+  # classified here. Most species have permanent shiny methods in supported
+  # games. The legendary and Mythical exceptions are documented below.
+  #
+  # The guardian deities, Ultra Beasts, and Necrozma are covered through
+  # permanent encounters such as Ultra Warp Ride and Dynamax Adventures.
+  #
+  # Shiny Meltan is a permanent Pokémon HOME Pokédex-completion reward for
+  # completing the Kanto Pokédex from Pokémon: Let's Go, Pikachu! or Pokémon:
+  # Let's Go, Eevee! Pokémon GO is not used because this permanent HOME method
+  # exists. Shiny Melmetal remains excluded because Meltan can evolve only in
+  # Pokémon GO, and Pokémon received in HOME cannot be transferred back to GO.
+  #
+  # Solgaleo and Lunala are obtainable shiny through permanent Dynamax
+  # Adventures encounters in The Crown Tundra. Cosmog, Cosmoem, Magearna,
+  # Marshadow, Zeraora, and Melmetal are excluded below because their legitimate
+  # shiny availability is unreleased or limited to time-bound events.
+  - [722, 809]
+
+  # Batch 19: Galar and Hisui. Retained HOME variants with Nat Dex 810-905
+  # are classified here. Most species have permanent shiny methods through
+  # breeding, wild encounters, Max Raid Battles, Dynamax Adventures, or
+  # Pokémon Legends: Arceus outbreaks and encounters.
+  #
+  # Regieleki and Regidrago remain included because their Crown Tundra temple
+  # encounters are not shiny-locked. Shiny Enamorus is included through the
+  # permanent Pokémon HOME gift for completing the Hisui Pokédex from Pokémon
+  # Legends: Arceus.
+  #
+  # Zacian, Zamazenta, Eternatus, Kubfu, both Urshifu styles, both Zarude
+  # forms, Glastrier, Spectrier, and all retained Calyrex forms are excluded
+  # below. Their legitimate shiny availability is either unreleased or limited
+  # to time-bound distributions, so it does not satisfy the project rule.
+  - [810, 905]
+
+  # Batch 20: Paldea, Kitakami, and Blueberry. Retained HOME variants with
+  # Nat Dex 906-1025 are classified here. Ordinary species and evolutions are
+  # covered through permanent wild encounters, breeding, outbreaks, raids, or
+  # evolution methods in Pokémon Scarlet and Pokémon Violet.
+  #
+  # Chest Form Gimmighoul is permanently shiny obtainable through encounters in
+  # Pokémon Legends: Z-A – Mega Dimension. Gholdengo is therefore obtainable by
+  # evolving a shiny Chest Form Gimmighoul. Roaming Form remains excluded because
+  # its shiny availability is limited to time-bound Pokémon GO periods.
+  #
+  # The four Treasures of Ruin received shiny distributions after limited 2025
+  # raid challenges. Koraidon and Miraidon also received limited 2025 serial-code
+  # distributions. These event releases do not satisfy the project rule.
+  #
+  # Walking Wake, Iron Leaves, the Loyal Three, Ogerpon, the later Paradox
+  # legends, Terapagos, and Pecharunt have no permanent legitimate shiny route.
+  # Their retained catalog forms are excluded below.
+  - [906, 1025]
+
+# Use form-level inclusions only when a species-wide rule would be too broad.
+home_ids: []
+
+excluded_home_ids:
+  # Shiny Mew has only been obtainable through event-limited distributions or
+  # event/ticket research. It therefore does not satisfy the project rule.
+  - "00151_NORMAL_NONE"
+
+  # Darkrai requires a limited-time Member Card encounter or rotating/event
+  # Pokémon GO access. Neither is a permanent non-event method.
+  - "00491_NORMAL_NONE"
+
+  # Shaymin requires the limited-time Oak's Letter encounter or event-style
+  # Pokémon GO research. Both retained forms therefore remain unavailable.
+  - "00492_NORMAL_NONE"
+  - "00492_SKY_NONE"
+  # Victini has no permanent legitimate shiny acquisition method.
+  - "00494_NORMAL_NONE"
+
+  # Genesect's legitimate shiny releases require limited distributions or
+  # rotating/event Pokémon GO availability. Pokémon GO is therefore not used.
+  - "00649_NORMAL_NONE"
+
+  # Eternal Flower Floette has never been legitimately released, shiny or
+  # otherwise, so the retained catalog form cannot satisfy the acquisition rule.
+  - "00670_ETERNAL_NONE"
+
+  # Shiny Diancie has only been released through limited distributions. The
+  # permanent Legends: Z-A encounter is shiny-locked.
+  - "00719_NORMAL_NONE"
+
+  # Hoopa has no permanent legitimate shiny acquisition method. Both retained
+  # forms remain unavailable because form changing does not create Shininess.
+  - "00720_NORMAL_NONE"
+  - "00720_UNBOUND_NONE"
+  # Cosmog and Cosmoem have never had a legitimate shiny release. Solgaleo and
+  # Lunala remain included through permanent Dynamax Adventures encounters.
+  - "00789_NORMAL_NONE"
+  - "00790_NORMAL_NONE"
+
+  # Magearna and Marshadow have no legitimate shiny acquisition method.
+  - "00801_NORMAL_NONE"
+  - "00802_NORMAL_NONE"
+
+  # Shiny Zeraora was available only as a time-limited Pokémon HOME Mystery
+  # Gift in 2020, so it does not satisfy the permanent non-event rule.
+  - "00807_NORMAL_NONE"
+
+  # Shiny Melmetal requires evolving Shiny Meltan in Pokémon GO during periods
+  # when Shiny Meltan is enabled. The permanent HOME reward cannot return to GO.
+  - "00809_NORMAL_NONE"
+  # Zacian, Zamazenta, and Eternatus have only had limited-time shiny
+  # distributions. Their permanent encounters remain shiny-locked.
+  - "00888_NORMAL_NONE"
+  - "00889_NORMAL_NONE"
+  - "00890_NORMAL_NONE"
+
+  # Kubfu and both Urshifu styles have no catchable legitimate shiny release.
+  # A briefly shiny raid-boss Urshifu caused by an event oversight could not be
+  # caught and therefore does not count as an acquisition method.
+  - "00891_NORMAL_NONE"
+  - "00892_SINGLE_STRIKE_NONE"
+  - "00892_RAPID_STRIKE_NONE"
+
+  # Zarude and Dada Zarude have no legitimate shiny acquisition method.
+  - "00893_NORMAL_NONE"
+  - "00893_DADA_NONE"
+
+  # Glastrier, Spectrier, and Calyrex are shiny-locked in their permanent Crown
+  # Tundra encounters and have not received a permanent legitimate shiny route.
+  - "00896_NORMAL_NONE"
+  - "00897_NORMAL_NONE"
+  - "00898_NORMAL_NONE"
+  - "00898_ICE_NONE"
+  - "00898_SHADOW_NONE"
+
+  # Roaming Form Gimmighoul has no permanent non-event shiny route. Its shiny
+  # availability has depended on time-bound Pokémon GO periods. Chest Form and
+  # Gholdengo remain included through Pokémon Legends: Z-A – Mega Dimension.
+  - "00999_ROAMING_NONE"
+
+  # The Treasures of Ruin were released shiny only through time-limited 2025
+  # raid-challenge rewards. Their permanent shrine encounters are shiny-locked.
+  - "01001_NORMAL_NONE"
+  - "01002_NORMAL_NONE"
+  - "01003_NORMAL_NONE"
+  - "01004_NORMAL_NONE"
+
+  # Koraidon and Miraidon received shiny serial-code distributions in 2025, but
+  # their permanent story encounters are shiny-locked. Every retained ride form
+  # therefore remains unavailable under the non-event rule.
+  - "01007_NORMAL_NONE"
+  - "01007_GLIDING_BUILD_NONE"
+  - "01007_LIMITED_BUILD_NONE"
+  - "01007_SPRINTING_BUILD_NONE"
+  - "01007_SWIMMING_BUILD_NONE"
+  - "01008_NORMAL_NONE"
+  - "01008_AQUATIC_MODE_NONE"
+  - "01008_DRIVE_MODE_NONE"
+  - "01008_GLIDE_MODE_NONE"
+  - "01008_LOW_POWER_MODE_NONE"
+
+  # Walking Wake and Iron Leaves are limited-event encounters and have no
+  # permanent legitimate shiny acquisition method.
+  - "01009_NORMAL_NONE"
+  - "01010_NORMAL_NONE"
+
+  # The Loyal Three and Ogerpon are shiny-locked in their permanent encounters.
+  - "01014_NORMAL_NONE"
+  - "01015_NORMAL_NONE"
+  - "01016_NORMAL_NONE"
+  - "01017_NORMAL_NONE"
+
+  # The Indigo Disk Paradox legends, Terapagos, and Pecharunt have no permanent
+  # legitimate shiny acquisition route.
+  - "01020_NORMAL_NONE"
+  - "01021_NORMAL_NONE"
+  - "01022_NORMAL_NONE"
+  - "01023_NORMAL_NONE"
+  - "01024_NORMAL_NONE"
+  - "01025_NORMAL_NONE"
