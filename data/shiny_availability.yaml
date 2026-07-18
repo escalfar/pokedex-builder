@@ -80,6 +80,25 @@ national_dex_ranges:
   # satisfy the project's non-event rule.
   - [494, 649]
 
+  # Batch 17: Kalos. Retained HOME variants with Nat Dex 650-721 are
+  # classified here. Most species have permanent shiny methods in supported
+  # games. The form and Mythical exceptions are documented below.
+  #
+  # Xerneas, Yveltal, and every retained Zygarde form are covered through
+  # permanent Dynamax Adventures encounters in The Crown Tundra. A caught
+  # Zygarde can be changed among its retained forms in compatible games.
+  #
+  # Shiny Volcanion is a permanent Pokémon HOME Pokédex-completion reward for
+  # completing the Lumiose, Hyperspace, and Mega Evolution Pokédexes from
+  # Pokémon Legends: Z-A. Pokémon GO is not used because this permanent HOME
+  # method exists.
+  #
+  # Eternal Flower Floette, Diancie, and both retained Hoopa forms are excluded
+  # below. Eternal Flower Floette has never had a legitimate release; Diancie's
+  # shiny releases have been limited distributions; and Hoopa has no permanent
+  # legitimate shiny acquisition method.
+  - [650, 721]
+
 # Use form-level inclusions only when a species-wide rule would be too broad.
 home_ids: []
 
@@ -102,4 +121,17 @@ excluded_home_ids:
   # Genesect's legitimate shiny releases require limited distributions or
   # rotating/event Pokémon GO availability. Pokémon GO is therefore not used.
   - "00649_NORMAL_NONE"
+
+  # Eternal Flower Floette has never been legitimately released, shiny or
+  # otherwise, so the retained catalog form cannot satisfy the acquisition rule.
+  - "00670_ETERNAL_NONE"
+
+  # Shiny Diancie has only been released through limited distributions. The
+  # permanent Legends: Z-A encounter is shiny-locked.
+  - "00719_NORMAL_NONE"
+
+  # Hoopa has no permanent legitimate shiny acquisition method. Both retained
+  # forms remain unavailable because form changing does not create Shininess.
+  - "00720_NORMAL_NONE"
+  - "00720_UNBOUND_NONE"
 

@@ -387,3 +387,60 @@ def test_unova_catalog_documents_permanent_home_rewards_and_exclusions() -> None
     assert "Victini has no permanent legitimate shiny" in content
     assert "rotating/event Pokémon GO availability" in content
     assert "Pokémon GO is therefore not used" in content
+
+
+def test_kalos_catalog_classifies_permanent_methods_and_exclusions() -> None:
+    """Kalos keeps permanent methods and excludes unreleased/event-only forms."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+
+    (
+        chespin,
+        eternal_floette,
+        hisuian_goodra,
+        zygarde,
+        zygarde_10,
+        diancie,
+        hoopa,
+        unbound_hoopa,
+        volcanion,
+    ) = apply_shiny_availability(
+        (
+            build_entry(national_dex=650, home_id="00650_NORMAL_NONE"),
+            build_entry(national_dex=670, home_id="00670_ETERNAL_NONE"),
+            build_entry(national_dex=706, home_id="00706_HISUI_NONE"),
+            build_entry(national_dex=718, home_id="00718_NORMAL_NONE"),
+            build_entry(national_dex=718, home_id="00718_10_NONE"),
+            build_entry(national_dex=719, home_id="00719_NORMAL_NONE"),
+            build_entry(national_dex=720, home_id="00720_NORMAL_NONE"),
+            build_entry(national_dex=720, home_id="00720_UNBOUND_NONE"),
+            build_entry(national_dex=721, home_id="00721_NORMAL_NONE"),
+        ),
+        rules,
+    )
+
+    assert chespin.obtainable_shiny is True
+    assert eternal_floette.obtainable_shiny is False
+    assert hisuian_goodra.obtainable_shiny is True
+    assert zygarde.obtainable_shiny is True
+    assert zygarde_10.obtainable_shiny is True
+    assert diancie.obtainable_shiny is False
+    assert hoopa.obtainable_shiny is False
+    assert unbound_hoopa.obtainable_shiny is False
+    assert volcanion.obtainable_shiny is True
+
+
+def test_kalos_catalog_documents_home_reward_and_special_exclusions() -> None:
+    """Special Kalos shiny decisions must remain explicit and auditable."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    content = catalog_path.read_text(encoding="utf-8")
+
+    assert "permanent Dynamax Adventures encounters" in content
+    assert "Lumiose, Hyperspace, and Mega Evolution Pokédexes" in content
+    assert "Eternal Flower Floette has never been legitimately released" in content
+    assert "permanent Legends: Z-A encounter is shiny-locked" in content
+    assert "Hoopa has no permanent legitimate shiny" in content

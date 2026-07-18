@@ -734,3 +734,34 @@ def test_unova_shiny_catalog_classifies_true_and_false_sample_rows() -> None:
     assert report.shiny.verified_false == 2
     assert report.shiny.unknown == 0
     assert report.shiny.percent == 100.0
+
+
+def test_kalos_shiny_catalog_classifies_true_and_false_sample_rows() -> None:
+    """The Kalos tranche reports permanent and excluded rows correctly."""
+    catalog_path = (
+        Path(__file__).resolve().parents[1] / "data" / "shiny_availability.yaml"
+    )
+    shiny_rules = ShinyAvailabilityRules.from_yaml(catalog_path)
+    entries = (
+        build_entry(national_dex=650, name="Chespin", home_id="00650_NORMAL_NONE"),
+        build_entry(
+            national_dex=670,
+            name="Eternal Flower Floette",
+            home_id="00670_ETERNAL_NONE",
+        ),
+        build_entry(national_dex=718, name="Zygarde", home_id="00718_10_NONE"),
+        build_entry(national_dex=719, name="Diancie", home_id="00719_NORMAL_NONE"),
+        build_entry(national_dex=720, name="Hoopa", home_id="00720_NORMAL_NONE"),
+        build_entry(national_dex=721, name="Volcanion", home_id="00721_NORMAL_NONE"),
+    )
+
+    report = build_catalog_coverage_report(
+        entries,
+        build_game_rules(),
+        shiny_rules,
+    )
+
+    assert report.shiny.verified_true == 3
+    assert report.shiny.verified_false == 3
+    assert report.shiny.unknown == 0
+    assert report.shiny.percent == 100.0
