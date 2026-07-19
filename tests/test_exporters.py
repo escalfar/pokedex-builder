@@ -47,7 +47,7 @@ def test_export_csv_creates_expected_columns(
     assert list(rows[0]) == [column.value for column in OUTPUT_COLUMNS]
     assert rows[0]["Nat Dex"] == "26"
     assert rows[0]["Nombre"] == "Alolan Raichu"
-    assert rows[0]["X/Y"] == "FALSE"
+    assert rows[0]["XY"] == "FALSE"
     assert rows[0]["Obtenible"] == "TRUE"
 
 
@@ -68,7 +68,7 @@ def test_export_json_preserves_native_booleans(
     assert len(payload) == 1
     assert payload[0]["Nat Dex"] == 26
     assert payload[0]["Nombre"] == "Alolan Raichu"
-    assert payload[0]["X/Y"] is False
+    assert payload[0]["XY"] is False
     assert payload[0]["Obtenible"] is True
 
 

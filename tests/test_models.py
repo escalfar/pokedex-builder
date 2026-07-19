@@ -125,7 +125,7 @@ def test_entry_exports_only_final_columns() -> None:
     assert row["Nombre"] == "Female Pikachu"
     assert row["Gen"] == 1
     assert row["ID HOME"] == "00025_NORMAL_FEMALE"
-    assert row["X/Y"] is False
+    assert row["XY"] is False
     assert row["Obtenible"] is True
     assert "Gender" not in row
     assert len(row) == 18
