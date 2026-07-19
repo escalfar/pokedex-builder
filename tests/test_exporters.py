@@ -47,7 +47,8 @@ def test_export_csv_creates_expected_columns(
     assert list(rows[0]) == [column.value for column in OUTPUT_COLUMNS]
     assert rows[0]["Nat Dex"] == "26"
     assert rows[0]["Nombre"] == "Alolan Raichu"
-    assert rows[0]["XY"] == "FALSE"
+    assert rows[0]["Obtenido"] == ""
+    assert rows[0]["X/Y"] == "FALSE"
     assert rows[0]["Obtenible"] == "TRUE"
 
 
@@ -68,7 +69,8 @@ def test_export_json_preserves_native_booleans(
     assert len(payload) == 1
     assert payload[0]["Nat Dex"] == 26
     assert payload[0]["Nombre"] == "Alolan Raichu"
-    assert payload[0]["XY"] is False
+    assert payload[0]["Obtenido"] is None
+    assert payload[0]["X/Y"] is False
     assert payload[0]["Obtenible"] is True
 
 
@@ -109,10 +111,57 @@ def test_export_excel_creates_four_expected_sheets(tmp_path: Path) -> None:
         sheet = workbook["Pokédex"]
         assert sheet.freeze_panes == "A2"
         assert sheet["A1"].value == "Nat Dex"
-        assert sheet["D2"].value == "Raichu (Alolan)"
-        assert sheet["R2"].value is True
+        assert sheet["F2"].value == "Raichu (Alolan)"
+        assert sheet["G2"].value is None
+        assert sheet["S2"].value is True
         assert sheet.auto_filter.ref == sheet.dimensions
         assert len(sheet.tables) == 0
+    finally:
+        workbook.close()
+
+
+def test_export_excel_uses_requested_column_order_and_hidden_columns(
+    tmp_path: Path,
+) -> None:
+    from openpyxl import load_workbook
+
+    from pokedex.exporter_excel import export_excel
+
+    output_path = tmp_path / "Pokedex.xlsx"
+    export_excel((build_entry(),), output_path)
+
+    workbook = load_workbook(output_path, data_only=True)
+    try:
+        sheet = workbook["Pokédex"]
+        headers = [cell.value for cell in sheet[1]]
+        assert headers == [
+            "Nat Dex",
+            "Pokemon",
+            "Forma",
+            "Gen",
+            "ID HOME",
+            "Nombre",
+            "Obtenido",
+            "X/Y",
+            "ORAS",
+            "SM",
+            "USUM",
+            "LGPE",
+            "SwSh",
+            "Arceus",
+            "BDSP",
+            "ScVi",
+            "ZA",
+            "Legendario/Mítico",
+            "Obtenible",
+        ]
+        assert {
+            column
+            for column in ("B", "C", "D", "E", "R", "S")
+            if sheet.column_dimensions[column].hidden
+        } == {"B", "C", "D", "E", "R", "S"}
+        assert sheet.column_dimensions["F"].hidden is False
+        assert sheet.column_dimensions["G"].hidden is False
     finally:
         workbook.close()
 
@@ -164,7 +213,7 @@ def test_excel_name_starts_with_species_without_changing_other_exports(
 
     workbook = load_workbook(output_path, data_only=True)
     try:
-        assert workbook["Pokédex"]["D2"].value == "Raichu (Alolan)"
+        assert workbook["Pokédex"]["F2"].value == "Raichu (Alolan)"
     finally:
         workbook.close()
 
@@ -229,7 +278,7 @@ def test_excel_adds_selected_base_form_labels_only_to_nombre(
     workbook = load_workbook(output_path, data_only=True)
     try:
         names = [
-            workbook["Pokédex"].cell(row=row, column=4).value
+            workbook["Pokédex"].cell(row=row, column=6).value
             for row in range(2, len(entries) + 2)
         ]
     finally:
@@ -289,7 +338,7 @@ def test_excel_uses_matching_flower_order_and_eternal_floette_last(
     workbook = load_workbook(output_path, data_only=True)
     try:
         names = [
-            workbook["Pokédex"].cell(row=row, column=4).value
+            workbook["Pokédex"].cell(row=row, column=6).value
             for row in range(2, len(entries) + 2)
         ]
     finally:
@@ -347,7 +396,7 @@ def test_excel_simplifies_selected_form_labels_only_in_nombre(tmp_path: Path) ->
     workbook = load_workbook(output_path, data_only=True)
     try:
         names = [
-            workbook["Pokédex"].cell(row=row, column=4).value
+            workbook["Pokédex"].cell(row=row, column=6).value
             for row in range(2, len(entries) + 2)
         ]
     finally:

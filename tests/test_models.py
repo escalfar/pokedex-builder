@@ -123,12 +123,13 @@ def test_entry_exports_only_final_columns() -> None:
     assert row["Pokemon"] == "Pikachu"
     assert row["Forma"] == "Female"
     assert row["Nombre"] == "Female Pikachu"
+    assert row["Obtenido"] is None
     assert row["Gen"] == 1
     assert row["ID HOME"] == "00025_NORMAL_FEMALE"
-    assert row["XY"] is False
+    assert row["X/Y"] is False
     assert row["Obtenible"] is True
     assert "Gender" not in row
-    assert len(row) == 18
+    assert len(row) == 19
 
 
 def test_models_reject_boolean_as_integer() -> None:

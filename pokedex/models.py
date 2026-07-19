@@ -236,9 +236,10 @@ class PokemonEntry:
             "Nat Dex": self.national_dex,
             "Pokemon": self.pokemon,
             "Forma": self.form,
-            "Nombre": self.name,
             "Gen": self.generation,
             "ID HOME": self.home_id,
+            "Nombre": self.name,
+            "Obtenido": None,
         }
 
         row.update(self.availability.to_dict())

@@ -19,7 +19,7 @@ GENDER_SORT_ORDER: dict[Gender, int] = {
 class GameColumn(StrEnum):
     """Supported game availability columns."""
 
-    XY = "XY"
+    XY = "X/Y"
     ORAS = "ORAS"
     SM = "SM"
     USUM = "USUM"
@@ -37,9 +37,10 @@ class OutputColumn(StrEnum):
     NAT_DEX = "Nat Dex"
     POKEMON = "Pokemon"
     FORM = "Forma"
-    NAME = "Nombre"
     GENERATION = "Gen"
     HOME_ID = "ID HOME"
+    NAME = "Nombre"
+    OBTAINED = "Obtenido"
 
     XY = GameColumn.XY
     ORAS = GameColumn.ORAS

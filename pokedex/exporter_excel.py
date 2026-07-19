@@ -9,7 +9,7 @@ from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.worksheet import Worksheet
 
-from pokedex.constants import OUTPUT_COLUMNS, ExcelSheet, GameColumn
+from pokedex.constants import OUTPUT_COLUMNS, ExcelSheet, GameColumn, OutputColumn
 from pokedex.exceptions import PokedexError
 from pokedex.models import PokemonEntry
 
@@ -171,6 +171,23 @@ def _populate_pokedex_sheet(
                 )
 
     _set_column_widths(sheet, headers)
+    _hide_internal_columns(sheet, headers)
+
+
+def _hide_internal_columns(sheet: Worksheet, headers: list[str]) -> None:
+    """Hide internal and reference columns in the primary Excel worksheet."""
+    hidden_headers = {
+        OutputColumn.POKEMON.value,
+        OutputColumn.FORM.value,
+        OutputColumn.GENERATION.value,
+        OutputColumn.HOME_ID.value,
+        OutputColumn.LEGENDARY_MYTHICAL.value,
+        OutputColumn.OBTAINABLE_SHINY.value,
+    }
+
+    for index, header in enumerate(headers, start=1):
+        if header in hidden_headers:
+            sheet.column_dimensions[get_column_letter(index)].hidden = True
 
 
 def _excel_ordered_entries(
@@ -345,7 +362,7 @@ def _validation_checks(
         (
             "Columnas completas",
             not invalid_rows,
-            ", ".join(invalid_rows) or "Todas las filas tienen 18 columnas",
+            ", ".join(invalid_rows) or "Todas las filas tienen 19 columnas",
         ),
         (
             "Orden por Pokédex",
@@ -362,6 +379,7 @@ def _set_column_widths(sheet: Worksheet, headers: list[str]) -> None:
         "Pokemon": 20,
         "Forma": 24,
         "Nombre": 34,
+        "Obtenido": 14,
         "Gen": 8,
         "ID HOME": 30,
         "Legendario/Mítico": 20,
