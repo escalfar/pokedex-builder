@@ -129,8 +129,9 @@ def test_entry_exports_only_final_columns() -> None:
     assert row["ID HOME"] == "00025_NORMAL_FEMALE"
     assert row["XY"] is False
     assert row["Obtenible"] is True
+    assert row["Posibles"] is None
     assert "Gender" not in row
-    assert len(row) == 20
+    assert len(row) == 21
 
 
 def test_models_reject_boolean_as_integer() -> None:

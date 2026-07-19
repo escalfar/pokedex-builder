@@ -223,15 +223,16 @@ La tabla principal contiene:
 18. `ZA`
 19. `Legendario/Mítico`
 20. `Obtenible`
+21. `Posibles`
 
-La dimensión interna de género no se exporta como una columna separada. Se refleja en `Forma`, `Nombre` e `ID HOME`.
+La dimensión interna de género no se exporta como una columna separada. Se refleja en `Forma`, `Nombre` e `ID HOME`. En Excel, `Posibles` se calcula con una fórmula y permanece oculta; en CSV y JSON se exporta vacía para conservar el mismo esquema de columnas.
 
 ## Excel
 
 `Pokedex.xlsx` contiene:
 
 - `Pokédex`: tabla completa con filtros y encabezados fijos.
-- `Resumen`: métricas generales y disponibilidad por juego.
+- `Resumen`: métricas generales, disponibilidad por juego y seguimiento dinámico de `Obtenido`/`Posibles`.
 - `Validación`: resultados de verificaciones automáticas.
 - `Metadatos`: versión, fecha UTC y número de registros.
 

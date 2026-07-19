@@ -51,6 +51,7 @@ def test_export_csv_creates_expected_columns(
     assert rows[0]["Prioridad"] == ""
     assert rows[0]["XY"] == "FALSE"
     assert rows[0]["Obtenible"] == "TRUE"
+    assert rows[0]["Posibles"] == ""
 
 
 def test_export_json_preserves_native_booleans(
@@ -74,6 +75,7 @@ def test_export_json_preserves_native_booleans(
     assert payload[0]["Prioridad"] is None
     assert payload[0]["XY"] is False
     assert payload[0]["Obtenible"] is True
+    assert payload[0]["Posibles"] is None
 
 
 def test_json_uses_unescaped_unicode(
@@ -117,6 +119,7 @@ def test_export_excel_creates_four_expected_sheets(tmp_path: Path) -> None:
         assert sheet["G2"].value == "☐"
         assert sheet["H2"].value is None
         assert sheet["T2"].value is True
+        assert sheet["U2"].value is None
         assert sheet.auto_filter.ref == sheet.dimensions
         assert len(sheet.tables) == 0
     finally:
@@ -158,12 +161,13 @@ def test_export_excel_uses_requested_column_order_and_hidden_columns(
             "ZA",
             "Legendario/Mítico",
             "Obtenible",
+            "Posibles",
         ]
         assert {
             column
-            for column in ("B", "C", "D", "E", "S", "T")
+            for column in ("B", "C", "D", "E", "S", "T", "U")
             if sheet.column_dimensions[column].hidden
-        } == {"B", "C", "D", "E", "S", "T"}
+        } == {"B", "C", "D", "E", "S", "T", "U"}
         assert sheet.column_dimensions["F"].hidden is False
         assert sheet.column_dimensions["G"].hidden is False
         assert sheet.column_dimensions["H"].hidden is False
@@ -201,6 +205,38 @@ def test_export_excel_summary_and_metadata(tmp_path: Path) -> None:
         assert metadata["B4"].value == "1.2.3"
         assert metadata["B6"].value == generated_at.isoformat()
         assert validation["B4"].value == "OK"
+    finally:
+        workbook.close()
+
+
+def test_export_excel_adds_possible_formulas_summary_and_dex_alignment(
+    tmp_path: Path,
+) -> None:
+    from openpyxl import load_workbook
+
+    from pokedex.exporter_excel import export_excel
+
+    output_path = tmp_path / "Pokedex.xlsx"
+    export_excel((build_entry(),), output_path)
+
+    workbook = load_workbook(output_path, data_only=False)
+    try:
+        pokedex = workbook["Pokédex"]
+        summary = workbook["Resumen"]
+
+        assert pokedex["A2"].alignment.horizontal == "center"
+        assert pokedex["U2"].value == '=OR(G2="☑",T2=TRUE)'
+        assert pokedex.column_dimensions["U"].hidden is True
+
+        assert summary["A7"].value == "Total obtenidos"
+        assert summary["B7"].value == "=COUNTIF('Pokédex'!$G$2:$G$2,\"☑\")"
+        assert summary["A8"].value == "Total no obtenidos"
+        assert summary["B8"].value == "=COUNTIF('Pokédex'!$G$2:$G$2,\"☐\")"
+        assert summary["A9"].value == "Total posibles"
+        assert summary["B9"].value == "=COUNTIF('Pokédex'!$U$2:$U$2,TRUE)"
+        assert summary["A10"].value == "Porcentaje obtenidos / posibles"
+        assert summary["B10"].value == "=IFERROR(B7/B9,0)"
+        assert summary["B10"].number_format == "0.00%"
     finally:
         workbook.close()
 
@@ -453,17 +489,16 @@ def test_export_excel_adds_tracking_validations_and_conditional_formats(
         obtained_rules = list(sheet.conditional_formatting["G2"])
         priority_rules = list(sheet.conditional_formatting["H2"])
         assert len(obtained_rules) == 1
-        assert obtained_rules[0].type == "expression"
-        assert obtained_rules[0].formula == ['G2="☑"']
+        assert obtained_rules[0].type == "cellIs"
+        assert obtained_rules[0].operator == "equal"
+        assert obtained_rules[0].formula == ['"☑"']
+        assert obtained_rules[0].stopIfTrue is True
 
-        assert len(priority_rules) == 2
-        zero_rule = next(rule for rule in priority_rules if rule.type == "cellIs")
-        color_scale_rule = next(
-            rule for rule in priority_rules if rule.type == "colorScale"
-        )
-        assert zero_rule.operator == "equal"
-        assert zero_rule.formula == ["0"]
-        assert zero_rule.stopIfTrue is True
-        assert color_scale_rule.colorScale is not None
+        assert len(priority_rules) == 11
+        assert all(rule.type == "cellIs" for rule in priority_rules)
+        assert [rule.formula for rule in priority_rules] == [
+            [str(value)] for value in range(11)
+        ]
+        assert all(rule.stopIfTrue is True for rule in priority_rules)
     finally:
         workbook.close()

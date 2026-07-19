@@ -56,6 +56,7 @@ class OutputColumn(StrEnum):
 
     LEGENDARY_MYTHICAL = "Legendario/Mítico"
     OBTAINABLE_SHINY = "Obtenible"
+    POSSIBLE = "Posibles"
 
 
 class ExcelSheet(StrEnum):

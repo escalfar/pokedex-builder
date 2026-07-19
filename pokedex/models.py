@@ -246,6 +246,8 @@ class PokemonEntry:
         row.update(self.availability.to_dict())
         row["Legendario/Mítico"] = self.legendary_mythical
         row["Obtenible"] = self.obtainable_shiny
+        # Calculated with an Excel formula in the workbook exporter.
+        row["Posibles"] = None
 
         return row
 

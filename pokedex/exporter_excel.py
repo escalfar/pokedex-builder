@@ -5,7 +5,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from openpyxl import Workbook
-from openpyxl.formatting.rule import CellIsRule, ColorScaleRule, FormulaRule
+from openpyxl.formatting.rule import CellIsRule
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.utils import get_column_letter
@@ -23,6 +23,18 @@ _BOOLEAN_TRUE_FILL = PatternFill("solid", fgColor="E2F0D9")
 _BOOLEAN_FALSE_FILL = PatternFill("solid", fgColor="FCE4D6")
 _OBTAINED_FILL = PatternFill("solid", fgColor="5B9BD5")
 _PRIORITY_ZERO_FILL = PatternFill("solid", fgColor="D9D2E9")
+_PRIORITY_FILLS: dict[int, PatternFill] = {
+    1: PatternFill("solid", fgColor="F8696B"),
+    2: PatternFill("solid", fgColor="FA7F6A"),
+    3: PatternFill("solid", fgColor="FB9569"),
+    4: PatternFill("solid", fgColor="FDAA68"),
+    5: PatternFill("solid", fgColor="FFC067"),
+    6: PatternFill("solid", fgColor="FFDA68"),
+    7: PatternFill("solid", fgColor="D8D96D"),
+    8: PatternFill("solid", fgColor="B1D872"),
+    9: PatternFill("solid", fgColor="8AD777"),
+    10: PatternFill("solid", fgColor="63BE7B"),
+}
 
 _EXCEL_BASE_FORM_LABELS: dict[str, str] = {
     "Deoxys": "Normal",
@@ -94,6 +106,9 @@ def export_excel(
 
     timestamp = generated_at or datetime.now(UTC)
     workbook = Workbook()
+    workbook.calculation.calcMode = "auto"
+    workbook.calculation.fullCalcOnLoad = True
+    workbook.calculation.forceFullCalc = True
 
     try:
         pokedex_sheet = workbook.active
@@ -148,6 +163,8 @@ def _populate_pokedex_sheet(
         export_row["Nombre"] = _excel_display_name(entry)
         sheet.append([export_row[header] for header in headers])
 
+    _add_possible_formulas(sheet, headers)
+
     sheet.freeze_panes = "A2"
     # Use a worksheet-level filter instead of an OOXML structured table.
     # This preserves filtering in Excel while avoiding table repair warnings.
@@ -174,9 +191,34 @@ def _populate_pokedex_sheet(
                     _BOOLEAN_TRUE_FILL if cell.value is True else _BOOLEAN_FALSE_FILL
                 )
 
+    _center_national_dex(sheet, headers)
     _add_tracking_controls(sheet, headers)
     _set_column_widths(sheet, headers)
     _hide_internal_columns(sheet, headers)
+
+
+def _add_possible_formulas(sheet: Worksheet, headers: list[str]) -> None:
+    """Populate the hidden Posibles column with row-relative formulas."""
+    obtained_column = headers.index(OutputColumn.OBTAINED.value) + 1
+    obtainable_column = headers.index(OutputColumn.OBTAINABLE_SHINY.value) + 1
+    possible_column = headers.index(OutputColumn.POSSIBLE.value) + 1
+    obtained_letter = get_column_letter(obtained_column)
+    obtainable_letter = get_column_letter(obtainable_column)
+
+    for row_number in range(2, sheet.max_row + 1):
+        sheet.cell(row=row_number, column=possible_column).value = (
+            f'=OR({obtained_letter}{row_number}="☑",'
+            f"{obtainable_letter}{row_number}=TRUE)"
+        )
+
+
+def _center_national_dex(sheet: Worksheet, headers: list[str]) -> None:
+    """Center National Pokédex numbers in the primary worksheet."""
+    national_dex_column = headers.index(OutputColumn.NAT_DEX.value) + 1
+    for row_number in range(2, sheet.max_row + 1):
+        sheet.cell(row=row_number, column=national_dex_column).alignment = Alignment(
+            horizontal="center"
+        )
 
 
 def _add_tracking_controls(sheet: Worksheet, headers: list[str]) -> None:
@@ -225,9 +267,11 @@ def _add_tracking_controls(sheet: Worksheet, headers: list[str]) -> None:
 
     sheet.conditional_formatting.add(
         obtained_range,
-        FormulaRule(  # type: ignore[no-untyped-call]
-            formula=[f'{obtained_letter}2="☑"'],
+        CellIsRule(  # type: ignore[no-untyped-call]
+            operator="equal",
+            formula=['"☑"'],
             fill=_OBTAINED_FILL,
+            stopIfTrue=True,
         ),
     )
     sheet.conditional_formatting.add(
@@ -239,20 +283,16 @@ def _add_tracking_controls(sheet: Worksheet, headers: list[str]) -> None:
             stopIfTrue=True,
         ),
     )
-    sheet.conditional_formatting.add(
-        priority_range,
-        ColorScaleRule(  # type: ignore[no-untyped-call]
-            start_type="num",
-            start_value=1,
-            start_color="F8696B",
-            mid_type="percentile",
-            mid_value=50,
-            mid_color="FFEB84",
-            end_type="num",
-            end_value=10,
-            end_color="63BE7B",
-        ),
-    )
+    for priority, fill in _PRIORITY_FILLS.items():
+        sheet.conditional_formatting.add(
+            priority_range,
+            CellIsRule(  # type: ignore[no-untyped-call]
+                operator="equal",
+                formula=[str(priority)],
+                fill=fill,
+                stopIfTrue=True,
+            ),
+        )
 
     for row_number in range(2, sheet.max_row + 1):
         sheet.cell(row=row_number, column=obtained_column).alignment = Alignment(
@@ -272,6 +312,7 @@ def _hide_internal_columns(sheet: Worksheet, headers: list[str]) -> None:
         OutputColumn.HOME_ID.value,
         OutputColumn.LEGENDARY_MYTHICAL.value,
         OutputColumn.OBTAINABLE_SHINY.value,
+        OutputColumn.POSSIBLE.value,
     }
 
     for index, header in enumerate(headers, start=1):
@@ -332,10 +373,30 @@ def _populate_summary_sheet(
     legendary_count = sum(entry.legendary_mythical for entry in entries)
     shiny_count = sum(entry.obtainable_shiny for entry in entries)
 
-    metrics: list[tuple[str, int]] = [
+    pokedex_last_row = len(entries) + 1
+    obtained_column = get_column_letter(
+        list(OUTPUT_COLUMNS).index(OutputColumn.OBTAINED) + 1
+    )
+    possible_column = get_column_letter(
+        list(OUTPUT_COLUMNS).index(OutputColumn.POSSIBLE) + 1
+    )
+    obtained_range = (
+        f"'{ExcelSheet.POKEDEX.value}'!${obtained_column}$2:"
+        f"${obtained_column}${pokedex_last_row}"
+    )
+    possible_range = (
+        f"'{ExcelSheet.POKEDEX.value}'!${possible_column}$2:"
+        f"${possible_column}${pokedex_last_row}"
+    )
+
+    metrics: list[tuple[str, int | str]] = [
         ("Total de filas", len(entries)),
         ("Total de especies", unique_species),
         ("Total de variantes adicionales", len(entries) - unique_species),
+        ("Total obtenidos", f'=COUNTIF({obtained_range},"☑")'),
+        ("Total no obtenidos", f'=COUNTIF({obtained_range},"☐")'),
+        ("Total posibles", f"=COUNTIF({possible_range},TRUE)"),
+        ("Porcentaje obtenidos / posibles", "=IFERROR(B7/B9,0)"),
         ("Legendarios/Míticos", legendary_count),
         ("Shiny obtenible sin evento", shiny_count),
     ]
@@ -351,6 +412,8 @@ def _populate_summary_sheet(
     for row_number, (label, value) in enumerate(metrics, start=4):
         sheet.cell(row=row_number, column=1, value=label)
         sheet.cell(row=row_number, column=2, value=value)
+
+    sheet["B10"].number_format = "0.00%"
 
     for cell in sheet[3]:
         cell.fill = _HEADER_FILL
@@ -451,7 +514,8 @@ def _validation_checks(
         (
             "Columnas completas",
             not invalid_rows,
-            ", ".join(invalid_rows) or "Todas las filas tienen 20 columnas",
+            ", ".join(invalid_rows)
+            or f"Todas las filas tienen {len(OUTPUT_COLUMNS)} columnas",
         ),
         (
             "Orden por Pokédex",
@@ -474,6 +538,7 @@ def _set_column_widths(sheet: Worksheet, headers: list[str]) -> None:
         "ID HOME": 30,
         "Legendario/Mítico": 20,
         "Obtenible": 14,
+        "Posibles": 12,
     }
 
     for index, header in enumerate(headers, start=1):
