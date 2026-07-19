@@ -5,7 +5,9 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from openpyxl import Workbook
+from openpyxl.formatting.rule import CellIsRule, ColorScaleRule, FormulaRule
 from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.worksheet import Worksheet
 
@@ -19,6 +21,8 @@ _TITLE_FONT = Font(size=16, bold=True)
 _SUBTITLE_FONT = Font(size=11, italic=True)
 _BOOLEAN_TRUE_FILL = PatternFill("solid", fgColor="E2F0D9")
 _BOOLEAN_FALSE_FILL = PatternFill("solid", fgColor="FCE4D6")
+_OBTAINED_FILL = PatternFill("solid", fgColor="5B9BD5")
+_PRIORITY_ZERO_FILL = PatternFill("solid", fgColor="D9D2E9")
 
 _EXCEL_BASE_FORM_LABELS: dict[str, str] = {
     "Deoxys": "Normal",
@@ -170,8 +174,93 @@ def _populate_pokedex_sheet(
                     _BOOLEAN_TRUE_FILL if cell.value is True else _BOOLEAN_FALSE_FILL
                 )
 
+    _add_tracking_controls(sheet, headers)
     _set_column_widths(sheet, headers)
     _hide_internal_columns(sheet, headers)
+
+
+def _add_tracking_controls(sheet: Worksheet, headers: list[str]) -> None:
+    """Add Excel 2016-compatible tracking dropdowns and conditional formats."""
+    if sheet.max_row < 2:
+        return
+
+    obtained_column = headers.index(OutputColumn.OBTAINED.value) + 1
+    priority_column = headers.index(OutputColumn.PRIORITY.value) + 1
+    obtained_letter = get_column_letter(obtained_column)
+    priority_letter = get_column_letter(priority_column)
+    obtained_range = f"{obtained_letter}2:{obtained_letter}{sheet.max_row}"
+    priority_range = f"{priority_letter}2:{priority_letter}{sheet.max_row}"
+
+    obtained_validation = DataValidation(
+        type="list",
+        formula1='"☐,☑"',
+        allow_blank=False,
+    )
+    obtained_validation.error = "Selecciona ☐ o ☑."
+    obtained_validation.errorTitle = "Valor de Obtenido no válido"
+    obtained_validation.prompt = "Selecciona ☐ para pendiente o ☑ para obtenido."
+    obtained_validation.promptTitle = "Estado de obtención"
+    obtained_validation.showErrorMessage = True
+    obtained_validation.showInputMessage = True
+    sheet.add_data_validation(obtained_validation)
+    obtained_validation.add(obtained_range)
+
+    priority_validation = DataValidation(
+        type="whole",
+        operator="between",
+        formula1="0",
+        formula2="10",
+        allow_blank=True,
+    )
+    priority_validation.error = (
+        "Ingresa un número entero del 0 al 10 o deja la celda vacía."
+    )
+    priority_validation.errorTitle = "Prioridad no válida"
+    priority_validation.prompt = "Prioridad opcional: valor entero del 0 al 10."
+    priority_validation.promptTitle = "Prioridad"
+    priority_validation.showErrorMessage = True
+    priority_validation.showInputMessage = True
+    sheet.add_data_validation(priority_validation)
+    priority_validation.add(priority_range)
+
+    sheet.conditional_formatting.add(
+        obtained_range,
+        FormulaRule(  # type: ignore[no-untyped-call]
+            formula=[f'{obtained_letter}2="☑"'],
+            fill=_OBTAINED_FILL,
+        ),
+    )
+    sheet.conditional_formatting.add(
+        priority_range,
+        CellIsRule(  # type: ignore[no-untyped-call]
+            operator="equal",
+            formula=["0"],
+            fill=_PRIORITY_ZERO_FILL,
+            stopIfTrue=True,
+        ),
+    )
+    sheet.conditional_formatting.add(
+        priority_range,
+        ColorScaleRule(  # type: ignore[no-untyped-call]
+            start_type="num",
+            start_value=1,
+            start_color="F8696B",
+            mid_type="percentile",
+            mid_value=50,
+            mid_color="FFEB84",
+            end_type="num",
+            end_value=10,
+            end_color="63BE7B",
+        ),
+    )
+
+    for row_number in range(2, sheet.max_row + 1):
+        sheet.cell(row=row_number, column=obtained_column).alignment = Alignment(
+            horizontal="center"
+        )
+        sheet.cell(row=row_number, column=priority_column).alignment = Alignment(
+            horizontal="center"
+        )
 
 
 def _hide_internal_columns(sheet: Worksheet, headers: list[str]) -> None:
@@ -362,7 +451,7 @@ def _validation_checks(
         (
             "Columnas completas",
             not invalid_rows,
-            ", ".join(invalid_rows) or "Todas las filas tienen 19 columnas",
+            ", ".join(invalid_rows) or "Todas las filas tienen 20 columnas",
         ),
         (
             "Orden por Pokédex",
@@ -380,6 +469,7 @@ def _set_column_widths(sheet: Worksheet, headers: list[str]) -> None:
         "Forma": 24,
         "Nombre": 34,
         "Obtenido": 14,
+        "Prioridad": 12,
         "Gen": 8,
         "ID HOME": 30,
         "Legendario/Mítico": 20,

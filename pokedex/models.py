@@ -239,7 +239,8 @@ class PokemonEntry:
             "Gen": self.generation,
             "ID HOME": self.home_id,
             "Nombre": self.name,
-            "Obtenido": None,
+            "Obtenido": "☐",
+            "Prioridad": None,
         }
 
         row.update(self.availability.to_dict())

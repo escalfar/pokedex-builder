@@ -150,7 +150,7 @@ def test_export_coverage_json(tmp_path: Path) -> None:
 
     assert result == output_path
     assert payload["complete"] is False
-    assert payload["games"]["X/Y"]["verified"] == 1
+    assert payload["games"]["XY"]["verified"] == 1
     assert payload["shiny"]["percent"] == 100.0
 
 

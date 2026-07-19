@@ -19,7 +19,7 @@ GENDER_SORT_ORDER: dict[Gender, int] = {
 class GameColumn(StrEnum):
     """Supported game availability columns."""
 
-    XY = "X/Y"
+    XY = "XY"
     ORAS = "ORAS"
     SM = "SM"
     USUM = "USUM"
@@ -41,6 +41,7 @@ class OutputColumn(StrEnum):
     HOME_ID = "ID HOME"
     NAME = "Nombre"
     OBTAINED = "Obtenido"
+    PRIORITY = "Prioridad"
 
     XY = GameColumn.XY
     ORAS = GameColumn.ORAS

@@ -206,21 +206,23 @@ La tabla principal contiene:
 1. `Nat Dex`
 2. `Pokemon`
 3. `Forma`
-4. `Nombre`
-5. `Gen`
-6. `ID HOME`
-7. `X/Y`
-8. `Omega Ruby / Alpha Sapphire`
-9. `Sun / Moon`
-10. `Ultra Sun / Ultra Moon`
-11. `Let's Go Pikachu / Eevee`
-12. `Sword / Shield`
-13. `Legends Arceus`
-14. `Brilliant Diamond / Shining Pearl`
-15. `Scarlet / Violet`
-16. `Legends Z-A`
-17. `Legendario/Mítico`
-18. `Obtenible`
+4. `Gen`
+5. `ID HOME`
+6. `Nombre`
+7. `Obtenido`
+8. `Prioridad`
+9. `XY`
+10. `ORAS`
+11. `SM`
+12. `USUM`
+13. `LGPE`
+14. `SwSh`
+15. `Arceus`
+16. `BDSP`
+17. `ScVi`
+18. `ZA`
+19. `Legendario/Mítico`
+20. `Obtenible`
 
 La dimensión interna de género no se exporta como una columna separada. Se refleja en `Forma`, `Nombre` e `ID HOME`.
 

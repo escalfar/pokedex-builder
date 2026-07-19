@@ -47,8 +47,9 @@ def test_export_csv_creates_expected_columns(
     assert list(rows[0]) == [column.value for column in OUTPUT_COLUMNS]
     assert rows[0]["Nat Dex"] == "26"
     assert rows[0]["Nombre"] == "Alolan Raichu"
-    assert rows[0]["Obtenido"] == ""
-    assert rows[0]["X/Y"] == "FALSE"
+    assert rows[0]["Obtenido"] == "☐"
+    assert rows[0]["Prioridad"] == ""
+    assert rows[0]["XY"] == "FALSE"
     assert rows[0]["Obtenible"] == "TRUE"
 
 
@@ -69,8 +70,9 @@ def test_export_json_preserves_native_booleans(
     assert len(payload) == 1
     assert payload[0]["Nat Dex"] == 26
     assert payload[0]["Nombre"] == "Alolan Raichu"
-    assert payload[0]["Obtenido"] is None
-    assert payload[0]["X/Y"] is False
+    assert payload[0]["Obtenido"] == "☐"
+    assert payload[0]["Prioridad"] is None
+    assert payload[0]["XY"] is False
     assert payload[0]["Obtenible"] is True
 
 
@@ -112,8 +114,9 @@ def test_export_excel_creates_four_expected_sheets(tmp_path: Path) -> None:
         assert sheet.freeze_panes == "A2"
         assert sheet["A1"].value == "Nat Dex"
         assert sheet["F2"].value == "Raichu (Alolan)"
-        assert sheet["G2"].value is None
-        assert sheet["S2"].value is True
+        assert sheet["G2"].value == "☐"
+        assert sheet["H2"].value is None
+        assert sheet["T2"].value is True
         assert sheet.auto_filter.ref == sheet.dimensions
         assert len(sheet.tables) == 0
     finally:
@@ -142,7 +145,8 @@ def test_export_excel_uses_requested_column_order_and_hidden_columns(
             "ID HOME",
             "Nombre",
             "Obtenido",
-            "X/Y",
+            "Prioridad",
+            "XY",
             "ORAS",
             "SM",
             "USUM",
@@ -157,11 +161,12 @@ def test_export_excel_uses_requested_column_order_and_hidden_columns(
         ]
         assert {
             column
-            for column in ("B", "C", "D", "E", "R", "S")
+            for column in ("B", "C", "D", "E", "S", "T")
             if sheet.column_dimensions[column].hidden
-        } == {"B", "C", "D", "E", "R", "S"}
+        } == {"B", "C", "D", "E", "S", "T"}
         assert sheet.column_dimensions["F"].hidden is False
         assert sheet.column_dimensions["G"].hidden is False
+        assert sheet.column_dimensions["H"].hidden is False
     finally:
         workbook.close()
 
@@ -404,3 +409,61 @@ def test_excel_simplifies_selected_form_labels_only_in_nombre(tmp_path: Path) ->
 
     assert names == [expected for *_, expected in cases]
     assert [entry.form for entry in entries] == [form for _, _, form, _ in cases]
+
+
+def test_export_excel_adds_tracking_validations_and_conditional_formats(
+    tmp_path: Path,
+) -> None:
+    from openpyxl import load_workbook
+
+    from pokedex.exporter_excel import export_excel
+
+    output_path = tmp_path / "Pokedex.xlsx"
+    export_excel((build_entry(),), output_path)
+
+    workbook = load_workbook(output_path)
+    try:
+        sheet = workbook["Pokédex"]
+        validations = list(sheet.data_validations.dataValidation)
+
+        assert len(validations) == 2
+        obtained_validation = next(
+            validation for validation in validations if validation.type == "list"
+        )
+        priority_validation = next(
+            validation for validation in validations if validation.type == "whole"
+        )
+
+        assert obtained_validation.formula1 == '"☐,☑"'
+        assert obtained_validation.allow_blank is False
+        assert str(obtained_validation.sqref) == "G2"
+
+        assert priority_validation.operator == "between"
+        assert priority_validation.formula1 == "0"
+        assert priority_validation.formula2 == "10"
+        assert priority_validation.allow_blank is True
+        assert str(priority_validation.sqref) == "H2"
+
+        conditional_ranges = {str(key) for key in sheet.conditional_formatting}
+        assert conditional_ranges == {
+            "<ConditionalFormatting G2>",
+            "<ConditionalFormatting H2>",
+        }
+
+        obtained_rules = list(sheet.conditional_formatting["G2"])
+        priority_rules = list(sheet.conditional_formatting["H2"])
+        assert len(obtained_rules) == 1
+        assert obtained_rules[0].type == "expression"
+        assert obtained_rules[0].formula == ['G2="☑"']
+
+        assert len(priority_rules) == 2
+        zero_rule = next(rule for rule in priority_rules if rule.type == "cellIs")
+        color_scale_rule = next(
+            rule for rule in priority_rules if rule.type == "colorScale"
+        )
+        assert zero_rule.operator == "equal"
+        assert zero_rule.formula == ["0"]
+        assert zero_rule.stopIfTrue is True
+        assert color_scale_rule.colorScale is not None
+    finally:
+        workbook.close()
