@@ -21,21 +21,13 @@ _TITLE_FONT = Font(size=16, bold=True)
 _SUBTITLE_FONT = Font(size=11, italic=True)
 _BOOLEAN_TRUE_FILL = PatternFill("solid", fgColor="E2F0D9")
 _BOOLEAN_FALSE_FILL = PatternFill("solid", fgColor="FCE4D6")
+_BOOLEAN_TRUE_FILL_COND = PatternFill("solid", start_color="E2F0D9", end_color="E2F0D9")
+_BOOLEAN_FALSE_FILL_COND = PatternFill(
+    "solid", start_color="FCE4D6", end_color="FCE4D6"
+)
 _OBTAINED_FILL = PatternFill("solid", start_color="5B9BD5", end_color="5B9BD5")
 _PRIORITY_ZERO_FILL = PatternFill("solid", start_color="7030A0", end_color="7030A0")
 _PRIORITY_ZERO_FILL_FONT = Font(color="EEECE1")
-# _PRIORITY_FILLS: dict[int, PatternFill] = {
-#     1: PatternFill("solid", fgColor="F8696B"),
-#     2: PatternFill("solid", fgColor="FA7F6A"),
-#     3: PatternFill("solid", fgColor="FB9569"),
-#     4: PatternFill("solid", fgColor="FDAA68"),
-#     5: PatternFill("solid", fgColor="FFC067"),
-#     6: PatternFill("solid", fgColor="FFDA68"),
-#     7: PatternFill("solid", fgColor="D8D96D"),
-#     8: PatternFill("solid", fgColor="B1D872"),
-#     9: PatternFill("solid", fgColor="8AD777"),
-#     10: PatternFill("solid", fgColor="63BE7B"),
-# }
 
 _EXCEL_BASE_FORM_LABELS: dict[str, str] = {
     "Deoxys": "Normal",
@@ -233,6 +225,9 @@ def _add_tracking_controls(sheet: Worksheet, headers: list[str]) -> None:
     priority_letter = get_column_letter(priority_column)
     obtained_range = f"{obtained_letter}2:{obtained_letter}{sheet.max_row}"
     priority_range = f"{priority_letter}2:{priority_letter}{sheet.max_row}"
+    possible_column = headers.index(OutputColumn.POSSIBLE.value) + 1
+    possible_letter = get_column_letter(possible_column)
+    possible_range = f"{possible_letter}2:{possible_letter}{sheet.max_row}"
 
     obtained_validation = DataValidation(
         type="list",
@@ -276,6 +271,26 @@ def _add_tracking_controls(sheet: Worksheet, headers: list[str]) -> None:
             operator="equal",
             formula=['"☑"'],
             fill=_OBTAINED_FILL,
+            stopIfTrue=True,
+        ),
+    )
+    # Posibles contains formulas, so conditional formatting is required for
+    # its colors to update after Excel recalculates the workbook.
+    sheet.conditional_formatting.add(
+        possible_range,
+        CellIsRule(  # type: ignore[no-untyped-call]
+            operator="equal",
+            formula=["TRUE"],
+            fill=_BOOLEAN_TRUE_FILL_COND,
+            stopIfTrue=True,
+        ),
+    )
+    sheet.conditional_formatting.add(
+        possible_range,
+        CellIsRule(  # type: ignore[no-untyped-call]
+            operator="equal",
+            formula=["FALSE"],
+            fill=_BOOLEAN_FALSE_FILL_COND,
             stopIfTrue=True,
         ),
     )
@@ -383,20 +398,19 @@ def _populate_summary_sheet(
     shiny_count = sum(entry.obtainable_shiny for entry in entries)
 
     pokedex_last_row = len(entries) + 1
-    obtained_column = get_column_letter(
-        list(OUTPUT_COLUMNS).index(OutputColumn.OBTAINED) + 1
-    )
-    possible_column = get_column_letter(
-        list(OUTPUT_COLUMNS).index(OutputColumn.POSSIBLE) + 1
-    )
-    obtained_range = (
-        f"'{ExcelSheet.POKEDEX.value}'!${obtained_column}$2:"
-        f"${obtained_column}${pokedex_last_row}"
-    )
-    possible_range = (
-        f"'{ExcelSheet.POKEDEX.value}'!${possible_column}$2:"
-        f"${possible_column}${pokedex_last_row}"
-    )
+
+    def pokedex_range(column: OutputColumn) -> str:
+        """Return an absolute range for one column in the Pokédex sheet."""
+        column_letter = get_column_letter(list(OUTPUT_COLUMNS).index(column) + 1)
+        return (
+            f"'{ExcelSheet.POKEDEX.value}'!${column_letter}$2:"
+            f"${column_letter}${pokedex_last_row}"
+        )
+
+    obtained_range = pokedex_range(OutputColumn.OBTAINED)
+    possible_range = pokedex_range(OutputColumn.POSSIBLE)
+    legendary_range = pokedex_range(OutputColumn.LEGENDARY_MYTHICAL)
+    obtainable_range = pokedex_range(OutputColumn.OBTAINABLE_SHINY)
 
     metrics: list[tuple[str, int | str]] = [
         ("Total de filas", len(entries)),
@@ -405,11 +419,22 @@ def _populate_summary_sheet(
         ("Total obtenidos", f'=COUNTIF({obtained_range},"☑")'),
         ("Total no obtenidos", f'=COUNTIF({obtained_range},"☐")'),
         ("Total posibles", f"=COUNTIF({possible_range},TRUE)"),
-        ("Porcentaje obtenidos / posibles", "=IFERROR(B7/B9,0)"),
+        ("Porcentaje posibles obtenidos", "=IFERROR(B7/B9,0)"),
+        ("Total obtenibles", f"=COUNTIF({obtainable_range},TRUE)"),
+        ("Porcentaje obtenibles obtenidos", "=IFERROR(B7/B11,0)"),
         ("Legendarios/Míticos", legendary_count),
+        (
+            "Legendarios/Míticos obtenidos",
+            f'=COUNTIFS({legendary_range},TRUE,{obtained_range},"☑")',
+        ),
+        (
+            "Porcentaje Legendarios/Míticos obtenidos",
+            "=IFERROR(B14/B13,0)",
+        ),
         ("Shiny obtenible sin evento", shiny_count),
     ]
 
+    first_game_row = 4 + len(metrics)
     for game in GameColumn:
         metrics.append(
             (
@@ -423,6 +448,12 @@ def _populate_summary_sheet(
         sheet.cell(row=row_number, column=2, value=value)
 
     sheet["B10"].number_format = "0.00%"
+    sheet["B12"].number_format = "0.00%"
+    sheet["B15"].number_format = "0.00%"
+
+    last_game_row = first_game_row + len(GameColumn) - 1
+    for row_number in range(first_game_row, last_game_row + 1):
+        sheet.row_dimensions[row_number].hidden = True
 
     for cell in sheet[3]:
         cell.fill = _HEADER_FILL

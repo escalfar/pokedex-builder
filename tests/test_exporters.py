@@ -234,9 +234,27 @@ def test_export_excel_adds_possible_formulas_summary_and_dex_alignment(
         assert summary["B8"].value == "=COUNTIF('Pokédex'!$G$2:$G$2,\"☐\")"
         assert summary["A9"].value == "Total posibles"
         assert summary["B9"].value == "=COUNTIF('Pokédex'!$U$2:$U$2,TRUE)"
-        assert summary["A10"].value == "Porcentaje obtenidos / posibles"
+        assert summary["A10"].value == "Porcentaje posibles obtenidos"
         assert summary["B10"].value == "=IFERROR(B7/B9,0)"
         assert summary["B10"].number_format == "0.00%"
+        assert summary["A11"].value == "Total obtenibles"
+        assert summary["B11"].value == "=COUNTIF('Pokédex'!$T$2:$T$2,TRUE)"
+        assert summary["A12"].value == "Porcentaje obtenibles obtenidos"
+        assert summary["B12"].value == "=IFERROR(B7/B11,0)"
+        assert summary["B12"].number_format == "0.00%"
+        assert summary["A13"].value == "Legendarios/Míticos"
+        assert summary["A14"].value == "Legendarios/Míticos obtenidos"
+        assert summary["B14"].value == (
+            "=COUNTIFS('Pokédex'!$S$2:$S$2,TRUE," "'Pokédex'!$G$2:$G$2,\"☑\")"
+        )
+        assert summary["A15"].value == "Porcentaje Legendarios/Míticos obtenidos"
+        assert summary["B15"].value == "=IFERROR(B14/B13,0)"
+        assert summary["B15"].number_format == "0.00%"
+        assert summary["A17"].value == "Obtenibles en XY"
+        assert summary["A26"].value == "Obtenibles en ZA"
+        assert all(
+            summary.row_dimensions[row_number].hidden for row_number in range(17, 27)
+        )
     finally:
         workbook.close()
 
@@ -484,16 +502,26 @@ def test_export_excel_adds_tracking_validations_and_conditional_formats(
         assert conditional_ranges == {
             "<ConditionalFormatting G2>",
             "<ConditionalFormatting H2>",
+            "<ConditionalFormatting U2>",
         }
 
         obtained_rules = list(sheet.conditional_formatting["G2"])
         priority_rules = list(sheet.conditional_formatting["H2"])
+        possible_rules = list(sheet.conditional_formatting["U2"])
 
         assert len(obtained_rules) == 1
         assert obtained_rules[0].type == "cellIs"
         assert obtained_rules[0].operator == "equal"
         assert obtained_rules[0].formula == ['"☑"']
         assert obtained_rules[0].stopIfTrue is True
+
+        assert len(possible_rules) == 2
+        assert {rule.operator for rule in possible_rules} == {"equal"}
+        assert {tuple(rule.formula) for rule in possible_rules} == {
+            ("TRUE",),
+            ("FALSE",),
+        }
+        assert all(rule.stopIfTrue is True for rule in possible_rules)
 
         assert len(priority_rules) == 2
         zero_rule = next(rule for rule in priority_rules if rule.type == "expression")
