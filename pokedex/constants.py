@@ -19,16 +19,16 @@ GENDER_SORT_ORDER: dict[Gender, int] = {
 class GameColumn(StrEnum):
     """Supported game availability columns."""
 
-    XY = "X/Y"
-    ORAS = "Omega Ruby / Alpha Sapphire"
-    SM = "Sun / Moon"
-    USUM = "Ultra Sun / Ultra Moon"
-    LGPE = "Let's Go Pikachu / Eevee"
-    SWSH = "Sword / Shield"
-    PLA = "Legends Arceus"
-    BDSP = "Brilliant Diamond / Shining Pearl"
-    SV = "Scarlet / Violet"
-    ZA = "Legends Z-A"
+    XY = "XY"
+    ORAS = "ORAS"
+    SM = "SM"
+    USUM = "USUM"
+    LGPE = "LGPE"
+    SWSH = "SwSh"
+    PLA = "Arceus"
+    BDSP = "BDSP"
+    SV = "ScVi"
+    ZA = "ZA"
 
 
 class OutputColumn(StrEnum):

@@ -487,3 +487,90 @@ def test_build_variants_adds_all_flower_colors(
         "White Flower",
         "Yellow Flower",
     }
+
+
+def test_build_variants_adds_all_unown_forms_in_home_order() -> None:
+    details = (
+        SpeciesDetails(
+            national_dex=201,
+            api_name="unown",
+            english_name="Unown",
+            generation=2,
+            is_legendary=False,
+            is_mythical=False,
+            resource_url="https://pokeapi.co/api/v2/pokemon-species/201/",
+            varieties=(
+                SpeciesVariety(
+                    api_name="unown",
+                    resource_url="https://pokeapi.co/api/v2/pokemon/201/",
+                    is_default=True,
+                ),
+            ),
+        ),
+    )
+    species = (PokemonSpecies(national_dex=201, name="Unown", generation=2),)
+
+    variants = build_pokemon_variants(details, species)
+
+    expected_names = [*"ABCDEFGHIJKLMNOPQRSTUVWXYZ", "!", "?"]
+
+    assert len(variants) == 28
+    assert [variant.form_name for variant in variants] == expected_names
+    assert [variant.display_name for variant in variants] == [
+        f"Unown ({form_name})" for form_name in expected_names
+    ]
+    assert variants[0].home_id == "00201_A_NONE"
+    assert variants[-2].home_id == "00201_EXCLAMATION_NONE"
+    assert variants[-1].home_id == "00201_QUESTION_NONE"
+    assert sum(variant.is_default for variant in variants) == 1
+
+
+def test_build_variants_adds_alcremie_forms_by_sweet_only() -> None:
+    details = (
+        SpeciesDetails(
+            national_dex=869,
+            api_name="alcremie",
+            english_name="Alcremie",
+            generation=8,
+            is_legendary=False,
+            is_mythical=False,
+            resource_url="https://pokeapi.co/api/v2/pokemon-species/869/",
+            varieties=(
+                SpeciesVariety(
+                    api_name="alcremie",
+                    resource_url="https://pokeapi.co/api/v2/pokemon/869/",
+                    is_default=True,
+                ),
+            ),
+        ),
+    )
+    species = (PokemonSpecies(national_dex=869, name="Alcremie", generation=8),)
+
+    variants = build_pokemon_variants(details, species)
+
+    expected_sweets = [
+        "Strawberry Sweet",
+        "Berry Sweet",
+        "Love Sweet",
+        "Star Sweet",
+        "Clover Sweet",
+        "Flower Sweet",
+        "Ribbon Sweet",
+    ]
+
+    assert len(variants) == 7
+    assert [variant.form_name for variant in variants] == expected_sweets
+    assert [variant.display_name for variant in variants] == [
+        f"Alcremie ({sweet})" for sweet in expected_sweets
+    ]
+    assert [variant.home_id for variant in variants] == [
+        "00869_STRAWBERRY_SWEET_NONE",
+        "00869_BERRY_SWEET_NONE",
+        "00869_LOVE_SWEET_NONE",
+        "00869_STAR_SWEET_NONE",
+        "00869_CLOVER_SWEET_NONE",
+        "00869_FLOWER_SWEET_NONE",
+        "00869_RIBBON_SWEET_NONE",
+    ]
+    assert all("cream" not in variant.form_slug for variant in variants)
+    assert sum(variant.is_default for variant in variants) == 1

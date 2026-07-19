@@ -16,6 +16,10 @@ NORMAL_FORM_SLUG = "normal"
 # explicitly so every form stored independently by Pokémon HOME receives its
 # own catalog row.
 _SUPPLEMENTAL_FORMS: dict[str, tuple[tuple[str, str], ...]] = {
+    "unown": tuple(
+        [(letter.casefold(), letter) for letter in "BCDEFGHIJKLMNOPQRSTUVWXYZ"]
+        + [("exclamation", "!"), ("question", "?")]
+    ),
     "burmy": (
         ("sandy-cloak", "Sandy Cloak"),
         ("trash-cloak", "Trash Cloak"),
@@ -59,14 +63,54 @@ _SUPPLEMENTAL_FORMS: dict[str, tuple[tuple[str, str], ...]] = {
         ("white-flower", "White Flower"),
         ("yellow-flower", "Yellow Flower"),
     ),
+    "alcremie": (
+        ("berry-sweet", "Berry Sweet"),
+        ("love-sweet", "Love Sweet"),
+        ("star-sweet", "Star Sweet"),
+        ("clover-sweet", "Clover Sweet"),
+        ("flower-sweet", "Flower Sweet"),
+        ("ribbon-sweet", "Ribbon Sweet"),
+    ),
 }
 
 _DEFAULT_FORM_PRESENTATION: dict[str, tuple[str, str]] = {
+    "unown": ("A", "Unown (A)"),
     "burmy": ("Plant Cloak", "Plant Cloak Burmy"),
     "vivillon": ("Meadow Pattern", "Meadow Pattern Vivillon"),
     "flabebe": ("Red Flower", "Red Flower Flabébé"),
     "floette": ("Red Flower", "Red Flower Floette"),
     "florges": ("Red Flower", "Red Flower Florges"),
+    "alcremie": ("Strawberry Sweet", "Alcremie (Strawberry Sweet)"),
+}
+
+_DEFAULT_FORM_SLUGS: dict[str, str] = {
+    "unown": "a",
+    "alcremie": "strawberry-sweet",
+}
+
+_SPECIAL_FORM_ORDER: dict[int, dict[str, int]] = {
+    201: {
+        **{
+            letter.casefold(): index
+            for index, letter in enumerate("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        },
+        "exclamation": 26,
+        "question": 27,
+    },
+    869: {
+        slug: index
+        for index, slug in enumerate(
+            (
+                "strawberry-sweet",
+                "berry-sweet",
+                "love-sweet",
+                "star-sweet",
+                "clover-sweet",
+                "flower-sweet",
+                "ribbon-sweet",
+            )
+        )
+    },
 }
 
 
@@ -199,7 +243,11 @@ def _build_species_variants(
             variety_api_name=f"{detail.api_name}-{form_slug}",
             form_slug=form_slug,
             form_name=form_name,
-            display_name=f"{form_name} {species.name}",
+            display_name=_supplemental_display_name(
+                species_api_name=detail.api_name,
+                species_name=species.name,
+                form_name=form_name,
+            ),
             generation=species.generation,
             resource_url=f"synthetic://pokemon-form/{detail.api_name}-{form_slug}",
             is_default=False,
@@ -209,6 +257,18 @@ def _build_species_variants(
     )
 
     return api_variants + supplemental
+
+
+def _supplemental_display_name(
+    *,
+    species_api_name: str,
+    species_name: str,
+    form_name: str,
+) -> str:
+    if species_api_name in {"unown", "alcremie"}:
+        return f"{species_name} ({form_name})"
+
+    return f"{form_name} {species_name}"
 
 
 def _build_variant(
@@ -222,6 +282,9 @@ def _build_variant(
         variety_api_name=variety.api_name,
         is_default=variety.is_default,
     )
+
+    if variety.is_default:
+        form_slug = _DEFAULT_FORM_SLUGS.get(detail.api_name, form_slug)
 
     form_name = form_slug_to_name(form_slug)
 
@@ -251,12 +314,22 @@ def _build_variant(
 
 def _variant_sort_key(
     variant: PokemonVariant,
-) -> tuple[int, int, str, int, str]:
+) -> tuple[int, int, int, str, int, str]:
+    form_slug = variant.form_slug.casefold()
+    special_order = _SPECIAL_FORM_ORDER.get(variant.national_dex)
+
+    if special_order is None:
+        group = 0 if variant.is_normal_form else 1
+        rank = 0
+    else:
+        group = 0
+        rank = special_order.get(form_slug, len(special_order))
 
     return (
         variant.national_dex,
-        0 if variant.is_normal_form else 1,
-        variant.form_slug.casefold(),
+        group,
+        rank,
+        form_slug,
         GENDER_SORT_ORDER[variant.gender],
         variant.variety_api_name.casefold(),
     )

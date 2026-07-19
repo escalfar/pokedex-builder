@@ -11,6 +11,31 @@ from pokedex.models import (
     PokemonVariant,
 )
 
+_SPECIAL_FORM_ORDER: dict[int, dict[str, int]] = {
+    201: {
+        **{
+            letter.casefold(): index
+            for index, letter in enumerate("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        },
+        "exclamation": 26,
+        "question": 27,
+    },
+    869: {
+        slug: index
+        for index, slug in enumerate(
+            (
+                "strawberry_sweet",
+                "berry_sweet",
+                "love_sweet",
+                "star_sweet",
+                "clover_sweet",
+                "flower_sweet",
+                "ribbon_sweet",
+            )
+        )
+    },
+}
+
 
 def build_pokemon_entries(
     variants: Iterable[PokemonVariant],
@@ -88,14 +113,22 @@ def validate_pokemon_entries(
 
 def _entry_sort_key(
     entry: PokemonEntry,
-) -> tuple[int, int, str, int, str]:
+) -> tuple[int, int, int, str, int, str]:
     """Return the deterministic sort key for an export entry."""
     form_slug = _extract_form_slug(entry.home_id)
-    is_normal = form_slug == "normal"
+    special_order = _SPECIAL_FORM_ORDER.get(entry.national_dex)
+
+    if special_order is None:
+        group = 0 if form_slug == "normal" else 1
+        rank = 0
+    else:
+        group = 0
+        rank = special_order.get(form_slug, len(special_order))
 
     return (
         entry.national_dex,
-        0 if is_normal else 1,
+        group,
+        rank,
         form_slug,
         GENDER_SORT_ORDER[entry.gender],
         entry.home_id,
