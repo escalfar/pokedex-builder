@@ -488,17 +488,20 @@ def test_export_excel_adds_tracking_validations_and_conditional_formats(
 
         obtained_rules = list(sheet.conditional_formatting["G2"])
         priority_rules = list(sheet.conditional_formatting["H2"])
+
         assert len(obtained_rules) == 1
         assert obtained_rules[0].type == "cellIs"
         assert obtained_rules[0].operator == "equal"
         assert obtained_rules[0].formula == ['"☑"']
         assert obtained_rules[0].stopIfTrue is True
 
-        assert len(priority_rules) == 11
-        assert all(rule.type == "cellIs" for rule in priority_rules)
-        assert [rule.formula for rule in priority_rules] == [
-            [str(value)] for value in range(11)
-        ]
-        assert all(rule.stopIfTrue is True for rule in priority_rules)
+        assert len(priority_rules) == 2
+        zero_rule = next(rule for rule in priority_rules if rule.type == "expression")
+        color_scale_rule = next(
+            rule for rule in priority_rules if rule.type == "colorScale"
+        )
+        assert zero_rule.formula == ["AND(ISNUMBER($H2),$H2=0)"]
+        assert zero_rule.stopIfTrue is True
+        assert color_scale_rule.colorScale is not None
     finally:
         workbook.close()

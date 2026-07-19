@@ -45,3 +45,8 @@ All notable changes to this project will be documented in this file.
 - Fixed the blue conditional format for `Obtenido` in Excel 2016.
 - Fixed the light-purple conditional format for priority value `0` by preventing overlap with the 1–10 gradient rules.
 
+
+## Batch 31
+- Replaced Excel conditional-format equality rules with formula-based rules for Excel 2016 compatibility.
+- `Obtenido` now uses `EXACT($G2,"☑")`.
+- `Prioridad` now uses explicit numeric formulas for values 0 through 10.
