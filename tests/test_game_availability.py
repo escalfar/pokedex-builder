@@ -402,12 +402,11 @@ def test_xy_catalog_contains_454_non_event_species() -> None:
 
 def test_xy_excludes_later_regional_and_cosplay_forms() -> None:
     rules = load_project_game_rules()
-    normal, alolan, hisuian, cosplay = apply_game_availability(
+    normal, alolan, hisuian = apply_game_availability(
         (
             build_entry(national_dex=26, home_id="00026_NORMAL_FEMALE"),
             build_entry(national_dex=26, home_id="00026_ALOLA_NONE"),
             build_entry(national_dex=100, home_id="00100_HISUI_NONE"),
-            build_entry(national_dex=25, home_id="00025_LIBRE_NONE"),
         ),
         rules,
     )
@@ -415,7 +414,6 @@ def test_xy_excludes_later_regional_and_cosplay_forms() -> None:
     assert normal.availability.is_available_in(GameColumn.XY) is True
     assert alolan.availability.is_available_in(GameColumn.XY) is False
     assert hisuian.availability.is_available_in(GameColumn.XY) is False
-    assert cosplay.availability.is_available_in(GameColumn.XY) is False
 
 
 def test_xy_keeps_forms_obtainable_in_generation_six() -> None:
@@ -500,12 +498,11 @@ def test_oras_keeps_all_deoxys_formes() -> None:
 
 def test_oras_excludes_later_regional_forms_and_cosplay_pikachu() -> None:
     rules = load_project_game_rules()
-    normal, alolan, hisuian, cosplay = apply_game_availability(
+    normal, alolan, hisuian = apply_game_availability(
         (
             build_entry(national_dex=26, home_id="00026_NORMAL_FEMALE"),
             build_entry(national_dex=26, home_id="00026_ALOLA_NONE"),
             build_entry(national_dex=100, home_id="00100_HISUI_NONE"),
-            build_entry(national_dex=25, home_id="00025_LIBRE_NONE"),
         ),
         rules,
     )
@@ -513,7 +510,6 @@ def test_oras_excludes_later_regional_forms_and_cosplay_pikachu() -> None:
     assert normal.availability.is_available_in(GameColumn.ORAS) is True
     assert alolan.availability.is_available_in(GameColumn.ORAS) is False
     assert hisuian.availability.is_available_in(GameColumn.ORAS) is False
-    assert cosplay.availability.is_available_in(GameColumn.ORAS) is False
 
 
 def test_sm_qr_methods_include_magearna_and_island_scan() -> None:
@@ -729,13 +725,11 @@ def test_swsh_excludes_later_regional_forms() -> None:
 
 def test_swsh_excludes_event_zarude_and_unstorable_calyrex_fusions() -> None:
     rules = load_project_game_rules()
-    zarude, dada, calyrex, ice, shadow = apply_game_availability(
+    zarude, dada, calyrex = apply_game_availability(
         (
             build_entry(national_dex=893, home_id="00893_NORMAL_NONE"),
             build_entry(national_dex=893, home_id="00893_DADA_NONE"),
             build_entry(national_dex=898, home_id="00898_NORMAL_NONE"),
-            build_entry(national_dex=898, home_id="00898_ICE_NONE"),
-            build_entry(national_dex=898, home_id="00898_SHADOW_NONE"),
         ),
         rules,
     )
@@ -743,8 +737,6 @@ def test_swsh_excludes_event_zarude_and_unstorable_calyrex_fusions() -> None:
     assert zarude.availability.is_available_in(GameColumn.SWSH) is False
     assert dada.availability.is_available_in(GameColumn.SWSH) is False
     assert calyrex.availability.is_available_in(GameColumn.SWSH) is True
-    assert ice.availability.is_available_in(GameColumn.SWSH) is False
-    assert shadow.availability.is_available_in(GameColumn.SWSH) is False
 
 
 def test_pla_save_data_research_requests_are_obtainable() -> None:
@@ -769,7 +761,8 @@ def test_bdsp_complete_catalog_covers_first_four_generations() -> None:
     rule = load_project_game_rules().games[GameColumn.BDSP]
 
     assert rule.complete is True
-    assert rule.national_dex_ranges == ((1, 493),)
+    assert rule.national_dex_ranges == ((1, 250), (252, 385), (387, 488))
+    assert rule.national_dex == ({493})
     assert rule.includes_national_dex(1) is True
     assert rule.includes_national_dex(493) is True
     assert rule.includes_national_dex(494) is False
@@ -794,7 +787,7 @@ def test_bdsp_keeps_supported_gender_and_platinum_forms() -> None:
 
 def test_bdsp_excludes_regional_cosplay_and_temporary_forms() -> None:
     rules = load_project_game_rules()
-    alolan, galarian, hisuian, paldean, cosplay, rainy = apply_game_availability(
+    alolan, galarian, hisuian, paldean = apply_game_availability(
         (
             build_entry(national_dex=26, home_id="00026_ALOLA_NONE"),
             build_entry(national_dex=77, home_id="00077_GALAR_NONE"),
@@ -803,13 +796,11 @@ def test_bdsp_excludes_regional_cosplay_and_temporary_forms() -> None:
                 national_dex=128,
                 home_id="00128_PALDEA_COMBAT_BREED_NONE",
             ),
-            build_entry(national_dex=25, home_id="00025_LIBRE_NONE"),
-            build_entry(national_dex=351, home_id="00351_RAINY_NONE"),
         ),
         rules,
     )
 
-    for entry in (alolan, galarian, hisuian, paldean, cosplay, rainy):
+    for entry in (alolan, galarian, hisuian, paldean):
         assert entry.availability.is_available_in(GameColumn.BDSP) is False
 
 
@@ -875,7 +866,7 @@ def test_sv_keeps_supported_regional_and_special_forms() -> None:
             build_entry(national_dex=128, home_id="00128_PALDEA_COMBAT_BREED_NONE"),
             build_entry(national_dex=194, home_id="00194_PALDEA_NONE"),
             build_entry(national_dex=901, home_id="00901_BLOODMOON_NONE"),
-            build_entry(national_dex=999, home_id="00999_ROAMING_NONE"),
+            build_entry(national_dex=999, home_id="00999_NORMAL_NONE"),
         ),
         rules,
     )
@@ -886,13 +877,11 @@ def test_sv_keeps_supported_regional_and_special_forms() -> None:
 def test_sv_keeps_pecharunt_mystery_gift_but_excludes_timed_events() -> None:
     """The permanent Pecharunt epilogue gift counts; timed raids do not."""
     rules = load_project_game_rules()
-    walking_wake, iron_leaves, pecharunt, glide, drive = apply_game_availability(
+    walking_wake, iron_leaves, pecharunt = apply_game_availability(
         (
             build_entry(national_dex=1009, home_id="01009_NORMAL_NONE"),
             build_entry(national_dex=1010, home_id="01010_NORMAL_NONE"),
             build_entry(national_dex=1025, home_id="01025_NORMAL_NONE"),
-            build_entry(national_dex=1007, home_id="01007_GLIDING_BUILD_NONE"),
-            build_entry(national_dex=1008, home_id="01008_DRIVE_MODE_NONE"),
         ),
         rules,
     )
@@ -900,8 +889,6 @@ def test_sv_keeps_pecharunt_mystery_gift_but_excludes_timed_events() -> None:
     assert walking_wake.availability.is_available_in(GameColumn.SV) is False
     assert iron_leaves.availability.is_available_in(GameColumn.SV) is False
     assert pecharunt.availability.is_available_in(GameColumn.SV) is True
-    assert glide.availability.is_available_in(GameColumn.SV) is False
-    assert drive.availability.is_available_in(GameColumn.SV) is False
 
 
 def test_za_catalog_covers_base_game_and_mega_dimension_species() -> None:

@@ -24,6 +24,33 @@ _SUPPLEMENTAL_FORMS: dict[str, tuple[tuple[str, str], ...]] = {
         ("sandy-cloak", "Sandy Cloak"),
         ("trash-cloak", "Trash Cloak"),
     ),
+    "shellos": (("east-sea", "East Sea"),),
+    "gastrodon": (("east-sea", "East Sea"),),
+    "deerling": (
+        ("summer", "Summer Form"),
+        ("autumn", "Autumn Form"),
+        ("winter", "Winter Form"),
+    ),
+    "sawsbuck": (
+        ("summer", "Summer Form"),
+        ("autumn", "Autumn Form"),
+        ("winter", "Winter Form"),
+    ),
+    "furfrou": (
+        ("heart-trim", "Heart Trim"),
+        ("star-trim", "Star Trim"),
+        ("diamond-trim", "Diamond Trim"),
+        ("debutante-trim", "Debutante Trim"),
+        ("matron-trim", "Matron Trim"),
+        ("dandy-trim", "Dandy Trim"),
+        ("la-reine-trim", "La Reine Trim"),
+        ("kabuki-trim", "Kabuki Trim"),
+        ("pharaoh-trim", "Pharaoh Trim"),
+    ),
+    "sinistea": (("antique", "Antique Form"),),
+    "polteageist": (("antique", "Antique Form"),),
+    "poltchageist": (("artisan", "Artisan Form"),),
+    "sinistcha": (("masterpiece", "Masterpiece Form"),),
     "vivillon": (
         ("archipelago-pattern", "Archipelago Pattern"),
         ("continental-pattern", "Continental Pattern"),
@@ -76,6 +103,15 @@ _SUPPLEMENTAL_FORMS: dict[str, tuple[tuple[str, str], ...]] = {
 _DEFAULT_FORM_PRESENTATION: dict[str, tuple[str, str]] = {
     "unown": ("A", "Unown (A)"),
     "burmy": ("Plant Cloak", "Plant Cloak Burmy"),
+    "shellos": ("West Sea", "West Sea Shellos"),
+    "gastrodon": ("West Sea", "West Sea Gastrodon"),
+    "deerling": ("Spring Form", "Spring Form Deerling"),
+    "sawsbuck": ("Spring Form", "Spring Form Sawsbuck"),
+    "furfrou": ("Natural Form", "Natural Form Furfrou"),
+    "sinistea": ("Phony Form", "Phony Form Sinistea"),
+    "polteageist": ("Phony Form", "Phony Form Polteageist"),
+    "poltchageist": ("Counterfeit Form", "Counterfeit Form Poltchageist"),
+    "sinistcha": ("Unremarkable Form", "Unremarkable Form Sinistcha"),
     "vivillon": ("Meadow Pattern", "Meadow Pattern Vivillon"),
     "flabebe": ("Red Flower", "Red Flower Flabébé"),
     "floette": ("Red Flower", "Red Flower Floette"),
@@ -85,6 +121,15 @@ _DEFAULT_FORM_PRESENTATION: dict[str, tuple[str, str]] = {
 
 _DEFAULT_FORM_SLUGS: dict[str, str] = {
     "unown": "a",
+    "shellos": "west-sea",
+    "gastrodon": "west-sea",
+    "deerling": "spring",
+    "sawsbuck": "spring",
+    "furfrou": "natural-form",
+    "sinistea": "phony",
+    "polteageist": "phony",
+    "poltchageist": "counterfeit",
+    "sinistcha": "unremarkable",
     "alcremie": "strawberry-sweet",
 }
 
@@ -97,6 +142,31 @@ _SPECIAL_FORM_ORDER: dict[int, dict[str, int]] = {
         "exclamation": 26,
         "question": 27,
     },
+    422: {"west-sea": 0, "east-sea": 1},
+    423: {"west-sea": 0, "east-sea": 1},
+    585: {"spring": 0, "summer": 1, "autumn": 2, "winter": 3},
+    586: {"spring": 0, "summer": 1, "autumn": 2, "winter": 3},
+    676: {
+        slug: index
+        for index, slug in enumerate(
+            (
+                "natural-form",
+                "heart-trim",
+                "star-trim",
+                "diamond-trim",
+                "debutante-trim",
+                "matron-trim",
+                "dandy-trim",
+                "la-reine-trim",
+                "kabuki-trim",
+                "pharaoh-trim",
+            )
+        )
+    },
+    854: {"phony": 0, "antique": 1},
+    855: {"phony": 0, "antique": 1},
+    1012: {"counterfeit": 0, "artisan": 1},
+    1013: {"unremarkable": 0, "masterpiece": 1},
     869: {
         slug: index
         for index, slug in enumerate(

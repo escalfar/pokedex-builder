@@ -11,7 +11,14 @@ complete: true
 # legendary birds are the documented exception because GO is currently their
 # only permanent, non-event legitimate source:
 #   00144_GALAR_NONE, 00145_GALAR_NONE, 00146_GALAR_NONE.
-national_dex: []
+national_dex:
+  # Sinnoh
+  - 493             # Arceus
+  # Kalos
+  - 721             # Volcanion
+  # Alola
+  - 808             # Meltan
+
 national_dex_ranges:
   - [1, 150]
 
@@ -60,7 +67,7 @@ national_dex_ranges:
   # Darkrai and both Shaymin forms are excluded below. Their legitimate shiny
   # methods depend on limited-time event items or event-style Pokémon GO access,
   # so they do not satisfy the project's non-event rule.
-  - [387, 493]
+  - [387, 490]
 
   # Batch 16: Unova. Retained HOME variants with Nat Dex 494-649 are
   # classified here. Most species have permanent shiny methods in supported
@@ -78,7 +85,7 @@ national_dex_ranges:
   # shiny method. Genesect's legal shiny releases have depended on limited
   # distributions or rotating/event Pokémon GO availability, which does not
   # satisfy the project's non-event rule.
-  - [494, 649]
+  - [495, 648]
 
   # Batch 17: Kalos. Retained HOME variants with Nat Dex 650-721 are
   # classified here. Most species have permanent shiny methods in supported
@@ -97,7 +104,7 @@ national_dex_ranges:
   # below. Eternal Flower Floette has never had a legitimate release; Diancie's
   # shiny releases have been limited distributions; and Hoopa has no permanent
   # legitimate shiny acquisition method.
-  - [650, 721]
+  - [650, 718]
 
   # Batch 18: Alola. Retained HOME variants with Nat Dex 722-809 are
   # classified here. Most species have permanent shiny methods in supported
@@ -116,7 +123,9 @@ national_dex_ranges:
   # Adventures encounters in The Crown Tundra. Cosmog, Cosmoem, Magearna,
   # Marshadow, Zeraora, and Melmetal are excluded below because their legitimate
   # shiny availability is unreleased or limited to time-bound events.
-  - [722, 809]
+  - [722, 789]
+  - [791, 800]
+  - [803, 806]
 
   # Batch 19: Galar and Hisui. Retained HOME variants with Nat Dex 810-905
   # are classified here. Most species have permanent shiny methods through
@@ -132,7 +141,8 @@ national_dex_ranges:
   # forms, Glastrier, Spectrier, and all retained Calyrex forms are excluded
   # below. Their legitimate shiny availability is either unreleased or limited
   # to time-bound distributions, so it does not satisfy the project rule.
-  - [810, 905]
+  - [810, 887]
+  - [894, 905]
 
   # Batch 20: Paldea, Kitakami, and Blueberry. Retained HOME variants with
   # Nat Dex 906-1025 are classified here. Ordinary species and evolutions are
@@ -151,7 +161,10 @@ national_dex_ranges:
   # Walking Wake, Iron Leaves, the Loyal Three, Ogerpon, the later Paradox
   # legends, Terapagos, and Pecharunt have no permanent legitimate shiny route.
   # Their retained catalog forms are excluded below.
-  - [906, 1025]
+  - [906, 1000]
+  - [1005, 1006]
+  - [1011, 1013]
+  - [1018, 1019]
 
 # Use form-level inclusions only when a species-wide rule would be too broad.
 home_ids: []
@@ -169,6 +182,7 @@ excluded_home_ids:
   # Pokémon GO research. Both retained forms therefore remain unavailable.
   - "00492_NORMAL_NONE"
   - "00492_SKY_NONE"
+
   # Victini has no permanent legitimate shiny acquisition method.
   - "00494_NORMAL_NONE"
 
@@ -176,18 +190,22 @@ excluded_home_ids:
   # rotating/event Pokémon GO availability. Pokémon GO is therefore not used.
   - "00649_NORMAL_NONE"
 
+  # PokeBall Pattern Vivillon has no permanent legitimate shiny acquisition method.
+  - "00666_POKE_BALL_PATTERN_NONE"
+
   # Eternal Flower Floette has never been legitimately released, shiny or
   # otherwise, so the retained catalog form cannot satisfy the acquisition rule.
   - "00670_ETERNAL_NONE"
 
   # Shiny Diancie has only been released through limited distributions. The
-  # permanent Legends: Z-A encounter is shiny-locked.
+  # permanent Legends: Z-A encounter is shiny-locked. Or PoGo
   - "00719_NORMAL_NONE"
 
   # Hoopa has no permanent legitimate shiny acquisition method. Both retained
   # forms remain unavailable because form changing does not create Shininess.
   - "00720_NORMAL_NONE"
   - "00720_UNBOUND_NONE"
+
   # Cosmog and Cosmoem have never had a legitimate shiny release. Solgaleo and
   # Lunala remain included through permanent Dynamax Adventures encounters.
   - "00789_NORMAL_NONE"
@@ -195,6 +213,7 @@ excluded_home_ids:
 
   # Magearna and Marshadow have no legitimate shiny acquisition method.
   - "00801_NORMAL_NONE"
+  - "00801_ORIGINAL_NONE"
   - "00802_NORMAL_NONE"
 
   # Shiny Zeraora was available only as a time-limited Pokémon HOME Mystery
@@ -204,6 +223,7 @@ excluded_home_ids:
   # Shiny Melmetal requires evolving Shiny Meltan in Pokémon GO during periods
   # when Shiny Meltan is enabled. The permanent HOME reward cannot return to GO.
   - "00809_NORMAL_NONE"
+
   # Zacian, Zamazenta, and Eternatus have only had limited-time shiny
   # distributions. Their permanent encounters remain shiny-locked.
   - "00888_NORMAL_NONE"
@@ -214,7 +234,7 @@ excluded_home_ids:
   # A briefly shiny raid-boss Urshifu caused by an event oversight could not be
   # caught and therefore does not count as an acquisition method.
   - "00891_NORMAL_NONE"
-  - "00892_SINGLE_STRIKE_NONE"
+  - "00892_NORMAL_NONE"
   - "00892_RAPID_STRIKE_NONE"
 
   # Zarude and Dada Zarude have no legitimate shiny acquisition method.
@@ -226,8 +246,10 @@ excluded_home_ids:
   - "00896_NORMAL_NONE"
   - "00897_NORMAL_NONE"
   - "00898_NORMAL_NONE"
-  - "00898_ICE_NONE"
-  - "00898_SHADOW_NONE"
+
+  # Boodmoon Ursaluna has no permanent legitimate shiny acquisition method.
+  # There's no way to evolve Ursaring into bloodmoon forme in any mainline game.
+  - "00901_BLOODMOON_NONE"
 
   # Roaming Form Gimmighoul has no permanent non-event shiny route. Its shiny
   # availability has depended on time-bound Pokémon GO periods. Chest Form and
@@ -245,15 +267,7 @@ excluded_home_ids:
   # their permanent story encounters are shiny-locked. Every retained ride form
   # therefore remains unavailable under the non-event rule.
   - "01007_NORMAL_NONE"
-  - "01007_GLIDING_BUILD_NONE"
-  - "01007_LIMITED_BUILD_NONE"
-  - "01007_SPRINTING_BUILD_NONE"
-  - "01007_SWIMMING_BUILD_NONE"
   - "01008_NORMAL_NONE"
-  - "01008_AQUATIC_MODE_NONE"
-  - "01008_DRIVE_MODE_NONE"
-  - "01008_GLIDE_MODE_NONE"
-  - "01008_LOW_POWER_MODE_NONE"
 
   # Walking Wake and Iron Leaves are limited-event encounters and have no
   # permanent legitimate shiny acquisition method.

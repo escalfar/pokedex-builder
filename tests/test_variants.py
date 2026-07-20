@@ -574,3 +574,105 @@ def test_build_variants_adds_alcremie_forms_by_sweet_only() -> None:
     ]
     assert all("cream" not in variant.form_slug for variant in variants)
     assert sum(variant.is_default for variant in variants) == 1
+
+
+@pytest.mark.parametrize(
+    (
+        "national_dex",
+        "api_name",
+        "english_name",
+        "generation",
+        "expected_forms",
+    ),
+    (
+        (422, "shellos", "Shellos", 4, ("west-sea", "east-sea")),
+        (423, "gastrodon", "Gastrodon", 4, ("west-sea", "east-sea")),
+        (
+            585,
+            "deerling",
+            "Deerling",
+            5,
+            ("spring", "summer", "autumn", "winter"),
+        ),
+        (
+            586,
+            "sawsbuck",
+            "Sawsbuck",
+            5,
+            ("spring", "summer", "autumn", "winter"),
+        ),
+        (
+            676,
+            "furfrou",
+            "Furfrou",
+            6,
+            (
+                "natural-form",
+                "heart-trim",
+                "star-trim",
+                "diamond-trim",
+                "debutante-trim",
+                "matron-trim",
+                "dandy-trim",
+                "la-reine-trim",
+                "kabuki-trim",
+                "pharaoh-trim",
+            ),
+        ),
+        (854, "sinistea", "Sinistea", 8, ("phony", "antique")),
+        (855, "polteageist", "Polteageist", 8, ("phony", "antique")),
+        (
+            1012,
+            "poltchageist",
+            "Poltchageist",
+            9,
+            ("counterfeit", "artisan"),
+        ),
+        (
+            1013,
+            "sinistcha",
+            "Sinistcha",
+            9,
+            ("unremarkable", "masterpiece"),
+        ),
+    ),
+)
+def test_build_variants_adds_home_persistent_forms(
+    national_dex: int,
+    api_name: str,
+    english_name: str,
+    generation: int,
+    expected_forms: tuple[str, ...],
+) -> None:
+    details = (
+        SpeciesDetails(
+            national_dex=national_dex,
+            api_name=api_name,
+            english_name=english_name,
+            generation=generation,
+            is_legendary=False,
+            is_mythical=False,
+            resource_url=(f"https://pokeapi.co/api/v2/pokemon-species/{national_dex}/"),
+            varieties=(
+                SpeciesVariety(
+                    api_name=api_name,
+                    resource_url=(f"https://pokeapi.co/api/v2/pokemon/{national_dex}/"),
+                    is_default=True,
+                ),
+            ),
+        ),
+    )
+    species = (
+        PokemonSpecies(
+            national_dex=national_dex,
+            name=english_name,
+            generation=generation,
+        ),
+    )
+
+    variants = build_pokemon_variants(details, species)
+
+    assert tuple(variant.form_slug for variant in variants) == expected_forms
+    assert variants[0].is_default is True
+    assert all(variant.generation == generation for variant in variants)
+    assert len({variant.home_id for variant in variants}) == len(expected_forms)

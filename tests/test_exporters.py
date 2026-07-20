@@ -433,6 +433,11 @@ def test_excel_simplifies_selected_form_labels_only_in_nombre(tmp_path: Path) ->
         (550, "Basculin", "Blue Striped", "Basculin (Blue)"),
         (550, "Basculin", "White Striped", "Basculin (White)"),
         (666, "Vivillon", "Poké Ball Pattern", "Vivillon (Poké Ball)"),
+        (422, "Shellos", "West Sea", "Shellos (West)"),
+        (586, "Sawsbuck", "Spring Form", "Sawsbuck (Spring)"),
+        (676, "Furfrou", "Matron Trim", "Furfrou (Matron)"),
+        (855, "Polteageist", "Antique Form", "Polteageist (Antique)"),
+        (1012, "Poltchageist", "Artisan Form", "Poltchageist (Artisan)"),
         (710, "Pumpkaboo", "Super", "Pumpkaboo (Jumbo)"),
         (711, "Gourgeist", "Super", "Gourgeist (Jumbo)"),
         (892, "Urshifu", "Rapid Strike", "Urshifu (Rapid)"),
@@ -461,7 +466,12 @@ def test_excel_simplifies_selected_form_labels_only_in_nombre(tmp_path: Path) ->
     finally:
         workbook.close()
 
-    assert names == [expected for *_, expected in cases]
+    # assert names == [expected for *_, expected in cases]
+    expected_cases = sorted(
+        enumerate(cases),
+        key=lambda item: (item[1][0], item[0]),
+    )
+    assert names == [case[3] for _, case in expected_cases]
     assert [entry.form for entry in entries] == [form for _, _, form, _ in cases]
 
 

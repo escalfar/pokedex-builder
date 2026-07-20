@@ -63,6 +63,54 @@ _EXCEL_FORM_LABEL_OVERRIDES: dict[str, dict[str, str]] = {
     "Pumpkaboo": {"Super": "Jumbo"},
     "Gourgeist": {"Super": "Jumbo"},
     "Urshifu": {"Rapid Strike": "Rapid"},
+    "Shellos": {
+        "East Sea": "East",
+        "West Sea": "West",
+    },
+    "Gastrodon": {
+        "East Sea": "East",
+        "West Sea": "West",
+    },
+    "Deerling": {
+        "Autumn Form": "Autumn",
+        "Spring Form": "Spring",
+        "Summer Form": "Summer",
+        "Winter Form": "Winter",
+    },
+    "Sawsbuck": {
+        "Autumn Form": "Autumn",
+        "Spring Form": "Spring",
+        "Summer Form": "Summer",
+        "Winter Form": "Winter",
+    },
+    "Furfrou": {
+        "Dandy Trim": "Dandy",
+        "Debutante Trim": "Debutante",
+        "Diamond Trim": "Diamond",
+        "Heart Trim": "Heart",
+        "Kabuki Trim": "Kabuki",
+        "La Reine Trim": "La Reine",
+        "Matron Trim": "Matron",
+        "Natural Form": "Natural",
+        "Pharaoh Trim": "Pharaoh",
+        "Star Trim": "Star",
+    },
+    "Sinistea": {
+        "Antique Form": "Antique",
+        "Phony Form": "Phony",
+    },
+    "Polteageist": {
+        "Antique Form": "Antique",
+        "Phony Form": "Phony",
+    },
+    "Poltchageist": {
+        "Artisan Form": "Artisan",
+        "Counterfeit Form": "Counterfeit",
+    },
+    "Sinistcha": {
+        "Masterpiece Form": "Masterpiece",
+        "Unremarkable Form": "Unremarkable",
+    },
     "Squawkabilly": {
         "Blue Plumage": "Blue",
         "White Plumage": "White",
@@ -79,6 +127,39 @@ _FLOWER_FORM_ORDER: dict[str, int] = {
     "Eternal": 5,
 }
 _FLOWER_SPECIES = {"Flabébé", "Floette", "Florges"}
+
+_EXCEL_SPECIES_FORM_ORDER: dict[str, dict[str, int]] = {
+    "Shellos": {"West Sea": 0, "East Sea": 1},
+    "Gastrodon": {"West Sea": 0, "East Sea": 1},
+    "Deerling": {
+        "Spring Form": 0,
+        "Summer Form": 1,
+        "Autumn Form": 2,
+        "Winter Form": 3,
+    },
+    "Sawsbuck": {
+        "Spring Form": 0,
+        "Summer Form": 1,
+        "Autumn Form": 2,
+        "Winter Form": 3,
+    },
+    "Furfrou": {
+        "Natural Form": 0,
+        "Heart Trim": 1,
+        "Star Trim": 2,
+        "Diamond Trim": 3,
+        "Debutante Trim": 4,
+        "Matron Trim": 5,
+        "Dandy Trim": 6,
+        "La Reine Trim": 7,
+        "Kabuki Trim": 8,
+        "Pharaoh Trim": 9,
+    },
+    "Sinistea": {"Phony Form": 0, "Antique Form": 1},
+    "Polteageist": {"Phony Form": 0, "Antique Form": 1},
+    "Poltchageist": {"Counterfeit Form": 0, "Artisan Form": 1},
+    "Sinistcha": {"Unremarkable Form": 0, "Masterpiece Form": 1},
+}
 
 
 def export_excel(
@@ -354,6 +435,11 @@ def _excel_ordered_entries(
         original_index, entry = item
         if entry.pokemon in _FLOWER_SPECIES:
             return (entry.national_dex, _FLOWER_FORM_ORDER.get(entry.form, 99))
+
+        species_order = _EXCEL_SPECIES_FORM_ORDER.get(entry.pokemon)
+        if species_order is not None:
+            return (entry.national_dex, species_order.get(entry.form, 99))
+
         return (entry.national_dex, original_index)
 
     return tuple(entry for _, entry in sorted(indexed_entries, key=sort_key))
@@ -452,6 +538,7 @@ def _populate_summary_sheet(
     sheet["B15"].number_format = "0.00%"
 
     last_game_row = first_game_row + len(GameColumn) - 1
+    sheet.row_dimensions[16].hidden = True
     for row_number in range(first_game_row, last_game_row + 1):
         sheet.row_dimensions[row_number].hidden = True
 

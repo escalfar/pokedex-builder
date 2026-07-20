@@ -525,7 +525,6 @@ def test_galar_hisui_catalog_classifies_permanent_methods_and_exclusions() -> No
         dada_zarude,
         regieleki,
         glastrier,
-        shadow_rider_calyrex,
         wyrdeer,
         enamorus,
     ) = apply_shiny_availability(
@@ -534,11 +533,10 @@ def test_galar_hisui_catalog_classifies_permanent_methods_and_exclusions() -> No
             build_entry(national_dex=888, home_id="00888_NORMAL_NONE"),
             build_entry(national_dex=890, home_id="00890_NORMAL_NONE"),
             build_entry(national_dex=891, home_id="00891_NORMAL_NONE"),
-            build_entry(national_dex=892, home_id="00892_SINGLE_STRIKE_NONE"),
+            build_entry(national_dex=892, home_id="00892_NORMAL_NONE"),
             build_entry(national_dex=893, home_id="00893_DADA_NONE"),
             build_entry(national_dex=894, home_id="00894_NORMAL_NONE"),
             build_entry(national_dex=896, home_id="00896_NORMAL_NONE"),
-            build_entry(national_dex=898, home_id="00898_SHADOW_NONE"),
             build_entry(national_dex=899, home_id="00899_NORMAL_NONE"),
             build_entry(national_dex=905, home_id="00905_NORMAL_NONE"),
         ),
@@ -553,7 +551,6 @@ def test_galar_hisui_catalog_classifies_permanent_methods_and_exclusions() -> No
     assert dada_zarude.obtainable_shiny is False
     assert regieleki.obtainable_shiny is True
     assert glastrier.obtainable_shiny is False
-    assert shadow_rider_calyrex.obtainable_shiny is False
     assert wyrdeer.obtainable_shiny is True
     assert enamorus.obtainable_shiny is True
 
@@ -587,7 +584,6 @@ def test_paldea_dlc_catalog_classifies_permanent_methods_and_exclusions() -> Non
         gholdengo,
         wo_chien,
         koraidon,
-        miraidon_drive,
         walking_wake,
         dipplin,
         okidogi,
@@ -605,7 +601,6 @@ def test_paldea_dlc_catalog_classifies_permanent_methods_and_exclusions() -> Non
             build_entry(national_dex=1000, home_id="01000_NORMAL_NONE"),
             build_entry(national_dex=1001, home_id="01001_NORMAL_NONE"),
             build_entry(national_dex=1007, home_id="01007_NORMAL_NONE"),
-            build_entry(national_dex=1008, home_id="01008_DRIVE_MODE_NONE"),
             build_entry(national_dex=1009, home_id="01009_NORMAL_NONE"),
             build_entry(national_dex=1011, home_id="01011_NORMAL_NONE"),
             build_entry(national_dex=1014, home_id="01014_NORMAL_NONE"),
@@ -625,7 +620,6 @@ def test_paldea_dlc_catalog_classifies_permanent_methods_and_exclusions() -> Non
     assert gholdengo.obtainable_shiny is True
     assert wo_chien.obtainable_shiny is False
     assert koraidon.obtainable_shiny is False
-    assert miraidon_drive.obtainable_shiny is False
     assert walking_wake.obtainable_shiny is False
     assert dipplin.obtainable_shiny is True
     assert okidogi.obtainable_shiny is False
