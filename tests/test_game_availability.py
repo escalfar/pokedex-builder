@@ -384,7 +384,7 @@ def load_project_game_rules() -> GameAvailabilityRules:
     return GameAvailabilityRules.from_yaml(catalog_path)
 
 
-def test_xy_catalog_contains_454_non_event_species() -> None:
+def test_xy_catalog_contains_friend_safari_and_evolution_lines() -> None:
     rule = load_project_game_rules().games[GameColumn.XY]
     covered = set(rule.national_dex)
 
@@ -392,7 +392,7 @@ def test_xy_catalog_contains_454_non_event_species() -> None:
         covered.update(range(start, end + 1))
 
     assert rule.complete is True
-    assert len(covered) == 454
+    assert len(covered) == 577
     assert 650 in covered  # Chespin starts the Central Kalos Pokédex.
     assert 718 in covered  # Zygarde closes the non-event Kalos collection.
     assert 719 not in covered  # Diancie requires an event in X/Y.

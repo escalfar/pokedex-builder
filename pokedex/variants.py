@@ -119,38 +119,26 @@ _DEFAULT_FORM_PRESENTATION: dict[str, tuple[str, str]] = {
     "alcremie": ("Strawberry Sweet", "Alcremie (Strawberry Sweet)"),
 }
 
-_DEFAULT_FORM_SLUGS: dict[str, str] = {
-    "unown": "a",
-    "shellos": "west-sea",
-    "gastrodon": "west-sea",
-    "deerling": "spring",
-    "sawsbuck": "spring",
-    "furfrou": "natural-form",
-    "sinistea": "phony",
-    "polteageist": "phony",
-    "poltchageist": "counterfeit",
-    "sinistcha": "unremarkable",
-    "alcremie": "strawberry-sweet",
-}
 
 _SPECIAL_FORM_ORDER: dict[int, dict[str, int]] = {
     201: {
+        "normal": 0,
         **{
             letter.casefold(): index
-            for index, letter in enumerate("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            for index, letter in enumerate("BCDEFGHIJKLMNOPQRSTUVWXYZ", start=1)
         },
         "exclamation": 26,
         "question": 27,
     },
-    422: {"west-sea": 0, "east-sea": 1},
-    423: {"west-sea": 0, "east-sea": 1},
-    585: {"spring": 0, "summer": 1, "autumn": 2, "winter": 3},
-    586: {"spring": 0, "summer": 1, "autumn": 2, "winter": 3},
+    422: {"normal": 0, "east-sea": 1},
+    423: {"normal": 0, "east-sea": 1},
+    585: {"normal": 0, "summer": 1, "autumn": 2, "winter": 3},
+    586: {"normal": 0, "summer": 1, "autumn": 2, "winter": 3},
     676: {
         slug: index
         for index, slug in enumerate(
             (
-                "natural-form",
+                "normal",
                 "heart-trim",
                 "star-trim",
                 "diamond-trim",
@@ -163,15 +151,15 @@ _SPECIAL_FORM_ORDER: dict[int, dict[str, int]] = {
             )
         )
     },
-    854: {"phony": 0, "antique": 1},
-    855: {"phony": 0, "antique": 1},
-    1012: {"counterfeit": 0, "artisan": 1},
-    1013: {"unremarkable": 0, "masterpiece": 1},
+    854: {"normal": 0, "antique": 1},
+    855: {"normal": 0, "antique": 1},
+    1012: {"normal": 0, "artisan": 1},
+    1013: {"normal": 0, "masterpiece": 1},
     869: {
         slug: index
         for index, slug in enumerate(
             (
-                "strawberry-sweet",
+                "normal",
                 "berry-sweet",
                 "love-sweet",
                 "star-sweet",
@@ -240,6 +228,7 @@ def validate_pokemon_variants(
     _validate_unique_logical_keys(variants)
     _validate_unique_names(variants)
     _validate_one_default_variety_per_species(variants)
+    _validate_one_normal_form_per_species(variants)
     _validate_gender_representation(variants)
     _validate_deterministic_order(variants)
 
@@ -352,9 +341,6 @@ def _build_variant(
         variety_api_name=variety.api_name,
         is_default=variety.is_default,
     )
-
-    if variety.is_default:
-        form_slug = _DEFAULT_FORM_SLUGS.get(detail.api_name, form_slug)
 
     form_name = form_slug_to_name(form_slug)
 
@@ -508,6 +494,33 @@ def _validate_one_default_variety_per_species(
 
         raise ValidationError(
             "Each species must contain exactly one default variety: " f"{details}"
+        )
+
+
+def _validate_one_normal_form_per_species(
+    variants: tuple[PokemonVariant, ...],
+) -> None:
+    """Require every species to expose exactly one logical normal form.
+
+    A visible default presentation (for example West Sea Shellos) may keep its
+    user-facing name, but its stable HOME identifier must still use NORMAL.
+    Gender differences count as one logical form because they share the slug.
+    """
+    normal_forms: dict[int, set[str]] = {}
+    for variant in variants:
+        normal_forms.setdefault(variant.national_dex, set())
+        if variant.is_normal_form:
+            # Male/female rows are two representations of the same logical form.
+            normal_forms[variant.national_dex].add(variant.form_slug.casefold())
+
+    invalid = {dex: slugs for dex, slugs in normal_forms.items() if len(slugs) != 1}
+    if invalid:
+        details = "; ".join(
+            f"{dex}={','.join(sorted(slugs)) or 'missing'}"
+            for dex, slugs in sorted(invalid.items())
+        )
+        raise ValidationError(
+            "Each species must contain exactly one normal form: " + details
         )
 
 

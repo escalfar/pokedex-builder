@@ -519,7 +519,7 @@ def test_build_variants_adds_all_unown_forms_in_home_order() -> None:
     assert [variant.display_name for variant in variants] == [
         f"Unown ({form_name})" for form_name in expected_names
     ]
-    assert variants[0].home_id == "00201_A_NONE"
+    assert variants[0].home_id == "00201_NORMAL_NONE"
     assert variants[-2].home_id == "00201_EXCLAMATION_NONE"
     assert variants[-1].home_id == "00201_QUESTION_NONE"
     assert sum(variant.is_default for variant in variants) == 1
@@ -564,7 +564,7 @@ def test_build_variants_adds_alcremie_forms_by_sweet_only() -> None:
         f"Alcremie ({sweet})" for sweet in expected_sweets
     ]
     assert [variant.home_id for variant in variants] == [
-        "00869_STRAWBERRY_SWEET_NONE",
+        "00869_NORMAL_NONE",
         "00869_BERRY_SWEET_NONE",
         "00869_LOVE_SWEET_NONE",
         "00869_STAR_SWEET_NONE",
@@ -585,21 +585,21 @@ def test_build_variants_adds_alcremie_forms_by_sweet_only() -> None:
         "expected_forms",
     ),
     (
-        (422, "shellos", "Shellos", 4, ("west-sea", "east-sea")),
-        (423, "gastrodon", "Gastrodon", 4, ("west-sea", "east-sea")),
+        (422, "shellos", "Shellos", 4, ("normal", "east-sea")),
+        (423, "gastrodon", "Gastrodon", 4, ("normal", "east-sea")),
         (
             585,
             "deerling",
             "Deerling",
             5,
-            ("spring", "summer", "autumn", "winter"),
+            ("normal", "summer", "autumn", "winter"),
         ),
         (
             586,
             "sawsbuck",
             "Sawsbuck",
             5,
-            ("spring", "summer", "autumn", "winter"),
+            ("normal", "summer", "autumn", "winter"),
         ),
         (
             676,
@@ -607,7 +607,7 @@ def test_build_variants_adds_alcremie_forms_by_sweet_only() -> None:
             "Furfrou",
             6,
             (
-                "natural-form",
+                "normal",
                 "heart-trim",
                 "star-trim",
                 "diamond-trim",
@@ -619,21 +619,21 @@ def test_build_variants_adds_alcremie_forms_by_sweet_only() -> None:
                 "pharaoh-trim",
             ),
         ),
-        (854, "sinistea", "Sinistea", 8, ("phony", "antique")),
-        (855, "polteageist", "Polteageist", 8, ("phony", "antique")),
+        (854, "sinistea", "Sinistea", 8, ("normal", "antique")),
+        (855, "polteageist", "Polteageist", 8, ("normal", "antique")),
         (
             1012,
             "poltchageist",
             "Poltchageist",
             9,
-            ("counterfeit", "artisan"),
+            ("normal", "artisan"),
         ),
         (
             1013,
             "sinistcha",
             "Sinistcha",
             9,
-            ("unremarkable", "masterpiece"),
+            ("normal", "masterpiece"),
         ),
     ),
 )
