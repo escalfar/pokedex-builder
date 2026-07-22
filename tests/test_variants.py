@@ -64,6 +64,17 @@ def test_extract_form_slug_removes_species_prefix() -> None:
     )
 
 
+def test_extract_form_slug_simplifies_galarian_darmanitan_standard_mode() -> None:
+    assert (
+        extract_form_slug(
+            species_api_name="darmanitan",
+            variety_api_name="darmanitan-galar-standard",
+            is_default=False,
+        )
+        == "galar"
+    )
+
+
 def test_form_slug_to_name() -> None:
     assert form_slug_to_name("normal") == "Normal"
     assert form_slug_to_name("white-striped") == "White Striped"
@@ -438,6 +449,8 @@ def test_build_variants_adds_all_vivillon_patterns() -> None:
 
     assert len(variants) == 20
     assert variants[0].form_name == "Meadow Pattern"
+    assert variants[-2].form_name == "Fancy Pattern"
+    assert variants[-1].form_name == "Poké Ball Pattern"
     assert {variant.form_name for variant in variants} >= {
         "Fancy Pattern",
         "Poké Ball Pattern",

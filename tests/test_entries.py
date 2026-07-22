@@ -265,6 +265,68 @@ def test_sort_entries_orders_female_before_male() -> None:
     )
 
 
+def test_sort_entries_places_unown_a_first() -> None:
+    unown_a = build_entry(
+        national_dex=201,
+        pokemon="Unown",
+        form="A",
+        name="Unown (A)",
+        generation=2,
+        home_id="00201_NORMAL_NONE",
+    )
+    unown_b = build_entry(
+        national_dex=201,
+        pokemon="Unown",
+        form="B",
+        name="Unown (B)",
+        generation=2,
+        home_id="00201_B_NONE",
+    )
+
+    ordered = sort_pokemon_entries((unown_b, unown_a))
+
+    assert ordered == (unown_a, unown_b)
+
+
+def test_sort_entries_places_special_vivillon_patterns_last() -> None:
+    meadow = build_entry(
+        national_dex=666,
+        pokemon="Vivillon",
+        form="Meadow Pattern",
+        name="Meadow Pattern Vivillon",
+        generation=6,
+        home_id="00666_NORMAL_NONE",
+    )
+    tundra = build_entry(
+        national_dex=666,
+        pokemon="Vivillon",
+        form="Tundra Pattern",
+        name="Tundra Pattern Vivillon",
+        generation=6,
+        home_id="00666_TUNDRA_PATTERN_NONE",
+    )
+    fancy = build_entry(
+        national_dex=666,
+        pokemon="Vivillon",
+        form="Fancy Pattern",
+        name="Fancy Pattern Vivillon",
+        generation=6,
+        home_id="00666_FANCY_PATTERN_NONE",
+    )
+    poke_ball = build_entry(
+        national_dex=666,
+        pokemon="Vivillon",
+        form="Poké Ball Pattern",
+        name="Poké Ball Pattern Vivillon",
+        generation=6,
+        home_id="00666_POKE_BALL_PATTERN_NONE",
+    )
+
+    ordered = sort_pokemon_entries((poke_ball, fancy, tundra, meadow))
+
+    assert ordered == (meadow, tundra, fancy, poke_ball)
+
+
 def test_validate_entries_accepts_ungendered_entry() -> None:
     validate_pokemon_entries((build_entry(),))
 

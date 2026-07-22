@@ -392,7 +392,7 @@ def test_xy_catalog_contains_friend_safari_and_evolution_lines() -> None:
         covered.update(range(start, end + 1))
 
     assert rule.complete is True
-    assert len(covered) == 577
+    assert len(covered) == 593
     assert 650 in covered  # Chespin starts the Central Kalos Pokédex.
     assert 718 in covered  # Zygarde closes the non-event Kalos collection.
     assert 719 not in covered  # Diancie requires an event in X/Y.

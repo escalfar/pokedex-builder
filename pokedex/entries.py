@@ -13,12 +13,40 @@ from pokedex.models import (
 
 _SPECIAL_FORM_ORDER: dict[int, dict[str, int]] = {
     201: {
+        "normal": 0,
         **{
             letter.casefold(): index
-            for index, letter in enumerate("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            for index, letter in enumerate("BCDEFGHIJKLMNOPQRSTUVWXYZ", start=1)
         },
         "exclamation": 26,
         "question": 27,
+    },
+    666: {
+        slug: index
+        for index, slug in enumerate(
+            (
+                "normal",
+                "archipelago_pattern",
+                "continental_pattern",
+                "elegant_pattern",
+                "garden_pattern",
+                "high_plains_pattern",
+                "icy_snow_pattern",
+                "jungle_pattern",
+                "marine_pattern",
+                "modern_pattern",
+                "monsoon_pattern",
+                "ocean_pattern",
+                "polar_pattern",
+                "river_pattern",
+                "sandstorm_pattern",
+                "savanna_pattern",
+                "sun_pattern",
+                "tundra_pattern",
+                "fancy_pattern",
+                "poke_ball_pattern",
+            )
+        )
     },
     869: {
         slug: index

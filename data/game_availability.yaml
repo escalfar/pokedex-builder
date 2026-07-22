@@ -19,17 +19,17 @@ games:
       - [21, 51]
       - [54, 108]
       - [111, 136]
-      - [142, 150]
+      - [138, 150]
       - [161, 199]
       - [202, 232]
       - [235, 242]
       - [246, 248]
       - [261, 286]
       - [290, 342]
+      - [345, 348]
       - [352, 376]
       - [396, 400]
-      - [403, 407]
-      - [412, 419]
+      - [403, 419]
       - [422, 426]
       - [433, 455]
       - [458, 473]
@@ -37,7 +37,7 @@ games:
       - [504, 545]
       - [548, 553]
       - [556, 561]
-      - [568, 591]
+      - [564, 591]
       - [594, 601]
       - [607, 625]
       - [627, 637]
@@ -47,129 +47,6 @@ games:
 
     excluded_home_ids:
       # Regional forms introduced after Pokémon X and Y.
-      - "00026_ALOLA_NONE"
-      - "00027_ALOLA_NONE"
-      - "00028_ALOLA_NONE"
-      - "00050_ALOLA_NONE"
-      - "00051_ALOLA_NONE"
-      - "00074_ALOLA_NONE"
-      - "00075_ALOLA_NONE"
-      - "00076_ALOLA_NONE"
-      - "00079_GALAR_NONE"
-      - "00080_GALAR_NONE"
-      - "00083_GALAR_NONE"
-      - "00100_HISUI_NONE"
-      - "00101_HISUI_NONE"
-      - "00103_ALOLA_NONE"
-      - "00105_ALOLA_NONE"
-      - "00122_GALAR_NONE"
-      - "00128_PALDEA_AQUA_BREED_NONE"
-      - "00128_PALDEA_BLAZE_BREED_NONE"
-      - "00128_PALDEA_COMBAT_BREED_NONE"
-      - "00144_GALAR_NONE"
-      - "00145_GALAR_NONE"
-      - "00146_GALAR_NONE"
-      - "00194_PALDEA_NONE"
-      - "00199_GALAR_NONE"
-      - "00211_HISUI_NONE"
-      - "00215_HISUI_FEMALE"
-      - "00215_HISUI_MALE"
-      - "00222_GALAR_NONE"
-      - "00263_GALAR_NONE"
-      - "00264_GALAR_NONE"
-      - "00550_WHITE_STRIPED_NONE"
-      - "00570_HISUI_NONE"
-      - "00571_HISUI_NONE"
-      - "00618_GALAR_NONE"
-      - "00666_POKE_BALL_PATTERN_NONE"
-      - "00670_ETERNAL_NONE"
-      - "00705_HISUI_NONE"
-      - "00706_HISUI_NONE"
-      - "00713_HISUI_NONE"
-      # X/Y only contain Zygarde's original 50% Forme with Aura Break.
-      - "00718_10_NONE"
-      - "00718_10_POWER_CONSTRUCT_NONE"
-      - "00718_50_POWER_CONSTRUCT_NONE"
-
-  oras:
-    complete: false
-    # Sources: updated Hoenn Pokédex and post-National-Dex encounter systems.
-    # Method: DexNav / Mirage Spots / Soaring
-    # Obtainable through permanent in-game DexNav, Mirage Spot, or soaring encounters.
-    # Jirachi remains excluded because it requires an external distribution.
-    # Deoxys and all four retained Formes remain obtainable through the Delta
-    # Episode and the in-game meteorite form-change mechanic.
-    national_dex:
-      - 208
-      - 214
-      - 222
-      - 225
-      - 227
-      - 386
-      - 462
-      - 621
-      - 700
-
-    national_dex_ranges:
-      - [13, 20]
-      - [25, 28]
-      - [35, 59]
-      - [63, 68]
-      - [72, 82]
-      - [84, 89]
-      - [95, 101]
-      - [106, 107]
-      - [109, 114]
-      - [116, 121]
-      - [125, 127]
-      - [129, 130]
-      - [132, 137]
-      - [169, 174]
-      - [177, 178]
-      - [182, 184]
-      - [190, 192]
-      - [196, 197]
-      - [199, 205]
-      - [218, 219]
-      - [230, 234]
-      - [236, 237]
-      - [239, 240]
-      - [242, 245]
-      - [249, 250]
-      - [252, 384]
-      - [401, 407]
-      - [420, 424]
-      - [427, 429]
-      - [431, 433]
-      - [436, 437]
-      - [440, 441]
-      - [443, 445]
-      - [451, 452]
-      - [456, 457]
-      - [464, 467]
-      - [470, 471]
-      - [474, 478]
-      - [480, 488]
-      - [506, 508]
-      - [517, 526]
-      - [529, 542]
-      - [546, 549]
-      - [554, 560]
-      - [562, 563]
-      - [568, 576]
-      - [585, 586]
-      - [592, 596]
-      - [599, 606]
-      - [610, 614]
-      - [626, 630]
-      - [633, 646]
-      - [690, 693]
-      - [707, 709]
-
-    home_ids: []
-
-    # Explicit form exclusions override broad species-level method coverage.
-    excluded_home_ids:
       - "00019_ALOLA_NONE"
       - "00020_ALOLA_NONE"
       - "00026_ALOLA_NONE"
@@ -177,6 +54,7 @@ games:
       - "00028_ALOLA_NONE"
       - "00037_ALOLA_NONE"
       - "00038_ALOLA_NONE"
+      - "00050_ALOLA_NONE"
       - "00051_ALOLA_NONE"
       - "00052_ALOLA_NONE"
       - "00052_GALAR_NONE"
@@ -195,6 +73,8 @@ games:
       - "00089_ALOLA_NONE"
       - "00100_HISUI_NONE"
       - "00101_HISUI_NONE"
+      - "00103_ALOLA_NONE"
+      - "00105_ALOLA_NONE"
       - "00110_GALAR_NONE"
       - "00122_GALAR_NONE"
       - "00128_PALDEA_AQUA_BREED_NONE"
@@ -216,14 +96,164 @@ games:
       - "00555_GALAR_NONE"
       - "00570_HISUI_NONE"
       - "00571_HISUI_NONE"
-      - "00585_SUMMER_NONE"
-      - "00585_AUTUMN_NONE"
-      - "00585_WINTER_NONE"
       - "00618_GALAR_NONE"
       - "00628_HISUI_NONE"
       - "00705_HISUI_NONE"
       - "00706_HISUI_NONE"
       - "00713_HISUI_NONE"
+      - "00585_SUMMER_NONE"
+      - "00585_AUTUMN_NONE"
+      - "00585_WINTER_NONE"
+      - "00586_SUMMER_NONE"
+      - "00586_AUTUMN_NONE"
+      - "00586_WINTER_NONE"
+      - "00666_FANCY_PATTERN_NONE"
+      - "00666_POKE_BALL_PATTERN_NONE"
+      - "00670_ETERNAL_NONE"
+      # X/Y only contain Zygarde's original 50% Forme with Aura Break.
+      - "00718_10_NONE"
+      - "00718_10_POWER_CONSTRUCT_NONE"
+      - "00718_50_POWER_CONSTRUCT_NONE"
+
+  oras:
+    complete: false
+    # Sources: updated Hoenn Pokédex and post-National-Dex encounter systems.
+    # Method: DexNav / Mirage Spots / Soaring
+    # Obtainable through permanent in-game DexNav, Mirage Spot, or soaring encounters.
+    # Jirachi remains excluded because it requires an external distribution.
+    # Deoxys and all four retained Formes remain obtainable through the Delta
+    # Episode and the in-game meteorite form-change mechanic.
+    national_dex:
+      - 208
+      - 214
+      - 386
+      - 462
+      - 621
+      - 700
+
+    national_dex_ranges:
+      - [13, 20]
+      - [25, 28]
+      - [35, 59]
+      - [63, 68]
+      - [72, 82]
+      - [84, 89]
+      - [95, 101]
+      - [106, 107]
+      - [109, 114]
+      - [116, 121]
+      - [125, 127]
+      - [129, 130]
+      - [132, 142]
+      - [152, 160]
+      - [167, 178]
+      - [182, 184]
+      - [190, 192]
+      - [196, 205]
+      - [218, 219]
+      - [222, 227]
+      - [230, 234]
+      - [236, 237]
+      - [239, 240]
+      - [242, 245]
+      - [249, 250]
+      - [252, 384]
+      - [387, 395]
+      - [401, 411]
+      - [420, 433]
+      - [436, 437]
+      - [440, 445]
+      - [451, 452]
+      - [456, 458]
+      - [464, 468]
+      - [470, 471]
+      - [474, 478]
+      - [480, 488]
+      - [495, 503]
+      - [506, 508]
+      - [517, 526]
+      - [529, 542]
+      - [546, 549]
+      - [554, 560]
+      - [562, 576]
+      - [585, 586]
+      - [592, 596]
+      - [599, 606]
+      - [610, 614]
+      - [626, 630]
+      - [633, 646]
+      - [688, 693]
+      - [707, 709]
+
+    home_ids: []
+
+    # Explicit form exclusions override broad species-level method coverage.
+    excluded_home_ids:
+      - "00019_ALOLA_NONE"
+      - "00020_ALOLA_NONE"
+      - "00026_ALOLA_NONE"
+      - "00027_ALOLA_NONE"
+      - "00028_ALOLA_NONE"
+      - "00037_ALOLA_NONE"
+      - "00038_ALOLA_NONE"
+      - "00050_ALOLA_NONE"
+      - "00051_ALOLA_NONE"
+      - "00052_ALOLA_NONE"
+      - "00052_GALAR_NONE"
+      - "00053_ALOLA_NONE"
+      - "00058_HISUI_NONE"
+      - "00059_HISUI_NONE"
+      - "00074_ALOLA_NONE"
+      - "00075_ALOLA_NONE"
+      - "00076_ALOLA_NONE"
+      - "00077_GALAR_NONE"
+      - "00078_GALAR_NONE"
+      - "00079_GALAR_NONE"
+      - "00080_GALAR_NONE"
+      - "00083_GALAR_NONE"
+      - "00088_ALOLA_NONE"
+      - "00089_ALOLA_NONE"
+      - "00100_HISUI_NONE"
+      - "00101_HISUI_NONE"
+      - "00103_ALOLA_NONE"
+      - "00105_ALOLA_NONE"
+      - "00110_GALAR_NONE"
+      - "00122_GALAR_NONE"
+      - "00128_PALDEA_AQUA_BREED_NONE"
+      - "00128_PALDEA_BLAZE_BREED_NONE"
+      - "00128_PALDEA_COMBAT_BREED_NONE"
+      - "00144_GALAR_NONE"
+      - "00145_GALAR_NONE"
+      - "00146_GALAR_NONE"
+      - "00194_PALDEA_NONE"
+      - "00199_GALAR_NONE"
+      - "00211_HISUI_NONE"
+      - "00215_HISUI_FEMALE"
+      - "00215_HISUI_MALE"
+      - "00222_GALAR_NONE"
+      - "00263_GALAR_NONE"
+      - "00264_GALAR_NONE"
+      - "00503_HISUI_NONE"
+      - "00549_HISUI_NONE"
+      - "00550_WHITE_STRIPED_NONE"
+      - "00554_GALAR_NONE"
+      - "00555_GALAR_NONE"
+      - "00562_GALAR_NONE"
+      - "00570_HISUI_NONE"
+      - "00571_HISUI_NONE"
+      - "00618_GALAR_NONE"
+      - "00628_HISUI_NONE"
+      - "00705_HISUI_NONE"
+      - "00706_HISUI_NONE"
+      - "00713_HISUI_NONE"
+      - "00585_SUMMER_NONE"
+      - "00585_AUTUMN_NONE"
+      - "00585_WINTER_NONE"
+      - "00586_SUMMER_NONE"
+      - "00586_AUTUMN_NONE"
+      - "00586_WINTER_NONE"
+      - "00666_POKE_BALL_PATTERN_NONE"
+      - "00670_ETERNAL_NONE"
 
   sm:
     complete: false
@@ -282,7 +312,7 @@ games:
       - [278, 279]
       - [283, 284]
       - [287, 289]
-      - [293, 299]
+      - [296, 299]
       - [318, 321]
       - [327, 330]
       - [339, 340]
@@ -315,6 +345,7 @@ games:
       - [633, 635]
       - [661, 663]
       - [674, 675]
+      - [679, 681]
       - [703, 709]
       - [722, 800]
 
@@ -360,8 +391,10 @@ games:
       - "00128_PALDEA_BLAZE_BREED_NONE"
       - "00128_PALDEA_AQUA_BREED_NONE"
       - "00199_GALAR_NONE"
-      - "00215_HISUI_NONE"
+      - "00215_HISUI_FEMALE"
+      - "00215_HISUI_MALE"
       - "00222_GALAR_NONE"
+      - "00503_HISUI_NONE"
       - "00549_HISUI_NONE"
       - "00628_HISUI_NONE"
       - "00705_HISUI_NONE"
@@ -505,6 +538,9 @@ games:
       - "00570_HISUI_NONE"
       - "00571_HISUI_NONE"
       - "00618_GALAR_NONE"
+      - "00628_HISUI_NONE"
+      - "00666_FANCY_PATTERN_NONE"
+      - "00666_POKE_BALL_PATTERN_NONE"
       - "00670_ETERNAL_NONE"
       - "00705_HISUI_NONE"
       - "00706_HISUI_NONE"
@@ -619,6 +655,7 @@ games:
       - [659, 663]
       - [674, 675]
       - [677, 718]
+      - [722, 730]
       - [736, 738]
       - [742, 773]
       - [776, 778]
@@ -841,6 +878,8 @@ games:
       - 302
       - 440
       - 464
+      - 800
+      - 904
 
     national_dex_ranges:
       - [1, 9]
@@ -930,7 +969,7 @@ games:
       - [774, 775]
       - [778, 779]
       - [782, 784]
-      - [789, 800]
+      - [791, 792]
       - [810, 823]
       - [833, 834]
       - [837, 849]
@@ -943,9 +982,11 @@ games:
       - [906, 1008]
       - [1011, 1024]
 
-    # Method: Mystery Gift
-    # Pecharunt is obtainable only through Mystery Gift.
     home_ids:
+      # Meloetta is obtainable through Indigo Disk DLC
+      - "00648_NORMAL_NONE"
+      # Method: Mystery Gift
+      # Pecharunt is obtainable only through Mystery Gift.
       - "01025_NORMAL_NONE"
 
     # Temporary ride modes remain unavailable as stored forms.
@@ -954,8 +995,6 @@ games:
       - "00052_ALOLA_NONE"
       - "00052_GALAR_NONE"
       - "00053_ALOLA_NONE"
-      - "00058_HISUI_NONE"
-      - "00059_HISUI_NONE"
       - "00100_HISUI_NONE"
       - "00101_HISUI_NONE"
       - "00110_GALAR_NONE"
@@ -993,9 +1032,7 @@ games:
       - "00706_HISUI_NONE"
       - "00713_HISUI_NONE"
       - "00724_HISUI_NONE"
-      - "00902_NORMAL_FEMALE"
-      - "00902_NORMAL_MALE"
-      - "00904_NORMAL_NONE"
+      - "00901_NORMAL_NONE"
       - "00999_ROAMING_NONE"
       # Galarian birds
       - "00144_GALAR_NONE"
@@ -1133,5 +1170,24 @@ games:
     # Regional forms are intentionally not excluded. Current HOME support
     # allows compatible regional variants to be transferred into Z-A.
     excluded_home_ids:
+      - "00666_ARCHIPELAGO_PATTERN_NONE"
+      - "00666_CONTINENTAL_PATTERN_NONE"
+      - "00666_ELEGANT_PATTERN_NONE"
+      - "00666_FANCY_PATTERN_NONE"
+      - "00666_HIGH_PLAINS_PATTERN_NONE"
+      - "00666_ICY_SNOW_PATTERN_NONE"
+      - "00666_JUNGLE_PATTERN_NONE"
+      - "00666_MODERN_PATTERN_NONE"
+      - "00666_MONSOON_PATTERN_NONE"
+      - "00666_OCEAN_PATTERN_NONE"
+      - "00666_POLAR_PATTERN_NONE"
+      - "00666_RIVER_PATTERN_NONE"
+      - "00666_SANDSTORM_PATTERN_NONE"
+      - "00666_SAVANNA_PATTERN_NONE"
+      - "00666_SUN_PATTERN_NONE"
+      - "00666_TUNDRA_PATTERN_NONE"
       - "00666_POKE_BALL_PATTERN_NONE"
+      - "00718_NORMAL_NONE"
+      - "00718_10_NONE"
       - "00801_ORIGINAL_NONE"
+      - "00999_ROAMING_NONE"

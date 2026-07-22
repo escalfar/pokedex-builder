@@ -11,6 +11,13 @@ from pokedex.pokeapi import SpeciesDetails, SpeciesVariety
 NORMAL_FORM_NAME = "Normal"
 NORMAL_FORM_SLUG = "normal"
 
+# PokéAPI names Galarian Darmanitan's standard mode as ``galar-standard``.
+# The project treats that mode as the base Galarian form, so its stable HOME ID
+# uses ``GALAR`` rather than the redundant ``GALAR_STANDARD``.
+_FORM_SLUG_OVERRIDES: dict[tuple[str, str], str] = {
+    ("darmanitan", "darmanitan-galar-standard"): "galar",
+}
+
 # PokéAPI exposes these HOME-persistent cosmetic forms through the forms
 # endpoint rather than the species varieties list.  The project models them
 # explicitly so every form stored independently by Pokémon HOME receives its
@@ -155,6 +162,33 @@ _SPECIAL_FORM_ORDER: dict[int, dict[str, int]] = {
     855: {"normal": 0, "antique": 1},
     1012: {"normal": 0, "artisan": 1},
     1013: {"normal": 0, "masterpiece": 1},
+    666: {
+        slug: index
+        for index, slug in enumerate(
+            (
+                "normal",
+                "archipelago-pattern",
+                "continental-pattern",
+                "elegant-pattern",
+                "garden-pattern",
+                "high-plains-pattern",
+                "icy-snow-pattern",
+                "jungle-pattern",
+                "marine-pattern",
+                "modern-pattern",
+                "monsoon-pattern",
+                "ocean-pattern",
+                "polar-pattern",
+                "river-pattern",
+                "sandstorm-pattern",
+                "savanna-pattern",
+                "sun-pattern",
+                "tundra-pattern",
+                "fancy-pattern",
+                "poke-ball-pattern",
+            )
+        )
+    },
     869: {
         slug: index
         for index, slug in enumerate(
@@ -251,6 +285,10 @@ def extract_form_slug(
 
     if not normalized_variety:
         raise ValueError("Variety API name cannot be empty.")
+
+    overridden_slug = _FORM_SLUG_OVERRIDES.get((normalized_species, normalized_variety))
+    if overridden_slug is not None:
+        return overridden_slug
 
     prefix = f"{normalized_species}-"
 
