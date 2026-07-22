@@ -467,3 +467,41 @@ def test_validate_entries_rejects_empty_collection() -> None:
         match="cannot be empty",
     ):
         validate_pokemon_entries(())
+
+
+def test_sort_entries_keeps_alcremie_normal_first() -> None:
+    """The logical NORMAL HOME ID must not move Strawberry Sweet to the end."""
+    entries = (
+        build_entry(
+            national_dex=869,
+            pokemon="Alcremie",
+            form="Berry Sweet",
+            name="Alcremie (Berry Sweet)",
+            generation=8,
+            home_id="00869_BERRY_SWEET_NONE",
+        ),
+        build_entry(
+            national_dex=869,
+            pokemon="Alcremie",
+            form="Strawberry Sweet",
+            name="Alcremie (Strawberry Sweet)",
+            generation=8,
+            home_id="00869_NORMAL_NONE",
+        ),
+        build_entry(
+            national_dex=869,
+            pokemon="Alcremie",
+            form="Ribbon Sweet",
+            name="Alcremie (Ribbon Sweet)",
+            generation=8,
+            home_id="00869_RIBBON_SWEET_NONE",
+        ),
+    )
+
+    ordered = sort_pokemon_entries(entries)
+
+    assert [entry.form for entry in ordered] == [
+        "Strawberry Sweet",
+        "Berry Sweet",
+        "Ribbon Sweet",
+    ]

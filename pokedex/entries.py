@@ -52,7 +52,7 @@ _SPECIAL_FORM_ORDER: dict[int, dict[str, int]] = {
         slug: index
         for index, slug in enumerate(
             (
-                "strawberry_sweet",
+                "normal",
                 "berry_sweet",
                 "love_sweet",
                 "star_sweet",
